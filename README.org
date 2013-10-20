@@ -12,3 +12,14 @@
   the very good [[http://emacsformacosx.com/][emacsformacosx.com]]. I've not made it multi OS yet, and
   a lot of the things solve problems that really only occur on a UK
   Mac (things like the # key).
+
+  If you want to use this I suggest you do the following:
+
+  - create a emacs-config directory in your $HOME dir.
+  - clone this repo in that directory
+  - do a symbolic link from the clone to your .emacs.d directory
+    
+  This is what I normally do. This lets me clone or create lots of new
+  emacs configurations without trashing any of the earlier ones and
+  lets me try a lot of things out. It seems to be working for me so
+  far.
