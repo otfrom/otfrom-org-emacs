@@ -58,7 +58,7 @@
   I'll include it here and add more to it as I understand what is
   going on.
 
-  My helm-mode guru is Kris Jenkins [[http://twitter.com/krisajenkins][Kris Jenkins]].
+  My helm-mode guru is [[http://twitter.com/krisajenkins][Kris Jenkins]].
   
   #+BEGIN_SRC emacs-lisp
     (maybe-install-and-require 'helm)
