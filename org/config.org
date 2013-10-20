@@ -1,0 +1,15 @@
+* helm-mode
+
+  helm-mode is the succesor to anything.el. I don't really have my
+  head around it all yet, but I'm already pretty impressed with it so
+  I'll include it here and add more to it as I understand what is
+  going on.
+
+  My helm-mode guru is Kris Jenkins [[http://twitter.com/krisajenkins][@krisajenkins]].
+  
+  #+BEGIN_SRC emacs-lisp
+    (maybe-install-and-require 'helm)
+    (helm-mode 1)
+  #+END_SRC
+  
+
