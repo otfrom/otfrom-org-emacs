@@ -78,6 +78,56 @@
      (global-set-key (kbd "s-p") 'git-gutter+-previous-hunk)
    #+END_SRC
    
+* Communication Modes
+
+** twittering-mode
+
+   I have been accused by many ([[http://twitter.com/rrees][Robert Rees]] and [[http://twitter.com/cluttercup][Jane Dickson]] to name
+   but two) of being constantly on twitter. This is mostly fair. I'm
+   curious to see the revision history of this file and see if I
+   change this description before I declare .emacs bankruptcy again.
+
+   The best twitter client I've found is twittering-mode. 
+
+   #+BEGIN_SRC emacs-lisp
+     (maybe-install-and-require 'twittering-mode)    
+   #+END_SRC
+
+   I *don't* want to see the the status messages in the mini-buffer
+   when twitter fetches things.
+   
+   #+BEGIN_SRC emacs-lisp
+     (setq twittering-url-show-status nil)
+   #+END_SRC
+
+   I like to have the icon pictures.
+      
+   #+BEGIN_SRC emacs-lisp
+     (setq twittering-icon-mode 1)
+     (setq twittering-use-icon-storage t)
+   #+END_SRC
+
+   #+BEGIN_SRC emacs-lisp
+     (add-hook 'twittering-edit-mode-hook
+         (lambda () (ispell-minor-mode) (flyspell-mode)))
+   #+END_SRC
+
+   You can configure it to use a local, encrypted file for the
+   credentials as well, which makes re-connecting easier and
+   reasonably secure.
+
+   #+BEGIN_SRC emacs-lisp
+     (setq twittering-use-master-password t)
+   #+END_SRC
+
+   By default I want to get my replies and direct messages.
+
+   #+BEGIN_SRC emacs-lisp
+     (setq twittering-initial-timeline-spec-string
+           '(":replies"
+             ":direct_messages"))   
+   #+END_SRC
+   
 * Macintosh Specific Setup
 
 ** # is broken on UK Macs
