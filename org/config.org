@@ -19,6 +19,19 @@
              (message (format "Loading file: %s" file)))
          (message (format "No %s file. So not loading one." file))))   
    #+END_SRC
+
+* Globals
+
+** Hippie Expand
+
+   I have a soft spot for hippie-expand. There might be better ways to
+   do this though and I'm happy to take advice from anyone with a
+   strong opinion. :-D
+
+   #+BEGIN_SRC emacs-lisp
+     (global-set-key (kbd "M-RET") 'hippie-expand)
+   #+END_SRC
+   
    
 * non-elpa files
 
