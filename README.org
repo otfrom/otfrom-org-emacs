@@ -7,3 +7,8 @@
 
   The real content is in [[./org/config.org][config.org]], which would probably be more
   interesting to read.
+
+  This emacs config was set up to run on Mac OS X using the emacs from
+  the very good [[http://emacsformacosx.com/][emacsformacosx.com]]. I've not made it multi OS yet, and
+  a lot of the things solve problems that really only occur on a UK
+  Mac (things like the # key).
