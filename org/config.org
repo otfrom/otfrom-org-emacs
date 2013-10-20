@@ -52,3 +52,9 @@
   #+BEGIN_SRC emacs-lisp
     (maybe-install-and-require 'magit)
   #+END_SRC
+
+  I use magit-status a lot. So let's bind it to C-x g.
+
+  #+BEGIN_SRC emacs-lisp
+    (global-set-key (kbd "C-x g") 'magit-status)
+  #+END_SRC
