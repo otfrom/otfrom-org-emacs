@@ -31,7 +31,16 @@
    #+BEGIN_SRC emacs-lisp
      (global-set-key (kbd "M-RET") 'hippie-expand)
    #+END_SRC
-   
+
+** upcase and downcase region
+
+   I like to be able to do this. I get lots of things that come in
+   SHOUTING or that need to SHOUT.
+
+   #+BEGIN_SRC emacs-lisp
+     (put 'downcase-region 'disabled nil)
+     (put 'upcase-region 'disabled nil)
+   #+END_SRC
    
 * non-elpa files
 
