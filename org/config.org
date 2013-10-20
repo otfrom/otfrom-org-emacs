@@ -264,30 +264,30 @@
       (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
     #+END_SRC
 
-** rainbow mode
+*** rainbow mode
 
-   If we have a color literal it is really nice to have an idea of
-   what it is going to look like. This is *really* useful in things
-   like editing CSS files with hex color codes.
+    If we have a color literal it is really nice to have an idea of
+    what it is going to look like. This is *really* useful in things
+    like editing CSS files with hex color codes.
 
-   #+BEGIN_SRC emacs-lisp
-     (maybe-install-and-require 'rainbow-mode)
-     (add-hook 'prog-mode-hook 'rainbow-mode)
-     (diminish 'rainbow-mode)
-   #+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (maybe-install-and-require 'rainbow-mode)
+      (add-hook 'prog-mode-hook 'rainbow-mode)
+      (diminish 'rainbow-mode)
+    #+END_SRC
 
-** highlight-symbol
+*** highlight-symbol
 
-   I like to see all of the places I'm using the same symbol. This is
-   a great visual cue for those times where you've mistyped a variable
-   for function name. It isn't quite flymake, but it is handy. It is
-   good to see where something is used as well.
+    I like to see all of the places I'm using the same symbol. This is
+    a great visual cue for those times where you've mistyped a variable
+    for function name. It isn't quite flymake, but it is handy. It is
+    good to see where something is used as well.
 
-   #+BEGIN_SRC emacs-lisp
-     (maybe-install-and-require 'highlight-symbol)
-     (add-hook 'prog-mode-hook 'highlight-symbol-mode)
-   #+END_SRC
-   
+    #+BEGIN_SRC emacs-lisp
+      (maybe-install-and-require 'highlight-symbol)
+      (add-hook 'prog-mode-hook 'highlight-symbol-mode)
+    #+END_SRC
+    
 * Macintosh Specific Setup
 
 ** # is broken on UK Macs
