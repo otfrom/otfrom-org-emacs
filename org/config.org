@@ -1,3 +1,25 @@
+* Helpers
+
+  There are a number of helper functions that we'll need through the
+  rest of this. We'll just define them up here.
+
+** load-if-exists
+
+   This is just a nice function to load a file if it exists, but just
+   print a message rather than an error if it doesn't. This is handy
+   for things like loading specific local config that you don't want
+   to go into github or be shared such as erc nicks, passwords, blog
+   rolls, etc.
+
+   #+BEGIN_SRC emacs-lisp
+     (defun load-if-exists (file)
+       (if (file-exists-p file)
+           (progn
+             (load file)
+             (message (format "Loading file: %s" file)))
+         (message (format "No %s file. So not loading one." file))))   
+   #+END_SRC
+   
 * non-elpa files
 
   Unfortunately, we can't get everything we want from the package
