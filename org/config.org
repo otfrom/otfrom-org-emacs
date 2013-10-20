@@ -14,7 +14,7 @@
 
 ** # is broken on UK Macs
 
-   On UK keyboards shift-3 is bound to �. This is a real pain. The #
+   On UK keyboards shift-3 is bound to £. This is a real pain. The #
    character is usually bound to M-3. This also causes problems,
    especially with things like window-number modes. We have a hacked
    window-number mode below that maps window 3 to s-3, which solves
@@ -23,7 +23,14 @@
    #+BEGIN_SRC emacs-lisp
      (global-set-key (kbd "M-3") '(lambda () (interactive) (insert "#")))
    #+END_SRC
-  
+
+   We also need to deal with £ being a UTF-8 character so we don't get
+   annoying Â characters before non-ascii characters.
+
+   #+BEGIN_SRC emacs-lisp
+     (setq default-process-coding-system '(utf-8-unix . utf-8-unix))
+   #+END_SRC
+   
 * helm-mode
 
   helm-mode is the succesor to anything.el. I don't really have my
