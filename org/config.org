@@ -45,17 +45,20 @@
   
 * git
 
-  magit is a *fantastic* mode for dealing with git.
+** magit
 
-  #+BEGIN_SRC emacs-lisp
-    (maybe-install-and-require 'magit)
-  #+END_SRC
+   magit is a *fantastic* mode for dealing with git.
+   
+   #+BEGIN_SRC emacs-lisp
+      (maybe-install-and-require 'magit)
+   #+END_SRC
+   
+   I use magit-status a lot. So let's bind it to C-x g.
 
-  I use magit-status a lot. So let's bind it to C-x g.
+   #+BEGIN_SRC emacs-lisp
+     (global-set-key (kbd "C-x g") 'magit-status)
+   #+END_SRC
 
-  #+BEGIN_SRC emacs-lisp
-    (global-set-key (kbd "C-x g") 'magit-status)
-  #+END_SRC
 * Macintosh Specific Setup
 
 ** # is broken on UK Macs
