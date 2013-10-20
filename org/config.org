@@ -10,6 +10,25 @@
     (add-to-list 'load-path "~/.emacs.d/non-elpa/")
   #+END_SRC
 
+* Make it Pretty
+
+** color themes
+
+   I really like the cyberpunk theme from [[https://github.com/overtone/emacs-live][emacs-live]] and [[https://twitter.com/samaaron][Sam Aaron]] is
+   a lovely guy. I wanted to avoid needing the old color-theme
+   mode. [[https://twitter.com/rikardglans][Rikard Glans]] was nice enought to port it over to the new
+   stuff. I've included it in non-elpa so that I can carry it
+   around. I don't actually want to use it at the moment.
+
+   What I'd like to use instead is calmer-forest, at least for now. I
+   do need to find a good high contrast theme for using on the *very*
+   low contrast projectors at [[http://www.skillsmatter.com][Skills Matter]].
+
+   #+BEGIN_SRC emacs-lisp
+     (maybe-install-and-require 'calmer-forest-theme)
+     (load-theme 'calmer-forest t)
+   #+END_SRC
+  
 * helm-mode
 
   helm-mode is the succesor to anything.el. I don't really have my
