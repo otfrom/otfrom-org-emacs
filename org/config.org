@@ -116,6 +116,10 @@
    credentials as well, which makes re-connecting easier and
    reasonably secure.
 
+   This didn't really work until I fixed the exec-path to get gpg in
+   it, which is in /usr/local/bin on my machine, so you need to add
+   the bits from [[$PATH is broken][$PATH is broken]] in the [[Macintosh Specific Setup][Macintosh Specific Setup]].
+
    #+BEGIN_SRC emacs-lisp
      (setq twittering-use-master-password t)
    #+END_SRC
