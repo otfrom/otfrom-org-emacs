@@ -1,3 +1,14 @@
+* non-elpa files
+
+  Unfortunately, we can't get everything we want from the package
+  archives or we might have files that we're working on locally that
+  we haven't released yet. We keep those in a non-elpa directory. We
+  need to add this to the load-path so that we can require the files
+  we have here.
+
+  #+BEGIN_SRC emacs-lisp
+    (add-to-list 'load-path "~/.emacs.d/non-elpa/")
+  #+END_SRC
 * helm-mode
 
   helm-mode is the succesor to anything.el. I don't really have my
