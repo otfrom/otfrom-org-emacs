@@ -222,6 +222,72 @@
              ":direct_messages"))   
    #+END_SRC
    
+* Programming Modes
+** prog-mode
+
+   prog-mode and the prog-mode-hook are at the basis of most of the
+   programming modes in emacs. If we want something set up for
+   everything we should do it here.
+   
+*** Parentheses
+**** Show Them
+
+     We really want to see those parentheses. 
+     
+     #+BEGIN_SRC emacs-lisp
+       (show-paren-mode +1)
+     #+END_SRC
+
+**** paredit-mode
+
+     Should I move over to smartparens? Can anyone tell me what is so
+     much better about it?
+
+     paredit-mode is a strange one. When you first use it, you will
+     hate it. You'll hate the way it won't let you do the things
+     you *think* you want to do. Once you get used to it though you
+     wonder how you ever did any programming without it.
+
+     #+BEGIN_SRC emacs-lisp
+       (maybe-install-and-require 'paredit)
+       (diminish 'paredit-mode "()")
+       (add-hook 'prog-mode-hook 'paredit-mode)
+     #+END_SRC
+
+*** rainbow-delimiters
+
+    Make those delimiters glow with wacky colors so we can see what is
+    going on.
+
+    #+BEGIN_SRC emacs-lisp
+      (maybe-install-and-require 'rainbow-delimiters)
+      (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+    #+END_SRC
+
+** rainbow mode
+
+   If we have a color literal it is really nice to have an idea of
+   what it is going to look like. This is *really* useful in things
+   like editing CSS files with hex color codes.
+
+   #+BEGIN_SRC emacs-lisp
+     (maybe-install-and-require 'rainbow-mode)
+     (add-hook 'prog-mode-hook 'rainbow-mode)
+     (diminish 'rainbow-mode)
+   #+END_SRC
+
+** highlight-symbol
+
+   I like to see all of the places I'm using the same symbol. This is
+   a great visual cue for those times where you've mistyped a variable
+   for function name. It isn't quite flymake, but it is handy. It is
+   good to see where something is used as well.
+
+   #+BEGIN_SRC emacs-lisp
+     (maybe-install-and-require 'highlight-symbol)
+     (add-hook 'prog-mode-hook 'highlight-symbol-mode)
+   #+END_SRC
+   
 * Macintosh Specific Setup
 
 ** # is broken on UK Macs
