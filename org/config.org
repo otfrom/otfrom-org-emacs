@@ -206,3 +206,16 @@
                        "/sbin"
                        "/usr/X11/bin"))     
    #+END_SRC
+* Local Config
+** custom.el
+
+   custom.el is great for configuring things through that "gui" in
+   emacs, but it is a real pain when it drops junk in your [[../init.el][init.el]] and
+   messes up your pretty config and git history and is stuff that you
+   don't want to leak out on to github. You can change the location of
+   this file though and I like to do this.
+
+   #+BEGIN_SRC emacs-lisp
+     (setq custom-file "~/.emacs.d/local/custom.el")
+     (load-if-exists custom-file)
+   #+END_SRC

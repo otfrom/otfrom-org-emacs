@@ -1,0 +1,5 @@
+* Notes
+
+  This is where you can put files like your custom.el, any passwords
+  (I like calling this file mellon.el) and other bits of config that
+  are local to you and not to be shared.
