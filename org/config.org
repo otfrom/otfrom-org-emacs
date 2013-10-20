@@ -41,6 +41,16 @@
      (put 'downcase-region 'disabled nil)
      (put 'upcase-region 'disabled nil)
    #+END_SRC
+
+** diminish
+
+   As we add lots of useful minor-modes the mode line can get a bit
+   unwieldy. diminish-mode helps us with that. We'll set it up here
+   and use it in various places throughout the setup.
+
+   #+BEGIN_SRC emacs-lisp
+     (maybe-install-and-require 'diminish)
+   #+END_SRC
    
 * non-elpa files
 
@@ -86,6 +96,13 @@
     (maybe-install-and-require 'helm)
     (helm-mode 1)
   #+END_SRC
+
+  We can diminish how much room helm-mode takes up on the command
+  line.
+
+  #+BEGIN_SRC emacs-lisp
+    (diminish 'helm-mode "h")
+  #+END_SRC
   
 * git
 
@@ -120,6 +137,12 @@
    #+BEGIN_SRC emacs-lisp
      (global-set-key (kbd "s-n") 'git-gutter+-next-hunk)
      (global-set-key (kbd "s-p") 'git-gutter+-previous-hunk)
+   #+END_SRC
+
+   We can diminish the size of GitGutter in the mode-line
+
+   #+BEGIN_SRC emacs-lisp
+     (diminish 'git-gutter+-mode)
    #+END_SRC
    
 * Communication Modes
