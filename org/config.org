@@ -109,3 +109,24 @@
      (window-number-super-mode 1) ;; for the super key binding        
    #+END_SRC
    
+** $PATH is broken
+
+   If you don't run emacs in a terminal on Mac OS X then it can be
+   really awkward to get the stuff you want in your path. This is the
+   best way I've found so far to sort this out and get things like
+   ~/bin and /usr/loca/bin in a $PATH that emacs can access. I quite
+   like running emacs from outside the terminal.
+
+   I should really make this detect that it isn't running in a
+   terminal and that it is running on Mac OS X so that I'm not doing
+   a bunch of extra stuff if I don't need to.
+
+   #+BEGIN_SRC emacs-lisp
+     (setq exec-path '((concat (getenv "HOME") "/bin")
+                       "/usr/local/bin"
+                       "/usr/bin"
+                       "/bin"
+                       "/usr/sbin"
+                       "/sbin"
+                       "/usr/X11/bin"))     
+   #+END_SRC
