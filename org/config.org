@@ -59,6 +59,25 @@
      (global-set-key (kbd "C-x g") 'magit-status)
    #+END_SRC
 
+** git-gutter-mode+
+
+   It is really nice having +/= in the gutter. I like it more than
+   having line numbers and thus I've dumped linum-mode.
+   
+   #+BEGIN_SRC emacs-lisp
+     (maybe-install-and-require 'git-gutter-fringe+)
+     (global-git-gutter+-mode t)
+   #+END_SRC
+
+   It is also quite nice to be able to navigate a file by he git
+   hunks. It makes it a bit easier to see what has changed since the
+   last time in the context of the whole file.
+
+   #+BEGIN_SRC emacs-lisp
+     (global-set-key (kbd "s-n") 'git-gutter+-next-hunk)
+     (global-set-key (kbd "s-p") 'git-gutter+-previous-hunk)
+   #+END_SRC
+   
 * Macintosh Specific Setup
 
 ** # is broken on UK Macs
