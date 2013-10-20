@@ -31,6 +31,16 @@
      (setq default-process-coding-system '(utf-8-unix . utf-8-unix))
    #+END_SRC
    
+** window-number-super mode
+
+   On a mac we have M-3 mapped to be the
+
+   #+BEGIN_SRC emacs-lisp
+     (require 'window-number-super)
+     (window-number-mode 1) ;; for the window numbers
+     (window-number-super-mode 1) ;; for the super key binding        
+   #+END_SRC
+   
 * helm-mode
 
   helm-mode is the succesor to anything.el. I don't really have my
