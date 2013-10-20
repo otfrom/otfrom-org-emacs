@@ -12,4 +12,10 @@
     (helm-mode 1)
   #+END_SRC
   
+* git
 
+  magit is a *fantastic* mode for dealing with git.
+
+  #+BEGIN_SRC emacs-lisp
+    (maybe-install-and-require 'magit)
+  #+END_SRC
