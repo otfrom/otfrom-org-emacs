@@ -1,0 +1,9 @@
+* Introduction
+
+  I was inspired by [[https://github.com/t-ob/dotfiles][Tom O'Brien's dotfiles]] to do a org-mode version of
+  my emacs config. I also completely broke my emacs config trying to
+  do some other things and I figured I should fix it properly rather
+  than just getting the basics back together.
+
+  The real content is in [[./org/config.org][config.org]], which would probably be more
+  interesting to read.
