@@ -116,7 +116,6 @@
        (set-default-font "-apple-Menlo-medium-normal-normal-*-12-*-*-*-m-0-iso10646-1"))
    #+END_SRC
    
-   
 ** bars, menus and numbers
 
    I like no scroll bars, no toolbars and line and column numbers in
