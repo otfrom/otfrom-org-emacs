@@ -446,6 +446,23 @@
       (add-hook 'cider-mode-hook 'subword-mode)
     #+END_SRC
 
+**** helm and clojure
+
+     Kris Jenkins has a great helm-clojure-headlines that I'd like to
+     bind to s-h when in clojure-mode.
+
+     #+BEGIN_SRC emacs-lisp
+       (defun helm-clojure-headlines ()
+         "Display headlines for the current Clojure file."
+         (interactive)
+         (helm :sources '(((name . "Clojure Headlines")
+                           (volatile)
+                           (headline "^[;(]")))))
+       
+       (add-hook 'clojure-mode-hook
+                 (lambda () (local-set-key (kbd "s-h") 'helm-clojure-headlines)))
+     #+END_SRC
+
 * Text Modes
 ** Text Mode Basics
 
