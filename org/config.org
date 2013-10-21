@@ -382,6 +382,80 @@
       ;; (add-hook 'cider-mode-hook 'subword-mode)
     #+END_SRC
 
+* Text Modes
+** Text Mode Basics
+
+   If we are in a text mode we want flyspell and auto-fill-mode.
+
+   #+BEGIN_SRC emacs-lisp
+     (add-hook 'text-mode-hook
+               (lambda ()
+                       (flyspell-mode 1)
+                       (diminish 'flyspell-mode)
+                       (auto-fill-mode 1)
+                       (diminish 'auto-fill-function)))
+   #+END_SRC
+
+** deft and org   
+
+*** deft
+
+    deft-mode is a Notational Velocity like note taker. I really like
+    it for finding notes that are already there. The way it searches
+    for notes reminds me quite a lot of helm, so I'm wondering if I
+    might replace this with helm and org-mode. That would be one to ask
+    Kris Jenkins.
+
+    #+BEGIN_SRC emacs-lisp
+    (maybe-install-and-require 'deft)
+    #+END_SRC
+
+    We want to keep our deft notes in ~/org/deft
+
+    #+BEGIN_SRC emacs-lisp
+      (setq deft-directory "~/org/deft/")
+    #+END_SRC
+
+    We want the notes to be in org-mode format
+
+    #+BEGIN_SRC emacs-lisp
+      (setq deft-extension "org")
+      (setq deft-text-mode 'org-mode)
+    #+END_SRC
+
+    And we want f8 to be the key to get us to the top level search
+    list.
+
+    #+BEGIN_SRC emacs-lisp
+      (global-set-key [f8] 'deft)
+    #+END_SRC
+
+*** org-mode
+
+    I also use org-mode on its own and would like to use it more. I
+    used to be a complete planner-mode addict. I've never really
+    gotten into org-mode in the same way. Having a way to sync to
+    trello and link to my email, magit and everything else keeps
+    making me want to try though.
+
+**** fontify
+
+     This is all written in org-mode. It would be good if the source
+     code examples were fonitfies according to their major mode.
+
+     #+BEGIN_SRC emacs-lisp
+       (setq org-src-fontify-natively t)
+     #+END_SRC
+
+**** spelling
+
+     On a Mac we need to tell org-mode to use aspell, which we
+     installed using homebrew.
+
+     #+BEGIN_SRC emacs-lisp
+       (setq ispell-program-name "/usr/local/bin/aspell")
+     #+END_SRC
+     
 * Macintosh Specific Setup
 
 ** # is broken on UK Macs
