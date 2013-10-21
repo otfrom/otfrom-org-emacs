@@ -92,19 +92,28 @@
 
 ** color themes
 
-   I really like the cyberpunk theme from [[https://github.com/overtone/emacs-live][emacs-live]] and [[https://twitter.com/samaaron][Sam Aaron]] is
-   a lovely guy. I wanted to avoid needing the old color-theme
-   mode. [[https://twitter.com/rikardglans][Rikard Glans]] was nice enought to port it over to the new
-   stuff.
+*** custom-theme-directory
 
-   Themes seem to be quite picky about where they live. They seem to
-   work properly only when they are in your ~/.emacs.d directory. I
-   should probably dig deeper into this and find out why I can't put
-   it into ~/.emacs.d/non-elpa.
+    Themes seem to be quite picky about where they live. They require
+    custom-theme-directory to be set. By default this is the same as
+    user-emacs-directory, which is usually ~/.emacs.d. I'd like to
+    keep them separate if possible. I learned this one by reading
+    some of [[https://github.com/sw1nn/dotfiles][Neale Swinnerton's dotfiles]].
 
-   #+BEGIN_SRC emacs-lisp
-     (load-theme 'emacslive-cyberpunk t)
-   #+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (setq custom-theme-directory (concat user-emacs-directory "themes"))
+    #+END_SRC
+
+*** cyberpunk
+    
+    I really like the cyberpunk theme from [[https://github.com/overtone/emacs-live][emacs-live]] and [[https://twitter.com/samaaron][Sam Aaron]] is
+    a lovely guy. I wanted to avoid needing the old color-theme
+    mode. [[https://twitter.com/rikardglans][Rikard Glans]] was nice enought to port it over to the new
+    stuff.
+
+    #+BEGIN_SRC emacs-lisp
+      (load-theme 'emacslive-cyberpunk t)
+    #+END_SRC
 
 ** fonts
 
