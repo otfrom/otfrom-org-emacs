@@ -575,3 +575,18 @@
      (setq custom-file "~/.emacs.d/local/custom.el")
      (load-if-exists custom-file)
    #+END_SRC
+* Finishing
+** emacs-server
+
+   Emacs startup time isn't nearly as much of a problem as it used to
+   be. I'm also pretty patient as I've been working with JVM startup
+   times over the years.
+
+   However, it is still nice to be able to attach to a running Emacs
+   process when we want to. To that end, let's start up an
+   emacs-server.
+
+   #+BEGIN_SRC emacs-lisp
+     (server-start)
+   #+END_SRC
+
