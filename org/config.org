@@ -61,7 +61,7 @@
   we have here.
 
   #+BEGIN_SRC emacs-lisp
-    (add-to-list 'load-path "~/.emacs.d/non-elpa/")
+    (add-to-list 'load-path (concat user-emacs-directory "non-elpa/"))
   #+END_SRC
 
 * Make it Pretty
