@@ -83,6 +83,17 @@
      (load-theme 'calmer-forest t)
    #+END_SRC
 
+** fonts
+
+   Ah, the joys of playing with different monospaced fonts on
+   emacs. Menlo seems to be the one I'm happiest with on my MBA.
+
+   #+BEGIN_SRC emacs-lisp
+     (when (memq window-system '(mac ns))
+       (set-default-font "-apple-Menlo-medium-normal-normal-*-12-*-*-*-m-0-iso10646-1"))
+   #+END_SRC
+   
+   
 ** bars, menus and numbers
 
    I like no scroll bars, no toolbars and line and column numbers in
