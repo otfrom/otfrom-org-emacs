@@ -109,7 +109,7 @@
    '(ido-subdir ((t (:foreground "gray60" :background "black"))))
    '(ido-indicator ((t (:foreground "black" :background "deep pink"))))
 
-   '(match ((t (:foreground "deep pink" :background "blackn"))))
+   '(match ((t (:foreground "deep pink" :background "black"))))
    '(minibuffer-prompt ((t (:foreground "#61CE3C" :background "black"))))
    '(grep-match-face ((t (:foreground "black" :background "deep pink"))))
    '(grep-hit-face ((t (:foreground "black" :background "red"))))
