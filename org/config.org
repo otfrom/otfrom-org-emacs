@@ -331,7 +331,7 @@
 
 *** clojure
 
-    _ALL OF THIS CLOJURE STUFF IS HORRIBLY BROKEN ATM_
+    _*ALL OF THIS CLOJURE STUFF IS HORRIBLY BROKEN ATM*_
     
     I do *love* coding in clojure. The tool chain has been evolving
     quite a bit over the last few years.
