@@ -139,69 +139,97 @@
    #+BEGIN_SRC emacs-lisp
      (setq inhibit-startup-screen t)
    #+END_SRC
-   
-* helm-mode
 
-  helm-mode is the succesor to anything.el. I don't really have my
-  head around it all yet, but I'm already pretty impressed with it so
-  I'll include it here and add more to it as I understand what is
-  going on.
+** alpha alpha alpha
 
-  My helm-mode guru is [[http://twitter.com/krisajenkins][Kris Jenkins]].
-  
-  #+BEGIN_SRC emacs-lisp
-    (maybe-install-and-require 'helm)
-    (helm-mode 1)
-  #+END_SRC
-
-  We can diminish how much room helm-mode takes up on the command
-  line.
-
-  #+BEGIN_SRC emacs-lisp
-    (diminish 'helm-mode "h")
-  #+END_SRC
-  
-* git
-
-** magit
-
-   magit is a *fantastic* mode for dealing with git.
+   I don't use this all the time, but sometimes, when I'm hacking
+   only on my diddy 13" laptop I like to have a window tailing a file
+   in the background while I'm writing something in the
+   foreground. This let's us toggle transparency. Who wouldn't like
+   that? I'm pretty sure I got this from [[https://twitter.com/IORayne][Anthony Grimes]]. 
    
    #+BEGIN_SRC emacs-lisp
-      (maybe-install-and-require 'magit)
+     (defun toggle-transparency ()
+       (interactive)
+       (let ((param (cadr (frame-parameter nil 'alpha))))
+         (if (and param (/= param 100))
+             (set-frame-parameter nil 'alpha '(100 100))
+           (set-frame-parameter nil 'alpha '(85 50)))))
+     (global-set-key (kbd "C-c t") 'toggle-transparency)
+   #+END_SRC
+
+* directories, navigation, searching
+** dired
+
+   dired can do lots of things. I'm pretty basic in my use. I do like
+   to have the file listings use human friendly numbers though.
+
+   #+BEGIN_SRC emacs-lisp
+     (setq dired-listing-switches "-alh")
+   #+END_SRC
+
+** helm-mode
+
+   helm-mode is the succesor to anything.el. I don't really have my
+   head around it all yet, but I'm already pretty impressed with it so
+   I'll include it here and add more to it as I understand what is
+   going on.
+
+   My helm-mode guru is [[http://twitter.com/krisajenkins][Kris Jenkins]].
+   
+   #+BEGIN_SRC emacs-lisp
+     (maybe-install-and-require 'helm)
+     (helm-mode 1)
+   #+END_SRC
+
+   We can diminish how much room helm-mode takes up on the command
+   line.
+
+   #+BEGIN_SRC emacs-lisp
+     (diminish 'helm-mode)
    #+END_SRC
    
-   I use magit-status a lot. So let's bind it to C-x g.
+** git
 
-   #+BEGIN_SRC emacs-lisp
-     (global-set-key (kbd "C-x g") 'magit-status)
-   #+END_SRC
+*** magit
 
-** git-gutter-mode+
+    magit is a *fantastic* mode for dealing with git.
+    
+    #+BEGIN_SRC emacs-lisp
+       (maybe-install-and-require 'magit)
+    #+END_SRC
+    
+    I use magit-status a lot. So let's bind it to C-x g.
 
-   It is really nice having +/= in the gutter. I like it more than
-   having line numbers and thus I've dumped linum-mode.
-   
-   #+BEGIN_SRC emacs-lisp
-     (maybe-install-and-require 'git-gutter-fringe+)
-     (global-git-gutter+-mode t)
-   #+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (global-set-key (kbd "C-x g") 'magit-status)
+    #+END_SRC
 
-   It is also quite nice to be able to navigate a file by he git
-   hunks. It makes it a bit easier to see what has changed since the
-   last time in the context of the whole file.
+*** git-gutter-mode+
 
-   #+BEGIN_SRC emacs-lisp
-     (global-set-key (kbd "s-n") 'git-gutter+-next-hunk)
-     (global-set-key (kbd "s-p") 'git-gutter+-previous-hunk)
-   #+END_SRC
+    It is really nice having +/= in the gutter. I like it more than
+    having line numbers and thus I've dumped linum-mode.
+    
+    #+BEGIN_SRC emacs-lisp
+      (maybe-install-and-require 'git-gutter-fringe+)
+      (global-git-gutter+-mode t)
+    #+END_SRC
 
-   We can diminish the size of GitGutter in the mode-line
+    It is also quite nice to be able to navigate a file by he git
+    hunks. It makes it a bit easier to see what has changed since the
+    last time in the context of the whole file.
 
-   #+BEGIN_SRC emacs-lisp
-     (diminish 'git-gutter+-mode)
-   #+END_SRC
-   
+    #+BEGIN_SRC emacs-lisp
+      (global-set-key (kbd "s-n") 'git-gutter+-next-hunk)
+      (global-set-key (kbd "s-p") 'git-gutter+-previous-hunk)
+    #+END_SRC
+
+    We can diminish the size of GitGutter in the mode-line
+
+    #+BEGIN_SRC emacs-lisp
+      (diminish 'git-gutter+-mode)
+    #+END_SRC
+    
 * Communication Modes
 
 ** twittering-mode
