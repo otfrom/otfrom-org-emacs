@@ -63,6 +63,13 @@
      (setq-default indent-tabs-mode nil)
    #+END_SRC
 
+** uniquify
+
+   #+BEGIN_SRC emacs-lisp
+     (require 'uniquify)
+     (setq uniquify-buffer-name-style 'post-forward)   
+   #+END_SRC
+ 
 * non-elpa and work arounds
 
   At the moment we don't have any workarounds. It looked like we might
