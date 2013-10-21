@@ -508,7 +508,7 @@
      installed using homebrew.
 
      #+BEGIN_SRC emacs-lisp
-       (setq ispell-program-name "/usr/local/bin/aspell")
+       (setq ispell-program-name (executable-find "aspell"))
      #+END_SRC
      
 * Macintosh Specific Setup
