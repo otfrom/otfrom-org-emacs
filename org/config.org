@@ -52,6 +52,17 @@
      (maybe-install-and-require 'diminish)
    #+END_SRC
    
+** Tabs are Evil
+
+   I mean, not like evil-mode is good for vi users who want to use
+   emacs, which is fine, and obviously not like a truly evil thing,
+   but you know, not what I want. Hey, I can use hyperbole in my
+   org-mode files if I want to.
+
+   #+BEGIN_SRC emacs-lisp
+     (setq-default indent-tabs-mode nil)
+   #+END_SRC
+
 * non-elpa and work arounds
 
   At the moment we don't have any workarounds. It looked like we might
