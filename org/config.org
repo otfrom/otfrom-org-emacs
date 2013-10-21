@@ -590,3 +590,19 @@
      (server-start)
    #+END_SRC
 
+** Finis
+
+   I should really come up with better exhortations than this. The
+   stuff that Sam Aaron has in emacs-live I actually find quite
+   inspirational. cider.el has similar, though more specifically
+   clojurian things to say that I quite like as well.
+
+   However, I've always expected that any sufficiently advanced lisp
+   system has probably gained sentience. I think Emacs probably
+   qualifies for that.
+
+   Therefore, let's sign off as so...
+
+   #+BEGIN_SRC emacs-lisp
+     (message "Cogito ergo sum.")
+   #+END_SRC
