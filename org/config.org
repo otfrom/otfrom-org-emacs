@@ -88,6 +88,56 @@
      (add-to-list 'load-path (concat user-emacs-directory "non-elpa/"))
    #+END_SRC
    
+* Macintosh Specific Setup
+
+** # is broken on UK Macs
+
+   On UK keyboards shift-3 is bound to £. This is a real pain. The #
+   character is usually bound to M-3. This also causes problems,
+   especially with things like window-number modes. We have a hacked
+   window-number mode below that maps window 3 to s-3, which solves
+   that problem. The # problem is solved with this bit of code below.
+   
+   #+BEGIN_SRC emacs-lisp
+     (global-set-key (kbd "M-3") '(lambda () (interactive) (insert "#")))
+   #+END_SRC
+
+   We also need to deal with £ being a UTF-8 character so we don't get
+   annoying Â characters before non-ascii characters.
+
+   #+BEGIN_SRC emacs-lisp
+     (setq default-process-coding-system '(utf-8-unix . utf-8-unix))
+   #+END_SRC
+   
+** window-number-super mode
+
+   On a mac we have M-3 mapped to be the
+
+   #+BEGIN_SRC emacs-lisp
+     (require 'window-number-super)
+     (window-number-mode 1) ;; for the window numbers
+     (window-number-super-mode 1) ;; for the super key binding        
+   #+END_SRC
+   
+** $PATH is broken
+
+   If you don't run emacs in a terminal on Mac OS X then it can be
+   really awkward to get the stuff you want in your path. This is the
+   best way I've found so far to sort this out and get things like
+   ~/bin and /usr/loca/bin in a $PATH that emacs can access. I quite
+   like running emacs from outside the terminal.
+
+   Thanks to the lovely and helpful [[https://twitter.com/_tobrien][Tom O'Brien]] I've got a better way
+   of doing this and now my emacs environment will be in sync with my
+   shell. You can out more at the github page for
+   [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]].
+
+   #+BEGIN_SRC emacs-lisp
+     (maybe-install-and-require 'exec-path-from-shell)
+     (when (memq window-system '(mac ns))
+       (exec-path-from-shell-initialize))
+   #+END_SRC
+
 * Make it Pretty
 
 ** color themes
@@ -536,56 +586,8 @@
      #+BEGIN_SRC emacs-lisp
        (setq ispell-program-name (executable-find "aspell"))
      #+END_SRC
-     
-* Macintosh Specific Setup
 
-** # is broken on UK Macs
 
-   On UK keyboards shift-3 is bound to £. This is a real pain. The #
-   character is usually bound to M-3. This also causes problems,
-   especially with things like window-number modes. We have a hacked
-   window-number mode below that maps window 3 to s-3, which solves
-   that problem. The # problem is solved with this bit of code below.
-   
-   #+BEGIN_SRC emacs-lisp
-     (global-set-key (kbd "M-3") '(lambda () (interactive) (insert "#")))
-   #+END_SRC
-
-   We also need to deal with £ being a UTF-8 character so we don't get
-   annoying Â characters before non-ascii characters.
-
-   #+BEGIN_SRC emacs-lisp
-     (setq default-process-coding-system '(utf-8-unix . utf-8-unix))
-   #+END_SRC
-   
-** window-number-super mode
-
-   On a mac we have M-3 mapped to be the
-
-   #+BEGIN_SRC emacs-lisp
-     (require 'window-number-super)
-     (window-number-mode 1) ;; for the window numbers
-     (window-number-super-mode 1) ;; for the super key binding        
-   #+END_SRC
-   
-** $PATH is broken
-
-   If you don't run emacs in a terminal on Mac OS X then it can be
-   really awkward to get the stuff you want in your path. This is the
-   best way I've found so far to sort this out and get things like
-   ~/bin and /usr/loca/bin in a $PATH that emacs can access. I quite
-   like running emacs from outside the terminal.
-
-   Thanks to the lovely and helpful [[https://twitter.com/_tobrien][Tom O'Brien]] I've got a better way
-   of doing this and now my emacs environment will be in sync with my
-   shell. You can out more at the github page for
-   [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]].
-
-   #+BEGIN_SRC emacs-lisp
-     (maybe-install-and-require 'exec-path-from-shell)
-     (when (memq window-system '(mac ns))
-       (exec-path-from-shell-initialize))
-   #+END_SRC
 
 * Local Config
 ** custom.el
