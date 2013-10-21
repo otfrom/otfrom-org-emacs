@@ -77,16 +77,15 @@
    I really like the cyberpunk theme from [[https://github.com/overtone/emacs-live][emacs-live]] and [[https://twitter.com/samaaron][Sam Aaron]] is
    a lovely guy. I wanted to avoid needing the old color-theme
    mode. [[https://twitter.com/rikardglans][Rikard Glans]] was nice enought to port it over to the new
-   stuff. I've included it in non-elpa so that I can carry it
-   around. I don't actually want to use it at the moment.
+   stuff.
 
-   What I'd like to use instead is calmer-forest, at least for now. I
-   do need to find a good high contrast theme for using on the *very*
-   low contrast projectors at [[http://www.skillsmatter.com][Skills Matter]].
+   Themes seem to be quite picky about where they live. They seem to
+   work properly only when they are in your ~/.emacs.d directory. I
+   should probably dig deeper into this and find out why I can't put
+   it into ~/.emacs.d/non-elpa.
 
    #+BEGIN_SRC emacs-lisp
-     (maybe-install-and-require 'calmer-forest-theme)
-     (load-theme 'calmer-forest t)
+     (load-theme 'emacslive-cyberpunk t)
    #+END_SRC
 
 ** fonts
