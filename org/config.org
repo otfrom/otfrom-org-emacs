@@ -587,7 +587,15 @@
        (setq ispell-program-name (executable-find "aspell"))
      #+END_SRC
 
+**** org-headlines
 
+     Just like in [[helm and clojure]] we'd like to be able to look at
+     the headlines in org-mode too.
+     
+     #+BEGIN_SRC emacs-lisp
+       (add-hook 'org-mode-hook
+                 (lambda () (local-set-key (kbd "s-h") 'helm-org-headlines)))
+     #+END_SRC
 
 * Local Config
 ** custom.el
