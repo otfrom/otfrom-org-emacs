@@ -28,6 +28,7 @@
 
   Here are the things this emacs config gives examples for:
 
+  - clojure support with cider
   - Separating custom.el from the rest of your files.
   - hippie expand
   - upcasing and downcasing
@@ -43,6 +44,3 @@
   - using add-hook
   - deft and org-mode
   - emacs on Mac OS X fixes
-    
-  It will have very good clojure support as soon as I can get it
-  working. I've caught myself out in the tool chain change again.
