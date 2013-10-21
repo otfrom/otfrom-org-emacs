@@ -23,3 +23,26 @@
   emacs configurations without trashing any of the earlier ones and
   lets me try a lot of things out. It seems to be working for me so
   far.
+
+* Features
+
+  Here are the things this emacs config gives examples for:
+
+  - Separating custom.el from the rest of your files.
+  - hippie expand
+  - upcasing and downcasing
+  - Using diminish to clean up a mode-line
+  - Adding non-elpa files
+  - Using multiple elpa package archives
+  - Using color themes and custom fonts
+  - removing chrome from the windows
+  - very basic helm mode setup
+  - magit & git gutter mode
+  - using Emacs as a twitter client
+  - paredit and rainbow delimiters
+  - using add-hook
+  - deft and org-mode
+  - emacs on Mac OS X fixes
+    
+  It will have very good clojure support as soon as I can get it
+  working. I've caught myself out in the tool chain change again.
