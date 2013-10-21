@@ -327,19 +327,17 @@
    ~/bin and /usr/loca/bin in a $PATH that emacs can access. I quite
    like running emacs from outside the terminal.
 
-   I should really make this detect that it isn't running in a
-   terminal and that it is running on Mac OS X so that I'm not doing
-   a bunch of extra stuff if I don't need to.
+   Thanks to the lovely and helpful [[https://twitter.com/_tobrien][Tom O'Brien]] I've got a better way
+   of doing this and now my emacs environment will be in sync with my
+   shell. You can out more at the github page for
+   [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]].
 
    #+BEGIN_SRC emacs-lisp
-     (setq exec-path '((concat (getenv "HOME") "/bin")
-                       "/usr/local/bin"
-                       "/usr/bin"
-                       "/bin"
-                       "/usr/sbin"
-                       "/sbin"
-                       "/usr/X11/bin"))     
+     (maybe-install-and-require 'exec-path-from-shell)
+     (when (memq window-system '(mac ns))
+       (exec-path-from-shell-initialize))
    #+END_SRC
+
 * Local Config
 ** custom.el
 
