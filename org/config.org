@@ -52,18 +52,24 @@
      (maybe-install-and-require 'diminish)
    #+END_SRC
    
-* non-elpa files
+* non-elpa and work arounds
 
-  Unfortunately, we can't get everything we want from the package
-  archives or we might have files that we're working on locally that
-  we haven't released yet. We keep those in a non-elpa directory. We
-  need to add this to the load-path so that we can require the files
-  we have here.
+  At the moment we don't have any workarounds. It looked like we might
+  need one for cider for a while but the marvelously helpful grand
+  master of the [[https://github.com/clojure-emacs][clojure Emacs repo]] [[http://twitter.com/bbatsov][Bozhidar Batsov]] has fixed it.
 
-  #+BEGIN_SRC emacs-lisp
-    (add-to-list 'load-path (concat user-emacs-directory "non-elpa/"))
-  #+END_SRC
+** non-elpa files
 
+   Unfortunately, we can't get everything we want from the package
+   archives or we might have files that we're working on locally that
+   we haven't released yet. We keep those in a non-elpa directory. We
+   need to add this to the load-path so that we can require the files
+   we have here.
+
+   #+BEGIN_SRC emacs-lisp
+     (add-to-list 'load-path (concat user-emacs-directory "non-elpa/"))
+   #+END_SRC
+   
 * Make it Pretty
 
 ** color themes
@@ -331,8 +337,6 @@
 
 *** clojure
 
-    _*ALL OF THIS CLOJURE STUFF IS HORRIBLY BROKEN ATM*_
-    
     I do *love* coding in clojure. The tool chain has been evolving
     quite a bit over the last few years.
 
@@ -344,44 +348,49 @@
     cider.el is what caused me to declare .emacs.d bankruptcy this
     time and restructure everything.
 
-    clojure-mode and clojure-test-mode have mostly stayed the same.
+    You can get most of the clojure support by just elpa installing
+    cider.
 
-    #+BEGIN_SRC emacs-lisp
-      ;; pkg-info needs the pre 2.0.0 dash.el which has breaking
-      ;; changes. We'll try installing it manually here.
-      ;; (maybe-install-and-require 'pkg-info)
-      
-      ;; (maybe-install-and-require 'clojure-mode)
-      ;; (maybe-install-and-require 'clojure-test-mode)
-      ;; (add-hook 'clojure-mode-hook lisp-hooks)
-    #+END_SRC
-
-    For now we'll still use nrepl.el and see how things work out with
-    cider.el.
-
-    #+BEGIN_SRC emacs-lisp
-      ;; (maybe-install-and-require 'cider)
-      ;; (add-hook 'cider-mode-hook lisp-hooks)
-    #+END_SRC
-
-    We want to have eldoc goodness in the nrepl buffer
+    Most of the clojure emacs goodness if available in the github
+    repo called [[https://github.com/clojure-emacs][clojure-emacs]].
     
     #+BEGIN_SRC emacs-lisp
-      ;; (add-hook 'cider-mode-hook 'nrepl-turn-on-eldoc-mode)
-      ;; (add-hook 'cider-interaction-mode-hook 'nrepl-turn-on-eldoc-mode)
+      (maybe-install-and-require 'cider)
+    #+END_SRC
+    
+    Adding clojure-test-mode is a good idea too. Lots of things out
+    there using the built in clojure.test.
+
+    #+BEGIN_SRC emacs-lisp
+      (maybe-install-and-require 'clojure-test-mode)
+    #+END_SRC
+
+    We'll also want to get our lisp-hooks into our clojurey
+    goodness. It would be a shame to not have it here.
+
+    #+BEGIN_SRC emacs-lisp
+      (add-hook 'clojure-mode-hook lisp-hooks)
+    #+END_SRC
+
+    There are more things that we'll want that are specific to cider
+    mode and the cider interaction buffer.
+    
+    #+BEGIN_SRC emacs-lisp
+      (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+      (add-hook 'cider-interaction-mode-hook 'cider-turn-on-eldoc-mode)
     #+END_SRC
 
     We also want to save the history of our interactions. There might
     be gold there.
 
     #+BEGIN_SRC emacs-lisp
-      ;; (setq cider-history-file (concat user-emacs-directory "cider-history"))
+      (setq cider-history-file (concat user-emacs-directory "cider-history"))
     #+END_SRC
 
     I also want to be able to navigate to the "-" characters in words.
     
     #+BEGIN_SRC emacs-lisp
-      ;; (add-hook 'cider-mode-hook 'subword-mode)
+      (add-hook 'cider-mode-hook 'subword-mode)
     #+END_SRC
 
 * Text Modes
