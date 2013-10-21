@@ -3,3 +3,4 @@ org/*.el
 *~
 bookmarks
 url/*
+/cider-history
