@@ -613,6 +613,17 @@
                  (lambda () (local-set-key (kbd "s-h") 'helm-org-headlines)))
      #+END_SRC
 
+**** org-cheatsheet
+
+     Having cheatsheets around is handy. Especially for sprawling
+     modes like org-mode.
+
+     #+BEGIN_SRC emacs-lisp
+       (maybe-install-and-require 'helm-orgcard)
+       (add-hook 'org-mode-hook
+                        (lambda () (local-set-key [s-f9] 'helm-orgcard)))
+     #+END_SRC
+
 * Local Config
 ** custom.el
 
