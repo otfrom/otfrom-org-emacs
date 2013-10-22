@@ -513,6 +513,16 @@
                  (lambda () (local-set-key (kbd "s-h") 'helm-clojure-headlines)))
      #+END_SRC
 
+**** Clojure Cheat Sheet
+
+     It was this helm addon from Kris Jenkins that made me start to
+     look at helm. And having the clojure cheat sheet to hand is
+     useful.
+
+     #+BEGIN_SRC emacs-lisp
+       (maybe-install-and-require 'clojure-cheatsheet)
+     #+END_SRC
+     
 * Text Modes
 ** Text Mode Basics
 
