@@ -623,6 +623,23 @@
      (load-if-exists custom-file)
    #+END_SRC
 * Finishing
+
+** passwords and encrypted things
+
+   It is good to store your passwords and things in an encrypted
+   file. I call mine mellon, because you can only read it if you are
+   my friend and have the passphrase.
+
+   This does mean that every time you use it you have to give the
+   passphrase, but it does mean that you can keep all your passwords
+   for things like erc and stuff in a file reasonably safely (though
+   it will be in memory when emacs is running, so it isn't completely
+   secure).
+
+   #+BEGIN_SRC emacs-lisp
+     (load-if-exists (concat user-emacs-directory "local/mellon.el.gpg"))
+   #+END_SRC
+   
 ** emacs-server
 
    Emacs startup time isn't nearly as much of a problem as it used to
