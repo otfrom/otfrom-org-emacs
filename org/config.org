@@ -521,8 +521,12 @@
      look at helm. And having the clojure cheat sheet to hand is
      useful.
 
+     I like binding cheatsheets to s-f9.
+
      #+BEGIN_SRC emacs-lisp
        (maybe-install-and-require 'clojure-cheatsheet)
+       (add-hook 'clojure-mode-hook
+                 (lambda () (local-set-key [s-f9] 'clojure-cheatsheet)))
      #+END_SRC
      
 * Text Modes
