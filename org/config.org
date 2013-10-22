@@ -526,7 +526,7 @@
      #+BEGIN_SRC emacs-lisp
        (maybe-install-and-require 'clojure-cheatsheet)
        (add-hook 'clojure-mode-hook
-                 (lambda () (local-set-key [s-f9] 'clojure-cheatsheet)))
+                 (lambda () (local-set-key [s-f1] 'clojure-cheatsheet)))
      #+END_SRC
      
 * Text Modes
@@ -621,7 +621,7 @@
      #+BEGIN_SRC emacs-lisp
        (maybe-install-and-require 'helm-orgcard)
        (add-hook 'org-mode-hook
-                        (lambda () (local-set-key [s-f9] 'helm-orgcard)))
+                        (lambda () (local-set-key [s-f1] 'helm-orgcard)))
      #+END_SRC
 
 * Local Config
