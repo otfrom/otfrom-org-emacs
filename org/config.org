@@ -540,6 +540,20 @@
                  (lambda () (local-set-key [s-f1] 'clojure-cheatsheet)))
      #+END_SRC
      
+** pastebins
+
+   gist, pastebin, refheap. All good ways of sharing snippets of code
+   with people on irc or similar.
+
+*** refheap
+
+    I like [[http://refheap.com][refheap]] and Anthony Grimes seems like a nice guy. And it
+    is built in clojure.
+
+    #+BEGIN_SRC emacs-lisp
+      (maybe-install-and-require 'refheap)
+    #+END_SRC
+
 * Text Modes
 ** Text Mode Basics
 
