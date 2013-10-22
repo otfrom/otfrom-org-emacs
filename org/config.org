@@ -288,6 +288,17 @@
       (diminish 'git-gutter+-mode)
     #+END_SRC
     
+** ace-jump-mode
+
+   Move quickly anywhere in the buffer in 3 keystrokes. We can move
+   there with C-c j and back to where we started with C-c k.
+   
+   #+BEGIN_SRC emacs-lisp
+     (maybe-install-and-require 'ace-jump-mode)
+     (global-set-key (kbd "C-c j") 'ace-jump-mode)
+     (global-set-key (kbd "C-c k") 'ace-jump-mode-pop-mark)
+   #+END_SRC
+   
 * Communication Modes
 
 ** twittering-mode
