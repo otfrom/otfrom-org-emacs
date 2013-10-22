@@ -543,7 +543,7 @@
                        (diminish 'auto-fill-function)))
    #+END_SRC
 
-** deft and org   
+** deft and org
 
 *** deft
 
@@ -554,7 +554,7 @@
     Kris Jenkins.
 
     #+BEGIN_SRC emacs-lisp
-    (maybe-install-and-require 'deft)
+      (maybe-install-and-require 'deft)
     #+END_SRC
 
     We want to keep our deft notes in ~/org/deft
