@@ -6,3 +6,4 @@ url/*
 /local/mellon.el.gpg
 /elpa/archives/
 *.elc
+/elpa/*.txt
