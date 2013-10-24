@@ -649,6 +649,30 @@
                         (lambda () (local-set-key [s-f1] 'helm-orgcard)))
      #+END_SRC
 
+**** org-feed
+
+     I really quite liked google as a blog reader. Before that I used
+     to use Bloglines, which I liked more. Now I find that I can use
+     emacs and org-mode to read RSS and atom.
+
+     #+BEGIN_SRC emacs-lisp
+       (setq org-feed-retrieve-method 'curl)
+     #+END_SRC
+
+***** The Blog Roll
+
+      And this is my incomplete and silly blog roll. There are many
+      more things that I should read and I read very few on the ones
+      in here regularly. If I know you and you are in here, you
+      should really tweet about your new blog posts more.
+
+      If I'm honest, really this is how I keep up with various
+      webcomics.
+
+      #+BEGIN_SRC emacs-lisp
+        (load-if-exists (concat user-emacs-directory "local/blog-roll.el"))
+      #+END_SRC
+ 
 * Local Config
 ** custom.el
 
