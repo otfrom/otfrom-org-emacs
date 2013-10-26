@@ -737,6 +737,16 @@
      (setq custom-file "~/.emacs.d/local/custom.el")
      (load-if-exists custom-file)
    #+END_SRC
+* Utilities and General Keybindings
+  
+** join-line
+
+   A quick way of getting lines back together.
+   
+   #+BEGIN_SRC emacs-lisp
+     (global-set-key (kbd "s-<return>") 'join-line)
+   #+END_SRC
+   
 * Finishing
 
 ** passwords and encrypted things
