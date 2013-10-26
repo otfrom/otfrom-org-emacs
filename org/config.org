@@ -466,48 +466,60 @@
     repo called [[https://github.com/clojure-emacs][clojure-emacs]].
 
 **** cider
-     
-     You can get most of the clojure support by just elpa installing
-     cider.
 
-     #+BEGIN_SRC emacs-lisp
-       (maybe-install-and-require 'cider)
-     #+END_SRC
-     
-     Adding clojure-test-mode is a good idea too. Lots of things out
-     there using the built in clojure.test.
+***** install
 
-     #+BEGIN_SRC emacs-lisp
-       (maybe-install-and-require 'clojure-test-mode)     
-     #+END_SRC
-     
-     We'll also want to get our lisp-hooks into our clojurey
-     goodness. It would be a shame to not have it here.
+      You can get most of the clojure support by just elpa installing
+      cider.
 
-     #+BEGIN_SRC emacs-lisp
-       (add-hook 'clojure-mode-hook lisp-hooks)
-     #+END_SRC
-     
-     There are more things that we'll want that are specific to cider
-     mode and the cider interaction buffer.
+      #+BEGIN_SRC emacs-lisp
+        (maybe-install-and-require 'cider)
+      #+END_SRC
+      
+***** clojure-test-mode
+      
+      Adding clojure-test-mode is a good idea too. Lots of things out
+      there using the built in clojure.test.
 
-     #+BEGIN_SRC emacs-lisp
-       (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
-       (add-hook 'cider-interaction-mode-hook 'cider-turn-on-eldoc-mode)
-     #+END_SRC
-     
-     We also want to save the history of our interactions. There might
-     be gold there.
+      #+BEGIN_SRC emacs-lisp
+        (maybe-install-and-require 'clojure-test-mode)     
+      #+END_SRC
 
-     #+BEGIN_SRC emacs-lisp
-       (setq cider-history-file (concat user-emacs-directory "cider-history"))
-     #+END_SRC
-     
-     I also want to be able to navigate to the "-" characters in words.
+***** clojure-mode-hook
+      
+      We'll also want to get our lisp-hooks into our clojurey
+      goodness. It would be a shame to not have it here.
 
-     #+BEGIN_SRC emacs-lisp
-       (add-hook 'cider-mode-hook 'subword-mode)
-     #+END_SRC
+      #+BEGIN_SRC emacs-lisp
+        (add-hook 'clojure-mode-hook lisp-hooks)
+      #+END_SRC
+
+***** cider-mode-hooks
+      
+      There are more things that we'll want that are specific to cider
+      mode and the cider interaction buffer.
+
+      #+BEGIN_SRC emacs-lisp
+        (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+        (add-hook 'cider-interaction-mode-hook 'cider-turn-on-eldoc-mode)
+      #+END_SRC
+
+***** Save cider history
+      
+      We also want to save the history of our interactions. There might
+      be gold there.
+
+      #+BEGIN_SRC emacs-lisp
+        (setq cider-history-file (concat user-emacs-directory "cider-history"))
+      #+END_SRC
+
+***** subword-mode
+
+      I also want to be able to navigate to the "-" characters in words.
+
+      #+BEGIN_SRC emacs-lisp
+        (add-hook 'cider-mode-hook 'subword-mode)
+      #+END_SRC
 
 **** helm and clojure
 
