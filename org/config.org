@@ -545,6 +545,15 @@
    gist, pastebin, refheap. All good ways of sharing snippets of code
    with people on irc or similar.
 
+*** gist
+
+    As you probably already have a github account, having gist as a
+    way of sharing code snippets is a good idea.
+
+    #+BEGIN_SRC emacs-lisp
+      (maybe-install-and-require 'gist)
+    #+END_SRC
+    
 *** refheap
 
     I like [[http://refheap.com][refheap]] and Anthony Grimes seems like a nice guy. And it
