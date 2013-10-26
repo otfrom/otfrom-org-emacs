@@ -419,6 +419,15 @@
       (add-hook 'prog-mode-hook 'highlight-symbol-mode)
     #+END_SRC
     
+*** autocomplete
+
+    Let's setup the basics of autocomplete for everything.
+
+    #+BEGIN_SRC emacs-lisp
+      (require 'auto-complete-config)
+      (ac-config-default)
+    #+END_SRC
+    
 ** lisp modes
 
    emacs-lisp and clojure are the two that really go in here for now,
@@ -521,6 +530,27 @@
         (add-hook 'cider-mode-hook 'subword-mode)
       #+END_SRC
 
+***** autocomplete
+
+      Popup autocomplete always looks cool and it helps sometimes too.
+
+      #+BEGIN_SRC emacs-lisp
+        (maybe-install-and-require 'ac-nrepl)
+        (add-hook 'cider-repl-mode-hook 'ac-nrepl-setup)
+        (add-hook 'cider-mode-hook 'ac-nrepl-setup)
+        (eval-after-load "auto-complete"
+          '(add-to-list 'ac-modes 'cider-repl-mode))
+        
+        (defun set-auto-complete-as-completion-at-point-function ()
+          (setq completion-at-point-functions '(auto-complete)))
+        (add-hook 'auto-complete-mode-hook 'set-auto-complete-as-completion-at-point-function)
+        
+        (add-hook 'cider-repl-mode-hook 'set-auto-complete-as-completion-at-point-function)
+        (add-hook 'cider-mode-hook 'set-auto-complete-as-completion-at-point-function)
+        
+        (define-key cider-mode-map (kbd "C-c C-d") 'ac-nrepl-popup-doc)
+      #+END_SRC
+      
 **** helm and clojure
 
      Kris Jenkins has a great helm-clojure-headlines that I'd like to
