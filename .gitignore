@@ -7,3 +7,4 @@ url/*
 /elpa/archives/
 *.elc
 /elpa/*.txt
+/.org-id-locations
