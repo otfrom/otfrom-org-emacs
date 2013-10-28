@@ -246,7 +246,27 @@
    #+BEGIN_SRC emacs-lisp
      (diminish 'helm-mode)
    #+END_SRC
-   
+
+*** command-t searching
+
+    #+BEGIN_SRC emacs-lisp
+      (maybe-install-and-require 'helm-ls-git)
+      
+      (defun helm-all ()
+        (interactive)
+        (helm :sources '(helm-source-findutils
+                         ;;helm-source-recentf
+                         helm-source-ls-git
+                         helm-source-bookmarks
+                         helm-source-buffers-list
+                         ;;helm-source-google-suggest
+                         ;;helm-source-locate
+                         )
+              :buffer "*helm all the things*"))
+      
+      (global-set-key (kbd "s-t") 'helm-all)
+      
+    #+END_SRC
 ** git
 
 *** magit
