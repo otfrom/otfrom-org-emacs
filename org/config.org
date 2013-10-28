@@ -744,6 +744,28 @@
         (load-if-exists (concat user-emacs-directory "local/blog-roll.el"))
       #+END_SRC
  
+** html, sgml, xml
+
+*** tagedit
+
+    This gives us paredit like editing for html
+
+    #+BEGIN_SRC emacs-lisp
+      (maybe-install-and-require 'tagedit)
+      (eval-after-load "sgml-mode"
+        '(progn
+           (require 'tagedit)
+           (tagedit-add-paredit-like-keybindings)
+           (add-hook 'html-mode-hook (lambda () (tagedit-mode 1)))))
+    #+END_SRC
+
+    I quite like the sound of the experimental editing stuff. Let's
+    put it in and see if it helps or destroys our code.
+
+    #+BEGIN_SRC emacs-lisp
+      (tagedit-add-experimental-features)
+    #+END_SRC
+    
 * Local Config
 ** custom.el
 
