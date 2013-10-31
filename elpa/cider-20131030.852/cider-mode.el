@@ -74,14 +74,8 @@
   (add-to-list 'completion-at-point-functions
                'cider-complete-at-point))
 
-;;;###autoload
-(defalias 'cider-interaction-mode 'cider-mode)
-
-;;;###autoload
-(defalias 'cider-interaction-mode-hook 'cider-mode-hook)
-
 (easy-menu-define cider-mode-menu cider-mode-map
-  "Menu for CIDER interaction mode"
+  "Menu for CIDER mode"
   '("CIDER"
     ["Jump" cider-jump]
     ["Jump back" cider-jump-back]

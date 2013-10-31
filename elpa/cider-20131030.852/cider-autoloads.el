@@ -3,8 +3,8 @@
 ;;; Code:
 
 
-;;;### (autoloads (cider cider-jack-in) "cider" "cider.el" (21100
-;;;;;;  19318 0 0))
+;;;### (autoloads (cider cider-jack-in) "cider" "cider.el" (21105
+;;;;;;  15317 0 0))
 ;;; Generated autoloads from cider.el
 
 (autoload 'cider-jack-in "cider" "\
@@ -24,7 +24,7 @@ Connect to an nREPL server identified by HOST and PORT.
 ;;;***
 
 ;;;### (autoloads (cider-disable-on-existing-clojure-buffers cider-enable-on-existing-clojure-buffers)
-;;;;;;  "cider-interaction" "cider-interaction.el" (21100 19318 0
+;;;;;;  "cider-interaction" "cider-interaction.el" (21105 15317 0
 ;;;;;;  0))
 ;;; Generated autoloads from cider-interaction.el
 
@@ -42,8 +42,8 @@ See command `cider-mode'.
 
 ;;;***
 
-;;;### (autoloads (cider-mode) "cider-mode" "cider-mode.el" (21100
-;;;;;;  19318 0 0))
+;;;### (autoloads (cider-mode) "cider-mode" "cider-mode.el" (21105
+;;;;;;  15316 0 0))
 ;;; Generated autoloads from cider-mode.el
 
 (autoload 'cider-mode "cider-mode" "\
@@ -53,13 +53,25 @@ Minor mode for REPL interaction from a Clojure buffer.
 
 \(fn &optional ARG)" t nil)
 
-(defalias 'cider-interaction-mode 'cider-mode)
+;;;***
+
+;;;### (autoloads (cider-selector) "cider-selector" "cider-selector.el"
+;;;;;;  (21105 15317 0 0))
+;;; Generated autoloads from cider-selector.el
 
-(defalias 'cider-interaction-mode-hook 'cider-mode-hook)
+(autoload 'cider-selector "cider-selector" "\
+Select a new buffer by type, indicated by a single character.
+The user is prompted for a single character indicating the method by
+which to choose a new buffer.  The `?' character describes then
+available methods.  OTHER-WINDOW provides an optional target.
+
+See `def-cider-selector-method' for defining new methods.
+
+\(fn &optional OTHER-WINDOW)" t nil)
 
 ;;;***
 
-;;;### (autoloads nil "nrepl-client" "nrepl-client.el" (21100 19319
+;;;### (autoloads nil "nrepl-client" "nrepl-client.el" (21105 15317
 ;;;;;;  0 0))
 ;;; Generated autoloads from nrepl-client.el
 
@@ -68,8 +80,8 @@ Minor mode for REPL interaction from a Clojure buffer.
 ;;;***
 
 ;;;### (autoloads nil nil ("cider-eldoc.el" "cider-macroexpansion.el"
-;;;;;;  "cider-pkg.el" "cider-repl-mode.el" "cider-repl.el" "cider-selector.el"
-;;;;;;  "cider-util.el" "cider-version.el") (21100 19319 133760 0))
+;;;;;;  "cider-pkg.el" "cider-repl-mode.el" "cider-repl.el" "cider-util.el"
+;;;;;;  "cider-version.el") (21105 15317 448069 0))
 
 ;;;***
 

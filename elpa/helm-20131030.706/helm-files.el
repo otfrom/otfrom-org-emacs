@@ -44,6 +44,7 @@
 (declare-function image-dired-update-property "image-dired.el" (prop value))
 (declare-function eshell-read-aliases-list "em-alias")
 (declare-function eshell-send-input "esh-mode" (&optional use-region queue-p no-newline))
+(declare-function eshell-kill-input "esh-mode")
 (declare-function eshell-bol "esh-mode")
 (declare-function helm-ls-git-ls "ext:helm-ls-git")
 (declare-function helm-hg-find-files-in-project "ext:helm-ls-hg")
@@ -682,16 +683,16 @@ See `helm-find-files-eshell-command-on-file-1' for more info."
 (defun helm-ff-switch-to-eshell (candidate)
   "Switch to eshell and cd to `helm-ff-default-directory'."
   (let ((cd-eshell #'(lambda ()
+                       (eshell-kill-input)
                        (goto-char (point-max))
                        (insert
                         (format "cd '%s'" helm-ff-default-directory))
                        (eshell-send-input))))
     (if (get-buffer "*eshell*")
-        (progn
-          (helm-switch-to-buffer "*eshell*")
-          (funcall cd-eshell))
-        (call-interactively 'eshell)
-        (funcall cd-eshell))))
+        (helm-switch-to-buffer "*eshell*")
+        (call-interactively 'eshell))
+    (unless (get-buffer-process (current-buffer))
+      (funcall cd-eshell))))
 
 (defun helm-ff-serial-rename-action (method)
   "Rename all marked files to `helm-ff-default-directory' with METHOD.
@@ -1718,7 +1719,8 @@ is non--nil."
 (defun helm-ff-sort-candidates (candidates source)
   "Sort function for `helm-source-find-files'.
 Return candidates prefixed with basename of `helm-input' first."
-  (if (file-directory-p helm-input)
+  (if (or (file-directory-p helm-input)
+          (null candidates))
       candidates
       (let* ((cand1real (car candidates))
              (cand1     (unless (file-exists-p cand1real)
@@ -1727,11 +1729,14 @@ Return candidates prefixed with basename of `helm-input' first."
              (all (sort rest-cand
                         #'(lambda (s1 s2)
                             (let* ((score (lambda (str)
-                                            (if (string-match
-                                                 (concat
-                                                  "\\_<"
-                                                  (helm-basename
-                                                   helm-input)) str) 1 0)))
+                                            (if (condition-case err
+                                                    (string-match
+                                                     (concat
+                                                      "\\_<"
+                                                      (helm-basename
+                                                       helm-input)) str)
+                                                  (invalid-regexp nil))
+                                                1 0)))
                                    (bn1 (helm-basename s1))
                                    (bn2 (helm-basename s2))
                                    (sc1 (funcall score bn1))

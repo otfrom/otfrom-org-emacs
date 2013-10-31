@@ -4,15 +4,22 @@
 
 
 ;;;### (autoloads (magit-run-gitk magit-run-git-gui-blame magit-run-git-gui
-;;;;;;  magit-show magit-show-file-revision magit-init magit-add-change-log-entry-other-window
-;;;;;;  magit-add-change-log-entry magit-wazzup magit-save-index
+;;;;;;  magit-grep magit-show magit-show-file-revision magit-init
+;;;;;;  magit-branch-manager magit-add-change-log-entry-other-window
+;;;;;;  magit-add-change-log-entry magit-wazzup magit-diff-unstaged
+;;;;;;  magit-diff-staged magit-diff-working-tree magit-diff magit-save-index
+;;;;;;  magit-cherry magit-reflog-head magit-reflog magit-file-log
+;;;;;;  magit-log-long-ranged magit-log-long magit-log-ranged magit-log
 ;;;;;;  magit-submodule-sync magit-submodule-init magit-submodule-update-init
-;;;;;;  magit-submodule-update magit-commit magit-git-command magit-shell-command
-;;;;;;  magit-interactive-rebase magit-rename-remote magit-remove-remote
-;;;;;;  magit-add-remote magit-rename-branch magit-delete-branch
-;;;;;;  magit-unstage-all magit-stage-all magit-merge-abort magit-merge
-;;;;;;  magit-status magit-show-commit) "magit" "magit.el" (21100
-;;;;;;  19272 0 0))
+;;;;;;  magit-submodule-update magit-stash-snapshot magit-stash magit-delete-tag
+;;;;;;  magit-tag magit-commit magit-push magit-push-tags magit-git-command
+;;;;;;  magit-shell-command magit-pull magit-remote-update magit-fetch-current
+;;;;;;  magit-fetch magit-reset-working-tree magit-reset-head-hard
+;;;;;;  magit-reset-head magit-interactive-rebase magit-rename-remote
+;;;;;;  magit-remove-remote magit-add-remote magit-rename-branch
+;;;;;;  magit-delete-branch magit-create-branch magit-checkout magit-unstage-all
+;;;;;;  magit-stage-all magit-merge-abort magit-merge magit-status
+;;;;;;  magit-show-commit) "magit" "magit.el" (21105 15267 0 0))
 ;;; Generated autoloads from magit.el
 
 (autoload 'magit-show-commit "magit" "\
@@ -71,8 +78,21 @@ Remove all changes from staging area.
 \('git reset --mixed HEAD').
 
 \(fn)" t nil)
- (autoload 'magit-checkout "magit")
- (autoload 'magit-create-branch "magit")
+
+(autoload 'magit-checkout "magit" "\
+Switch 'HEAD' to REVISION and update working tree.
+Fails if working tree or staging area contain uncommitted changes.
+If REVISION is a remote branch, offer to create a local tracking branch.
+\('git checkout [-b] REVISION').
+
+\(fn REVISION)" t nil)
+
+(autoload 'magit-create-branch "magit" "\
+Switch 'HEAD' to new BRANCH at revision PARENT and update working tree.
+Fails if working tree or staging area contain uncommitted changes.
+\('git checkout -b BRANCH REVISION').
+
+\(fn BRANCH PARENT)" t nil)
 
 (autoload 'magit-delete-branch "magit" "\
 Delete the BRANCH.
@@ -112,13 +132,62 @@ Rename remote OLD to NEW.
 Start a git rebase -i session, old school-style.
 
 \(fn COMMIT)" t nil)
- (autoload 'magit-reset-head "magit")
- (autoload 'magit-reset-head-hard "magit")
- (autoload 'magit-reset-working-tree "magit")
- (autoload 'magit-fetch "magit")
- (autoload 'magit-fetch-current "magit")
- (autoload 'magit-remote-update "magit")
- (autoload 'magit-pull "magit")
+
+(autoload 'magit-reset-head "magit" "\
+Switch 'HEAD' to REVISION, keeping prior working tree and staging area.
+Any differences from REVISION become new changes to be committed.
+With prefix argument, all uncommitted changes in working tree
+and staging area are lost.
+\('git reset [--soft|--hard] REVISION').
+
+\(fn REVISION &optional HARD)" t nil)
+
+(autoload 'magit-reset-head-hard "magit" "\
+Switch 'HEAD' to REVISION, losing all changes.
+Uncomitted changes in both working tree and staging area are lost.
+\('git reset --hard REVISION').
+
+\(fn REVISION)" t nil)
+
+(autoload 'magit-reset-working-tree "magit" "\
+Revert working tree and clear changes from staging area.
+\('git reset --hard HEAD').
+
+With a prefix arg, also remove untracked files.
+With two prefix args, remove ignored files as well.
+
+\(fn &optional ARG)" t nil)
+
+(autoload 'magit-fetch "magit" "\
+Fetch from REMOTE.
+
+\(fn REMOTE)" t nil)
+
+(autoload 'magit-fetch-current "magit" "\
+Run fetch for default remote.
+
+If there is no default remote, ask for one.
+
+\(fn)" t nil)
+
+(autoload 'magit-remote-update "magit" "\
+Update all remotes.
+
+\(fn)" t nil)
+
+(autoload 'magit-pull "magit" "\
+Run git pull.
+
+If there is no default remote, the user is prompted for one and
+its values is saved with git config.  If there is no default
+merge branch, the user is prompted for one and its values is
+saved with git config.  With a prefix argument, the default
+remote is not used and the user is prompted for a remote.  With
+two prefix arguments, the default merge branch is not used and
+the user is prompted for a merge branch.  Values entered by the
+user because of prefix arguments are not saved with git config.
+
+\(fn)" t nil)
 
 (autoload 'magit-shell-command "magit" "\
 Perform arbitrary shell COMMAND.
@@ -132,8 +201,32 @@ Similar to `magit-shell-command', but involves slightly less
 typing and automatically refreshes the status buffer.
 
 \(fn COMMAND)" t nil)
- (autoload 'magit-push-tags "magit")
- (autoload 'magit-push "magit")
+
+(autoload 'magit-push-tags "magit" "\
+Push tags to a remote repository.
+
+Push tags to the current branch's remote.  If that isn't set push
+to \"origin\" or if that remote doesn't exit but only a single
+remote is defined use that.  Otherwise or with a prefix argument
+ask the user what remote to use.
+
+\(fn)" t nil)
+
+(autoload 'magit-push "magit" "\
+Push the current branch to a remote repository.
+
+By default push to the remote specified by the git-config(1) option
+branch.<name>.remote or else origin.  Otherwise or with a prefix
+argument instead ask the user what remote to push to.
+
+When pushing to branch.<name>.remote push to the branch specified by
+branch.<name>.merge.  When pushing to another remote or if the latter
+option is not set push to the remote branch with the same name as the
+local branch being pushed.  With two or more prefix arguments instead
+ask the user what branch to push to.  In this last case actually push
+even if `magit-set-upstream-on-push's value is `refuse'.
+
+\(fn)" t nil)
 
 (autoload 'magit-commit "magit" "\
 Create a new commit on HEAD.
@@ -141,10 +234,33 @@ With a prefix argument amend to the commit at HEAD instead.
 \('git commit [--amend]').
 
 \(fn &optional AMENDP)" t nil)
- (autoload 'magit-tag "magit")
- (autoload 'magit-delete-tag "magit")
- (autoload 'magit-stash "magit")
- (autoload 'magit-stash-snapshot "magit")
+
+(autoload 'magit-tag "magit" "\
+Create a new tag with the given NAME at REV.
+With a prefix argument annotate the tag.
+\('git tag [--annotate] NAME REV').
+
+\(fn NAME REV &optional ANNOTATE)" t nil)
+
+(autoload 'magit-delete-tag "magit" "\
+Delete the tag with the given NAME.
+\('git tag -d NAME').
+
+\(fn NAME)" t nil)
+
+(autoload 'magit-stash "magit" "\
+Create new stash of working tree and staging area named DESCRIPTION.
+Working tree and staging area revert to the current 'HEAD'.
+With prefix argument, changes in staging area are kept.
+\('git stash save [--keep-index] DESCRIPTION')
+
+\(fn DESCRIPTION)" t nil)
+
+(autoload 'magit-stash-snapshot "magit" "\
+Create new stash of working tree and staging area; keep changes in place.
+\('git stash save \"Snapshot...\"; git stash apply stash@{0}')
+
+\(fn)" t nil)
 
 (autoload 'magit-submodule-update "magit" "\
 Update the submodule of the current git repository.
@@ -166,21 +282,72 @@ Initialize the submodules.
 Synchronizes submodule's remote URL configuration.
 
 \(fn)" t nil)
- (autoload 'magit-log "magit")
- (autoload 'magit-log-ranged "magit")
- (autoload 'magit-log-long "magit")
- (autoload 'magit-log-long-ranged "magit")
- (autoload 'magit-file-log "magit")
- (autoload 'magit-reflog "magit")
- (autoload 'magit-reflog-head "magit")
- (autoload 'magit-cherry "magit")
+
+(autoload 'magit-log "magit" "\
+
+
+\(fn &optional RANGE)" t nil)
+
+(autoload 'magit-log-ranged "magit" "\
+
+
+\(fn RANGE)" t nil)
+
+(autoload 'magit-log-long "magit" "\
+
+
+\(fn &optional RANGE)" t nil)
+
+(autoload 'magit-log-long-ranged "magit" "\
+
+
+\(fn RANGE)" t nil)
+
+(autoload 'magit-file-log "magit" "\
+Display the log for the currently visited file or another one.
+With a prefix argument show the log graph.
+
+\(fn FILE &optional USE-GRAPH)" t nil)
+
+(autoload 'magit-reflog "magit" "\
+
+
+\(fn REF)" t nil)
+
+(autoload 'magit-reflog-head "magit" "\
+
+
+\(fn)" t nil)
+
+(autoload 'magit-cherry "magit" "\
+
+
+\(fn HEAD UPSTREAM)" t nil)
 
 (autoload 'magit-save-index "magit" "\
 Add the content of current file as if it was the index.
 
 \(fn)" t nil)
- (autoload 'magit-diff "magit")
- (autoload 'magit-diff-working-tree "magit")
+
+(autoload 'magit-diff "magit" "\
+
+
+\(fn RANGE &optional WORKING ARGS)" t nil)
+
+(autoload 'magit-diff-working-tree "magit" "\
+
+
+\(fn REV)" t nil)
+
+(autoload 'magit-diff-staged "magit" "\
+Show differences between index and HEAD.
+
+\(fn)" t nil)
+
+(autoload 'magit-diff-unstaged "magit" "\
+Show differences between working tree and index.
+
+\(fn)" t nil)
 
 (autoload 'magit-wazzup "magit" "\
 
@@ -199,7 +366,11 @@ a position in a file-visiting buffer.
 
 
 \(fn &optional WHOAMI FILE-NAME)" t nil)
- (autoload 'magit-branch-manager "magit")
+
+(autoload 'magit-branch-manager "magit" "\
+
+
+\(fn)" t nil)
 
 (autoload 'magit-init "magit" "\
 Initialize git repository in the DIR directory.
@@ -229,7 +400,11 @@ buffer active, either in another window or (with a prefix
 argument) in the current window.
 
 \(fn COMMIT FILENAME &optional SELECT PREFIX)" t nil)
- (autoload 'magit-grep "magit")
+
+(autoload 'magit-grep "magit" "\
+
+
+\(fn PATTERN)" t nil)
 
 (autoload 'magit-run-git-gui "magit" "\
 Run `git gui' for the current git repository.
@@ -253,8 +428,8 @@ Run `gitk --all' for the current git repository.
 
 ;;;### (autoloads (magit-bisect-run magit-bisect-visualize magit-bisect-log
 ;;;;;;  magit-bisect-skip magit-bisect-bad magit-bisect-good magit-bisect-reset
-;;;;;;  magit-bisect-start) "magit-bisect" "magit-bisect.el" (21100
-;;;;;;  19272 0 0))
+;;;;;;  magit-bisect-start) "magit-bisect" "magit-bisect.el" (21105
+;;;;;;  15267 0 0))
 ;;; Generated autoloads from magit-bisect.el
 
 (autoload 'magit-bisect-start "magit-bisect" "\
@@ -300,7 +475,7 @@ Bisect automatically by running commands after each step.
 ;;;***
 
 ;;;### (autoloads (magit-blame-mode) "magit-blame" "magit-blame.el"
-;;;;;;  (21100 19272 0 0))
+;;;;;;  (21105 15267 0 0))
 ;;; Generated autoloads from magit-blame.el
 
 (autoload 'magit-blame-mode "magit-blame" "\
@@ -311,7 +486,7 @@ Display blame information inline.
 ;;;***
 
 ;;;### (autoloads (global-magit-wip-save-mode magit-wip-save-mode
-;;;;;;  magit-wip-mode) "magit-wip" "magit-wip.el" (21100 19272 0
+;;;;;;  magit-wip-mode) "magit-wip" "magit-wip.el" (21105 15267 0
 ;;;;;;  0))
 ;;; Generated autoloads from magit-wip.el
 
@@ -361,8 +536,8 @@ See `magit-wip-save-mode' for more information on Magit-Wip-Save mode.
 
 ;;;***
 
-;;;### (autoloads nil nil ("magit-key-mode.el" "magit-pkg.el") (21100
-;;;;;;  19272 614471 0))
+;;;### (autoloads nil nil ("magit-key-mode.el" "magit-pkg.el") (21105
+;;;;;;  15267 849431 0))
 
 ;;;***
 
