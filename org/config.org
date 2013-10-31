@@ -766,6 +766,64 @@
       (tagedit-add-experimental-features)
     #+END_SRC
     
+*** css
+
+    I should probably look at adding more sugar to this.
+    
+**** paredit
+     
+     I *always* want my parens to match (except in text modes).
+
+     #+BEGIN_SRC emacs-lisp
+       (add-hook 'css-mode-hook 'paredit-mode)
+     #+END_SRC
+     
+**** rainbow mode
+
+     And I want to see the colours I'm using.
+     
+     #+BEGIN_SRC emacs-lisp
+       (add-hook 'css-mode-hook 'rainbow-mode)     
+     #+END_SRC
+
+**** eldoc
+
+     And who doesn't want eldoc tips when they are editing things. 
+
+     #+BEGIN_SRC emacs-lisp
+       (maybe-install-and-require 'css-eldoc)
+     #+END_SRC
+
+**** helm support
+
+     And to be able to navigate around our selectors using helm. And
+     then we want to make it a headline key just like in our other
+     modes. 
+
+     #+BEGIN_SRC emacs-lisp
+       (maybe-install-and-require 'helm-css-scss)
+       (add-hook 'css-mode-hook
+                 (lambda () (local-set-key (kbd "s-h") 'helm-css-scss)))
+     #+END_SRC
+
+**** showcss-mode
+
+     I like the look of showcss-mode (soon to be renamed to show-css
+     according to [[http://twitter.com/sanityinc][Steve Purcell]] according to [[https://twitter.com/sanityinc/status/395948249678622720][this tweet]]).
+
+     Because there is a mismatch between the MELPA package name and
+     the mode, we need to do a bit more work to install and load it.
+
+     We also need to install dom.el directly as it showcss-mode
+     doesn't list it as a dependency.
+     
+     #+BEGIN_SRC emacs-lisp
+       (maybe-install-and-require 'dom)
+       (when (not (package-installed-p 'showcss-mode))
+         (package-install 'showcss-mode))
+       (require 'show-css)
+     #+END_SRC
+     
 * Local Config
 ** custom.el
 
