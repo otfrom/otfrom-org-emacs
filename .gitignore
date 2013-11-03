@@ -9,3 +9,4 @@ url/*
 /elpa/*.txt
 /.org-id-locations
 /var/*
+/ac-comphist.dat
