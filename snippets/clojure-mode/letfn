@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# -*- coding: utf-8 -*-
+#name: letfn
+# --
+(letfn [(${1:name) [${2:args}]
+          $0)])

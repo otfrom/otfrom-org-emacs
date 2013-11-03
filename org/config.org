@@ -448,6 +448,31 @@
       (ac-config-default)
     #+END_SRC
     
+*** yasnippet
+
+    I had some lovely things in skeleton mode ages ago to write out
+    boilerplate for C++ and to convert some awful, horrible 100
+    parameter PLSQL functions I had to call. yasnippets seems to be
+    the one that people are using now to do smaller things than what
+    I was doing with skeleton. This is probably a good thing.
+
+    #+BEGIN_SRC emacs-lisp
+      (maybe-install-and-require 'yasnippet)
+    #+END_SRC
+
+    We need a place to add our snippets for each mode as well. We'll
+    put that in snippets.
+
+    #+BEGIN_SRC emacs-lisp
+      (setq yas/root-directory (concat user-emacs-directory "snippets"))
+    #+END_SRC
+
+    And we want to add yasnippets to all modes where we have snippets.
+
+    #+BEGIN_SRC emacs-lisp
+      (yas-global-mode 1)
+    #+END_SRC
+    
 ** lisp modes
 
    emacs-lisp and clojure are the two that really go in here for now,

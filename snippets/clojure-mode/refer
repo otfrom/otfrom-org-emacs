@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# -*- coding: utf-8 -*-
+#name: refer
+# --
+(:refer-clojure :exclude [$0])

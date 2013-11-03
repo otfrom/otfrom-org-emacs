@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# uuid: EE9CE83A-4D76-42B5-9E05-35D1D297EEC6
+# contributor: Translated from textmate snippet by PROGRAM_NAME
+# name: Pullquote Puller
+## binding: "^p
+## condition: "text.html,text.html.markdown,text.html.textile
+# --
+${0:${TM_SELECTED_TEXT/\A{" (.*) "}\z|.*/(?1:$1:{" $0 "})/m}}

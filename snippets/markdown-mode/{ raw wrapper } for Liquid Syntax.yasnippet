@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# uuid: 1EF1C025-C895-4000-AD4E-186DDE575E04
+# contributor: Translated from textmate snippet by PROGRAM_NAME
+# name: {% raw wrapper %} for Liquid Syntax
+## binding: "^r
+## condition: "text.html,text.html.markdown,text.html.textile
+# --
+${0:${TM_SELECTED_TEXT/\A{% raw %}
+(.*)
+{% endraw %}\z|.*/(?1:$1:{% raw %}
+$0
+{% endraw %})/m}}

@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# uuid: 0F1E089E-D2AE-485A-B787-59525C3252A9
+# key: octo
+# contributor: Translated from textmate snippet by PROGRAM_NAME
+# name: Backtick Inline
+## binding: "^c
+## condition: "text.html,text.html.markdown,text.html.textile
+# --
+${0:${TM_SELECTED_TEXT/\A`(.*)`\z|.*/(?1:$1:`$0`)/m}}

@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# -*- coding: utf-8 -*-
+#name: perf
+# --
+(dotimes [_ 10]
+  (time
+    (dotimes [_ ${1:times}] 
+      $0)))

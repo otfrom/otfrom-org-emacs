@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# -*- coding: utf-8 -*-
+# name: for
+# key: for
+# --
+(for [${1:seq-exprs}]
+  ${2:body-expr})

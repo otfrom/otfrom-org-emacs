@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: pp1
+# key: pp1
+# --
+(clojure.pprint/pprint *1)

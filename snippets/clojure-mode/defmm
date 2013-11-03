@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# -*- coding: utf-8 -*-
+#name: defmulti
+# --
+(defmulti ${1:name} ${2:dispatch-fn})

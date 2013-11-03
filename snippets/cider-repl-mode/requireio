@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: requireio
+# key: requireio
+# --
+(require '[clojure.java.io :as io])

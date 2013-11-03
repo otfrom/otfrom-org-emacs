@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# -*- coding: utf-8 -*-
+# name: bp
+# key: bp
+# --
+(swank.core/break)

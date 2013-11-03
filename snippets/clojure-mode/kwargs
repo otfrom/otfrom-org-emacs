@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# -*- coding: utf-8 -*-
+#name: keyword args
+# --
+& {:keys [${1:keys}] :or {${2:defaults}}}

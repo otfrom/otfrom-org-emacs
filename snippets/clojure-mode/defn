@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# -*- coding: utf-8 -*-
+#name: defn
+# --
+(defn ${1:name} ${2:
+  "${3:doc-string}"
+  }[${4:arg-list}]
+  $0)

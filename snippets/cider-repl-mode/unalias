@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: unalias
+# key: unalias
+# --
+(ns-unalias *ns* '${1:alias})

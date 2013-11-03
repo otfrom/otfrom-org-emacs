@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# -*- coding: utf-8 -*-
+#name: condp
+# --
+(condp ${1:pred} ${2:expr}
+  $0)

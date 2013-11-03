@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# -*- coding: utf-8 -*-
+#name: use
+# --
+(:use [${1:namespace} :only [$0]])

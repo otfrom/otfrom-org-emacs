@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# -*- coding: utf-8 -*-
+#name: defrecord
+# --
+(defrecord ${1:Name} [${2:fields}]
+  ${3:Protocol}
+  $0)

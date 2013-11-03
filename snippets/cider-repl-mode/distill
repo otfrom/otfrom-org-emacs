@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: distill
+# key: distill
+# --
+(alembic.still/distill '[${1:${2:dependency} "${3:version}"}])
