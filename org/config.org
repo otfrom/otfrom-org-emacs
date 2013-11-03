@@ -216,7 +216,7 @@
      (global-set-key (kbd "C-c t") 'toggle-transparency)
    #+END_SRC
 
-* directories, navigation, searching
+* directories, navigation, searching, movement
 ** dired
 
    dired can do lots of things. I'm pretty basic in my use. I do like
@@ -318,7 +318,7 @@
      (global-set-key (kbd "C-c j") 'ace-jump-mode)
      (global-set-key (kbd "C-c k") 'ace-jump-mode-pop-mark)
    #+END_SRC
-   
+
 * Communication Modes
 
 ** twittering-mode
@@ -471,6 +471,16 @@
 
     #+BEGIN_SRC emacs-lisp
       (yas-global-mode 1)
+    #+END_SRC
+    
+*** smartscan
+
+    A suggestion from [[http://www.masteringemacs.org/articles/2011/01/14/effective-editing-movement/][Effective Editing]] in [[http://www.masteringemacs.org/][Mastering Emacs]]. 
+    
+    #+BEGIN_SRC emacs-lisp
+      (maybe-install-and-require 'smartscan)
+      (add-hook 'prog-mode-hook
+                '(lambda () (smartscan-mode 1)))
     #+END_SRC
     
 ** lisp modes
