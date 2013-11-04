@@ -82,6 +82,15 @@
      (require 'which-func)
      (which-func-mode 1)
    #+END_SRC
+
+** iedit
+
+   This lets us change things that are the same at the same
+   time. This is useful for renaming variables and functions.
+
+   #+BEGIN_SRC emacs-lisp
+     (maybe-install-and-require 'iedit)
+   #+END_SRC
    
 * non-elpa and work arounds
 
