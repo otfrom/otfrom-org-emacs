@@ -659,6 +659,17 @@
                  (lambda () (local-set-key [s-f1] 'clojure-cheatsheet)))
      #+END_SRC
      
+** python
+   
+*** GNU Emacs IPython Notebook
+
+    The [[http://ipython.org/][IPython Notebook]] is *almost* as cool as org-mode literate
+    programming. There is an Emacs mode you can use with it.
+    
+    #+BEGIN_SRC emacs-lisp
+      (maybe-install-and-require 'ein)
+    #+END_SRC
+
 ** pastebins
 
    gist, pastebin, refheap. All good ways of sharing snippets of code
