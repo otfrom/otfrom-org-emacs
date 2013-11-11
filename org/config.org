@@ -812,6 +812,28 @@
         (load-if-exists (concat user-emacs-directory "local/blog-roll.el"))
       #+END_SRC
  
+**** ox-reveal
+
+     [[https://github.com/hakimel/reveal.js/][reveal.js]] is a great way of making pretty presentations,
+     especially if you have a fair bit of code. Kris Jenkins suggested
+     that [[https://github.com/yjwen/org-reveal][ox-reveal]] would be a great way of generating the slides for
+     reveal.js.
+
+     #+BEGIN_SRC emacs-lisp
+       (maybe-install-and-require 'ox-reveal)
+     #+END_SRC
+
+     As a part of the installation we need to point at where we have
+     our copy of reveal.js. It uses a lot of disk space, but put it
+     into a sub directory for each presentation. Then you can serve it
+     up using http-server in node or a python webserver locally and
+     then things like speaker notes will work. Full screen in Lion is
+     still b0rken. Yet another reason to go over to linux.
+
+     #+BEGIN_SRC emacs-lisp
+       (setq org-reveal-root "reveal.js-2.5.0/")
+     #+END_SRC
+     
 ** html, sgml, xml
 
 *** tagedit

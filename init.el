@@ -23,6 +23,7 @@
     (package-install p))
   (require p))
 
-(maybe-install-and-require 'org)
+;; org-mode always needs to be installed in an emacs where it isn't loaded.
+(require 'org)
 
 (org-babel-load-file (concat (getenv "HOME") "/.emacs.d/org/config.org"))

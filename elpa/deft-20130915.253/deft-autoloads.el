@@ -4,7 +4,7 @@
 
 
 ;;;### (autoloads (deft deft-new-file deft-find-file) "deft" "deft.el"
-;;;;;;  (21093 23399 0 0))
+;;;;;;  (21118 56938 0 0))
 ;;; Generated autoloads from deft.el
 
 (autoload 'deft-find-file "deft" "\
@@ -30,7 +30,7 @@ Switch to *Deft* buffer and load files.
 
 ;;;***
 
-;;;### (autoloads nil nil ("deft-pkg.el") (21093 23399 618766 0))
+;;;### (autoloads nil nil ("deft-pkg.el") (21118 56938 857553 0))
 
 ;;;***
 
