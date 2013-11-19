@@ -246,6 +246,13 @@
    #+BEGIN_SRC emacs-lisp
      (maybe-install-and-require 'nyan-mode)
    #+END_SRC
+
+   And we want to show it and have it be animated.
+
+   #+BEGIN_SRC emacs-lisp
+     (nyan-mode)
+     (nyan-start-animation)
+   #+END_SRC
    
 * directories, navigation, searching, movement
 ** dired
