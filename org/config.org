@@ -238,6 +238,15 @@
      (global-set-key (kbd "C-c t") 'toggle-transparency)
    #+END_SRC
 
+** nyan-mode
+
+   It is good enough for @bodil and @AnnaPawlicka says she'll use it
+   if I install it. So here we go. [[http://www.nyancat.com/][Nyan Cat]] for me.
+
+   #+BEGIN_SRC emacs-lisp
+     (maybe-install-and-require 'nyan-mode)
+   #+END_SRC
+   
 * directories, navigation, searching, movement
 ** dired
 
