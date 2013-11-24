@@ -411,6 +411,46 @@
              ":direct_messages"))   
    #+END_SRC
    
+** jabber.el for gtalk and other jabber servers
+
+   It looks like there will be a time in the near future when Google
+   will no longer support jabber/xmpp. There might be a new mode to
+   support hangouts when that happens or I might have to go over to
+   running my own xmpp server or find someone else who is doing one,
+   or just abandon jabber for irc. Until that time I'll have a go with
+   jabber.el.
+
+   #+BEGIN_SRC emacs-lisp
+     (maybe-install-and-require 'jabber)
+   #+END_SRC
+
+   The setup for the jabber-account-list is in my private gpg
+   encrypted mellon.el file.
+
+   We also want to be able to store a local history of our chats.
+   
+   #+BEGIN_SRC emacs-lisp
+     (setq
+       jabber-history-enabled t
+       jabber-use-global-history nil
+       jabber-backlog-number 40
+       jabber-backlog-days 30)
+   #+END_SRC
+
+   And we want URLs to be clickable.
+   
+   #+BEGIN_SRC emacs-lisp
+     (add-hook 'jabber-chat-mode-hook 'goto-address)
+   #+END_SRC
+
+   And while we want to know when we receive messages having something
+   flicker in the echo area every time someone's status changes is
+   just waaaaay too chatty.
+
+   #+BEGIN_SRC emacs-lisp
+     (setq jabber-alert-presence-hooks nil)
+   #+END_SRC
+   
 * Programming Modes
 ** prog-mode
 

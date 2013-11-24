@@ -10,3 +10,5 @@ url/*
 /.org-id-locations
 /var/*
 /ac-comphist.dat
+/jabber-avatar-cache/*
+/jabber-history/*
