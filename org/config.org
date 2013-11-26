@@ -450,6 +450,13 @@
    #+BEGIN_SRC emacs-lisp
      (setq jabber-alert-presence-hooks nil)
    #+END_SRC
+
+   A convenience binding for firing up all the jabber connections
+   would be handy.
+
+   #+BEGIN_SRC emacs-lisp
+     (global-set-key [f6] 'jabber-connect-all)
+   #+END_SRC
    
 * Programming Modes
 ** prog-mode
