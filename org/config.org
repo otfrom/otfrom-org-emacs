@@ -790,11 +790,11 @@
       (setq deft-text-mode 'org-mode)
     #+END_SRC
 
-    And we want f8 to be the key to get us to the top level search
-    list.
+    And we want f5 to be the key to get us to the top level search
+    list. The f5s are where we put our text mode things.
 
     #+BEGIN_SRC emacs-lisp
-      (global-set-key [f8] 'deft)
+      (global-set-key [f5] 'deft)
     #+END_SRC
 
 *** org-mode
