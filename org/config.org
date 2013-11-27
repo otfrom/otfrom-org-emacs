@@ -357,6 +357,18 @@
      (global-set-key (kbd "C-c k") 'ace-jump-mode-pop-mark)
    #+END_SRC
 
+** window movement
+
+   I need to remap the windmove keys so that they don't conflict with
+   the org-mode or paredit keys.
+
+   #+BEGIN_SRC emacs-lisp
+     (global-set-key [M-s-up] 'windmove-up)
+     (global-set-key [M-s-down] 'windmove-down)
+     (global-set-key [M-s-right] 'windmove-right)
+     (global-set-key [M-s-left] 'windmove-left)
+   #+END_SRC
+   
 * Communication Modes
 
 ** twittering-mode
