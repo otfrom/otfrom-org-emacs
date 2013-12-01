@@ -1016,6 +1016,29 @@
                  (lambda () (local-set-key (kbd "s-h") 'helm-css-scss)))
      #+END_SRC
 
+*** Create a webserver
+
+    We'll need elnode. Who needs all this silly node.js or python
+    stuff to start a webserver.
+
+    #+BEGIN_SRC emacs-lisp
+      (maybe-install-and-require 'elnode)
+    #+END_SRC
+
+    This is a handy helper for when you need a webserver _right here_
+    and want to browse the site you just started.
+    
+    #+BEGIN_SRC emacs-lisp
+      (defun web-server-here (port)
+        (interactive "sServer Port: ")
+        (elnode-make-webserver (file-name-directory (buffer-file-name)) port)
+        (browse-url (concat "http://localhost:" port)))
+    #+END_SRC
+
+    When you want to list the webservers that  are running (say to
+    kill on of them. Just M-x list-elnode-servers
+
+    
 * Local Config
 ** custom.el
 
