@@ -369,6 +369,23 @@
      (global-set-key [M-s-left] 'windmove-left)
    #+END_SRC
    
+** backup directories
+
+   I'm fed up of having to put *~ into my .gitignore everywhere and
+   I shouldn't really leave emacs only things in there anyway. Let's
+   just move all the backup files to one directory.
+
+   #+BEGIN_SRC emacs-lisp
+     (setq
+      backup-by-copying t      ; don't clobber symlinks
+      backup-directory-alist
+      '(("." . "~/.saves"))    ; don't litter my fs tree
+      delete-old-versions t
+      kept-new-versions 6
+      kept-old-versions 2
+      version-control t)       ; use versioned backups
+   #+END_SRC
+
 * Communication Modes
 
 ** twittering-mode
