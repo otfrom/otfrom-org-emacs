@@ -1054,7 +1054,6 @@
 
     When you want to list the webservers that  are running (say to
     kill on of them. Just M-x list-elnode-servers
-
     
 * Local Config
 ** custom.el
