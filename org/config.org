@@ -524,7 +524,7 @@
    like #ukodi and ##cleanweb. And ones for Mastodon C like #kixi.
    
    #+BEGIN_SRC emacs-lisp
-     (setq erc-autojoin-channels-alist '(("freenode.net" "#pallet" "#jclouds" "##cleanweb" "#clojure" "#clojurewerkz" "#cascalog" "#hadoop" "#kixi" "#liberator" "#theodi" "#ldnclj")))
+     (setq erc-autojoin-channels-alist '(("freenode.net" "##cleanweb" "#kixi" "#theodi" "#ldnclj")))
    #+END_SRC
 
    My credentials are in mellon.el of course. This is where I set
