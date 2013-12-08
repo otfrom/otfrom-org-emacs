@@ -532,6 +532,20 @@
    also keep my erc-pals and erc-fools in here. Try to guess which
    list you might be in. :-D
    
+** Hailing Frequencies
+
+   It is good that jabber and erc die when I put the computer to
+   sleep. What I'd like to be able to do is bring them all back up
+   with a simple Vulcan grip.
+
+   #+BEGIN_SRC emacs-lisp
+     (defun open-a-channel ()
+       (interactive)
+       (jabber-connect-all)
+       (erc :server "irc.freenode.net"))
+     (global-set-key [C-M-s-f6] 'open-a-channel)
+   #+END_SRC
+   
 * Programming Modes
 ** prog-mode
 
