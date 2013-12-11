@@ -492,40 +492,53 @@
    Internet Relay Chat is a great way of talking to lots of
    interesting people in what feels a bit like a pub.
 
-   We want to highlight pals and diminish fools, but leave out when
-   people leave and join.
-   
-   #+BEGIN_SRC emacs-lisp
-     (erc-track-mode t)
-     (setq erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE"
-                                      "324" "329" "332" "333" "353" "477"))
-     
-     ;; don't show any of this
-     (setq erc-hide-list '("JOIN" "PART" "QUIT" "NICK"))
-   #+END_SRC
+*** Tracking
+    
+    We want to highlight pals and diminish fools, but leave out when
+    people leave and join.
+    
+    #+BEGIN_SRC emacs-lisp
+      (erc-track-mode t)
+      (setq erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE"
+                                       "324" "329" "332" "333" "353" "477"))
+      
+      ;; don't show any of this
+      (setq erc-hide-list '("JOIN" "PART" "QUIT" "NICK"))
+    #+END_SRC
 
-   Typing happens at the bottom and we want as much history as
-   possible to be visible.
+*** Scroll to Bottom
+    
+    Typing happens at the bottom and we want as much history as
+    possible to be visible.
 
-   #+BEGIN_SRC emacs-lisp
-     (add-hook 'erc-mode-hook 'erc-add-scroll-to-bottom)
-   #+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (add-hook 'erc-mode-hook 'erc-add-scroll-to-bottom)
+    #+END_SRC
 
-   And spell checking is good.
+*** Spell Checking
+    
+    And spell checking is good.
 
-   #+BEGIN_SRC emacs-lisp
-     (erc-spelling-mode 1)
-   #+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (erc-spelling-mode 1)
+    #+END_SRC
 
-   These are all of the channels I join by default. Some big data ones
-   like #cascalog and #hadoop. Some clojure ones such as
-   #liberator, #clojure, #clojurewerkz, #lndclj. Some devopsy ones
-   like #jclouds and #pallet. Some communities that do good
-   like #ukodi and ##cleanweb. And ones for Mastodon C like #kixi.
-   
-   #+BEGIN_SRC emacs-lisp
-     (setq erc-autojoin-channels-alist '(("freenode.net" "##cleanweb" "#kixi" "#theodi" "#ldnclj")))
-   #+END_SRC
+    These are all of the channels I join by default. Some big data ones
+    like #cascalog and #hadoop. Some clojure ones such as
+    #liberator, #clojure, #clojurewerkz, #lndclj. Some devopsy ones
+    like #jclouds and #pallet. Some communities that do good
+    like #ukodi and ##cleanweb. And ones for Mastodon C like #kixi.
+    
+    #+BEGIN_SRC emacs-lisp
+      (setq erc-autojoin-channels-alist '(("freenode.net" "##cleanweb" "#kixi" "#theodi" "#ldnclj")))
+    #+END_SRC
+
+*** Credentials
+    
+    My credentials are in mellon.el of course. This is where I set
+    erc-user-full-name, erc-email-user-id, erc-nick and erc-password. I
+    also keep my erc-pals and erc-fools in here. Try to guess which
+    list you might be in. :-D
 
    My credentials are in mellon.el of course. This is where I set
    erc-user-full-name, erc-email-user-id, erc-nick and erc-password. I
