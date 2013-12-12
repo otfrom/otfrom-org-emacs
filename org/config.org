@@ -160,6 +160,24 @@
        (exec-path-from-shell-initialize))
    #+END_SRC
 
+** ns-win keys that I want to die
+
+   There are a number of Mac/Next things in ns-win.el that are
+   supposed to be there to make things friendlier for people who are
+   interface damaged by Mac OS X and similar. I'm damaged by other
+   things and hope to be moving back to a Linux flavour of some sort
+   again soon.
+
+*** ns-do-hide-emacs
+
+    This is the keybinding that is annoying me the most atm. I'd quite
+    like it to work for headlines in helm in most programming modes
+    instead. 
+    
+    #+BEGIN_SRC emacs-lisp
+      (global-unset-key (kbd "s-h"))
+    #+END_SRC
+
 * Make it Pretty
 
 ** color themes
