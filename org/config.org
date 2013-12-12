@@ -853,6 +853,21 @@
       (maybe-install-and-require 'ein)
     #+END_SRC
 
+** javascript
+
+   According to [[http://twitter.com/sw1nn][Neale Swinnerton]] js2-mode is the way to go.
+
+   #+BEGIN_SRC emacs-lisp
+     (maybe-install-and-require 'js2-mode)
+     (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+   #+END_SRC
+
+   And we can hook it in to run node.js shell scripts as well.
+
+   #+BEGIN_SRC emacs-lisp
+     (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
+   #+END_SRC
+   
 ** pastebins
 
    gist, pastebin, refheap. All good ways of sharing snippets of code
