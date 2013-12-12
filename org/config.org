@@ -439,7 +439,15 @@
            '(":replies"
              ":direct_messages"))   
    #+END_SRC
-   
+
+*** Tweet Button
+
+    Sometimes I just want to scream. Twitter lets me do that.
+
+    #+BEGIN_SRC emacs-lisp
+      (global-set-key [M-f6] 'twittering-update-status-interactive)
+    #+END_SRC
+    
 ** jabber.el for gtalk and other jabber servers
 
    It looks like there will be a time in the near future when Google
