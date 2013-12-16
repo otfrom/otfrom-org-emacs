@@ -1134,6 +1134,15 @@
     When you want to list the webservers that  are running (say to
     kill on of them. Just M-x list-elnode-servers
     
+** markdown
+
+   I love org-mode, but lots of other systems use markdown, github
+   wiki pages being a very good example.
+
+   #+BEGIN_SRC emacs-lisp
+     (maybe-install-and-require 'markdown-mode)
+   #+END_SRC
+   
 * Local Config
 ** custom.el
 
