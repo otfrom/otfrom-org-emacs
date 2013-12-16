@@ -1142,7 +1142,24 @@
    #+BEGIN_SRC emacs-lisp
      (maybe-install-and-require 'markdown-mode)
    #+END_SRC
-   
+
+*** helm markdown headlines
+
+    I want super-h to work and give me headlines just like in
+    org-mode. I feel this could perhaps be a bit better, but this will
+    do for now.
+    
+    #+BEGIN_SRC emacs-lisp
+      (defun helm-markdown-headlines ()
+        "Display headlines for the current Clojure file."
+        (interactive)
+        (helm :sources '(((name . "Markdown Headlines")
+                          (volatile)
+                          (headline "^[#]")))))
+      
+      (add-hook 'markdown-mode-hook
+                (lambda () (local-set-key (kbd "s-h") 'helm-markdown-headlines)))
+    #+END_SRC
 * Local Config
 ** custom.el
 
