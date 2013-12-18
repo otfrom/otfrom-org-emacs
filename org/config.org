@@ -404,6 +404,16 @@
       version-control t)       ; use versioned backups
    #+END_SRC
 
+** ibuffer
+
+   I've never used ibuffer much before, but many people swear by it
+   (rather than at it). I've tried it now and it looks good. So let's
+   rebind C-x C-b.
+
+   #+BEGIN_SRC emacs-lisp
+     (global-set-key (kbd "C-x C-b") 'ibuffer)
+   #+END_SRC
+   
 * Communication Modes
 
 ** twittering-mode
