@@ -1170,6 +1170,47 @@
       (add-hook 'markdown-mode-hook
                 (lambda () (local-set-key (kbd "s-h") 'helm-markdown-headlines)))
     #+END_SRC
+* Multimedia
+
+** emms to play music
+
+   I've used emms before. I like the way you just need an underlying
+   media player and emacs is just a thin shell over that, with some
+   files to help with play lists.
+
+   #+BEGIN_SRC emacs-lisp
+     (maybe-install-and-require 'emms)
+     (require 'emms-player-simple)
+     (require 'emms-source-file)
+     (require 'emms-source-playlist)
+     (setq emms-player-list '(emms-player-mpg321))
+     (setq emms-source-file-default-directory "/Users/bld/Music/")
+   #+END_SRC
+
+*** emms keybindings
+
+    f7-f9 are the previous, play/pause and next keys. It is quite
+    handy having them bound to do that for emms.
+
+    And a control-meta to start everything off.
+
+    #+BEGIN_SRC emacs-lisp
+      (global-set-key (kbd "C-M-<f8>") 'emms-playlist-mode-go)
+      (global-set-key (kbd "M-<f8>") 'emms-pause)
+      (global-set-key (kbd "M-<f9>") 'emms-next)
+      (global-set-key (kbd "M-<f7>") 'emms-previous)
+    #+END_SRC
+    
+*** Turn off emms-mode-line
+
+    There really is enough in that modeline already. We don't need to
+    add more.
+
+    #+BEGIN_SRC emacs-lisp
+      (require 'emms-mode-line)
+      (emms-mode-line 0)
+    #+END_SRC
+    
 * Local Config
 ** custom.el
 
