@@ -592,6 +592,16 @@
             (erc :server "irc.freenode.net"))))
     #+END_SRC
 
+*** Logging
+
+    Handy to save the irc logs so we have a way of finding interesting
+    things again after hearing about them on irc.
+    
+    #+BEGIN_SRC emacs-lisp
+      (setq erc-log-channels-directory (concat user-emacs-directory "erc/logs/"))
+      (setq erc-save-buffer-on-part t)
+    #+END_SRC
+    
 ** Hailing Frequencies
 
    It is good that jabber and erc die when I put the computer to
