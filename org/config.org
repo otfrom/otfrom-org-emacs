@@ -759,17 +759,22 @@
 
      Thx again to [[http://twitter.com/krisajenkins][Kris Jenkins]] and his [[http://blog.jenkster.com/2013/12/popup-help-in-emacs-lisp.html][blog post]] I've got even yet
      more help with emacs-lisp functions in a popup just like in ac
-     stuff in clojure modes.
+     stuff in clojure modes. Thanks to [[http://twitter.com/sanityinc][Steve Purcell]] we have an
+     improved version that gets faces and vars in addition to
+     functions, so in some ways it is even a bit better than what is
+     available in cider/clojure-mode (from my understanding anyway). 
 
      #+BEGIN_SRC emacs-lisp
        (require 'popup)
        
-       (defun describe-function-in-popup ()
+       (defun describe-thing-in-popup ()
          (interactive)
-         (let ((description (save-window-excursion
-                              (describe-function (symbol-at-point))
-                              (switch-to-buffer "*Help*")
-                              (buffer-string))))
+         (let* ((thing (symbol-at-point))
+                (help-xref-following t)
+                (description (with-temp-buffer
+                               (help-mode)
+                               (help-xref-interned thing)
+                               (buffer-string))))
            (popup-tip description
                       :point (point)
                       :around t
