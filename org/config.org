@@ -1225,14 +1225,14 @@
 
    I've used emms before. I like the way you just need an underlying
    media player and emacs is just a thin shell over that, with some
-   files to help with play lists.
+   files to help with play lists. We're using mpg321 from homebrew on
+   a mac to play the files.
 
    #+BEGIN_SRC emacs-lisp
      (maybe-install-and-require 'emms)
-     (require 'emms-player-simple)
-     (require 'emms-source-file)
-     (require 'emms-source-playlist)
-     (setq emms-player-list '(emms-player-mpg321))
+     (require 'emms-setup)
+     (emms-standard)
+     (emms-default-players)
      (setq emms-source-file-default-directory "/Users/bld/Music/")
    #+END_SRC
 
@@ -1248,6 +1248,7 @@
       (global-set-key (kbd "M-<f8>") 'emms-pause)
       (global-set-key (kbd "M-<f9>") 'emms-next)
       (global-set-key (kbd "M-<f7>") 'emms-previous)
+      (global-set-key (kbd "s-<f8>") 'emms-stop)
     #+END_SRC
     
 *** Turn off emms-mode-line
