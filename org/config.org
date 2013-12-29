@@ -575,7 +575,6 @@
     erc-user-full-name, erc-email-user-id, erc-nick and erc-password. I
     also keep my erc-pals and erc-fools in here. Try to guess which
     list you might be in. :-D
-
     
 *** Switch to irc
 
