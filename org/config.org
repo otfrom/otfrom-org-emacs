@@ -756,6 +756,41 @@
        (add-hook 'emacs-lisp-mode-hook lisp-hooks)
      #+END_SRC
 
+**** Pop Up Help in Emacs Lisp
+
+     Thx again to [[http://twitter.com/krisajenkins][Kris Jenkins]] and his [[http://blog.jenkster.com/2013/12/popup-help-in-emacs-lisp.html][blog post]] I've got even yet
+     more help with emacs-lisp functions in a popup just like in ac
+     stuff in clojure modes.
+
+     #+BEGIN_SRC emacs-lisp
+       (require 'popup)
+       
+       (defun describe-function-in-popup ()
+         (interactive)
+         (let ((description (save-window-excursion
+                              (describe-function (symbol-at-point))
+                              (switch-to-buffer "*Help*")
+                              (buffer-string))))
+           (popup-tip description
+                      :point (point)
+                      :around t
+                      :height 30
+                      :scroll-bar t
+                      :margin t)))
+     #+END_SRC
+
+***** The usual help keybinding
+
+      Let's use C-c C-d for describing functions at point as this is
+      the binding in cider/nrepl that I'm used to. We'll probably do
+      this in other modes as well so we'll make it a local keybinding
+      and then it will more or less [[http://en.wikipedia.org/wiki/DWIM][dwim]].
+
+      #+BEGIN_SRC emacs-lisp
+        (add-hook 'emacs-lisp-mode-hook
+                  (lambda () (local-set-key (kbd "C-c C-d") 'describe-function-in-popup)))
+      #+END_SRC
+
 *** clojure
 
     I do *love* coding in clojure. The tool chain has been evolving
