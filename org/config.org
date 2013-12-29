@@ -792,7 +792,7 @@
 
       #+BEGIN_SRC emacs-lisp
         (add-hook 'emacs-lisp-mode-hook
-                  (lambda () (local-set-key (kbd "C-c C-d") 'describe-function-in-popup)))
+                  (lambda () (local-set-key (kbd "C-c C-d") 'describe-thing-in-popup)))
       #+END_SRC
 
 *** clojure
