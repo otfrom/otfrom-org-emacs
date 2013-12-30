@@ -1244,10 +1244,10 @@
     And a control-meta to start everything off.
 
     #+BEGIN_SRC emacs-lisp
-      (global-set-key (kbd "C-M-<f8>") 'emms-playlist-mode-go)
-      (global-set-key (kbd "M-<f8>") 'emms-pause)
-      (global-set-key (kbd "M-<f9>") 'emms-next)
-      (global-set-key (kbd "M-<f7>") 'emms-previous)
+      (global-set-key (kbd "C-M-s-<f8>") 'emms-playlist-mode-go)
+      (global-set-key (kbd "<f8>") 'emms-pause)
+      (global-set-key (kbd "<f9>") 'emms-next)
+      (global-set-key (kbd "<f7>") 'emms-previous)
       (global-set-key (kbd "s-<f8>") 'emms-stop)
     #+END_SRC
     
