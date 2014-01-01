@@ -206,15 +206,27 @@
       (setq custom-theme-directory (concat user-emacs-directory "themes"))
     #+END_SRC
 
-*** cyberpunk
+*** grandshell
+
+    I've been finding lots of interesting things from [[https://twitter.com/steckerhalter][steckerhalter]]
+    and this [[https://github.com/steckerhalter/grandshell-theme][grandshell]] theme looks pretty good. I'm going to try it
+    for a while.
+    
+    #+BEGIN_SRC emacs-lisp
+      (maybe-install-and-require 'grandshell-theme)
+    #+END_SRC
+
+*** cyberpunk, I still love you
     
     I really like the cyberpunk theme from [[https://github.com/overtone/emacs-live][emacs-live]] and [[https://twitter.com/samaaron][Sam Aaron]] is
     a lovely guy. I wanted to avoid needing the old color-theme
     mode. [[https://twitter.com/rikardglans][Rikard Glans]] was nice enought to port it over to the new
     stuff.
 
+    I'm not using it at the moment as I'm trying out other themes.
+
     #+BEGIN_SRC emacs-lisp
-      (load-theme 'emacslive-cyberpunk t)
+      ;; (load-theme 'emacslive-cyberpunk t)
     #+END_SRC
 
 ** fonts
