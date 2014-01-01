@@ -92,6 +92,18 @@
      (maybe-install-and-require 'iedit)
    #+END_SRC
    
+** Make emacs Discoverable
+
+   I started following [[https://twitter.com/melpa_emacs][@melpa_emacs]] at the end of 2013. From that I
+   discovered (see what I did there) discover.el, which has an
+   explanatory blog post [[http://www.masteringemacs.org/articles/2013/12/21/discoverel-discover-emacs-context-menus/][here]].
+   
+   
+   #+BEGIN_SRC emacs-lisp
+     (maybe-install-and-require 'discover)
+     (global-discover-mode 1)
+   #+END_SRC
+   
 * non-elpa and work arounds
 
   At the moment we don't have any workarounds. It looked like we might
