@@ -311,26 +311,6 @@
      (diminish 'helm-mode)
    #+END_SRC
 
-*** command-t searching
-
-    #+BEGIN_SRC emacs-lisp
-      (maybe-install-and-require 'helm-ls-git)
-      
-      (defun helm-all ()
-        (interactive)
-        (helm :sources '(helm-source-findutils
-                         ;;helm-source-recentf
-                         helm-source-ls-git
-                         helm-source-bookmarks
-                         helm-source-buffers-list
-                         ;;helm-source-google-suggest
-                         ;;helm-source-locate
-                         )
-              :buffer "*helm all the things*"))
-      
-      (global-set-key (kbd "s-t") 'helm-all)
-      
-    #+END_SRC
 ** git
 
 *** magit
@@ -422,6 +402,28 @@
      (global-set-key (kbd "C-x C-b") 'ibuffer)
    #+END_SRC
    
+** projectile
+
+   [[https://github.com/bbatsov/projectile][projectile]] from [[http://twtitter.com/bbatsov][Bozhidar Batsov]] constrains and helps things like
+   searches so that they happen within a git repo or leiningen
+   project.
+
+   #+BEGIN_SRC emacs-lisp
+     (maybe-install-and-require 'projectile)
+     (projectile-global-mode)
+   #+END_SRC
+
+   
+*** projectile and helm
+
+    Of course projectile and helm play along nicely. This is a
+    replacement for the super-t stuff I had before.
+
+    #+BEGIN_SRC emacs-lisp
+      (maybe-install-and-require 'helm-projectile)
+      (global-set-key (kbd "s-t") 'helm-projectile)
+    #+END_SRC
+    
 * Communication Modes
 
 ** twittering-mode
