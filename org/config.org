@@ -413,6 +413,12 @@
      (projectile-global-mode)
    #+END_SRC
 
+   But we don't need to see that projectile mode is running everywhere
+   so let's diminish it.
+
+   #+BEGIN_SRC emacs-lisp
+     (diminish 'projectile-mode)
+   #+END_SRC
    
 *** projectile and helm
 
