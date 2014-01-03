@@ -392,6 +392,20 @@
      (global-set-key [M-s-right] 'windmove-right)
      (global-set-key [M-s-left] 'windmove-left)
    #+END_SRC
+
+** buffer movement
+
+   Sometimes the problem isn't that you want to move the cursor to a
+   particular window, but you want to move a buffer. buffer-move lets
+   you do that.
+
+   #+BEGIN_SRC emacs-lisp
+     (maybe-install-and-require 'buffer-move)
+     (global-set-key (kbd "<s-up>")     'buf-move-up)
+     (global-set-key (kbd "<s-down>")   'buf-move-down)
+     (global-set-key (kbd "<s-left>")   'buf-move-left)
+     (global-set-key (kbd "<s-right>")  'buf-move-right)
+   #+END_SRC
    
 ** backup directories
 
