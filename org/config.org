@@ -409,6 +409,17 @@
       (global-set-key (kbd "<s-right>")  'buf-move-right)
     #+END_SRC
 
+*** shrink and enlarge windows
+
+    On large screens where there are lots of windows in a frame we'll
+    often want to shrink or grow individual windows. It would be handy
+    to have easier keys for this.
+
+    #+BEGIN_SRC emacs-lisp
+      (global-set-key (kbd "s-=") 'shrink-window)
+      (global-set-key (kbd "s-+") 'enlarge-window)
+    #+END_SRC
+    
 ** backup directories
 
    I'm fed up of having to put *~ into my .gitignore everywhere and
