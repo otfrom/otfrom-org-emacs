@@ -83,13 +83,18 @@
      (which-func-mode 1)
    #+END_SRC
 
-** iedit
+** Multiple Cursors
 
-   This lets us change things that are the same at the same
-   time. This is useful for renaming variables and functions.
+   This is a replacement for the iedit that I used to have. Neale
+   Swinnerton was the one who showed this to me and it looked really
+   cool.
 
    #+BEGIN_SRC emacs-lisp
-     (maybe-install-and-require 'iedit)
+     (maybe-install-and-require 'multiple-cursors)
+     (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+     (global-set-key (kbd "C->") 'mc/mark-next-like-this)
+     (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+     (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
    #+END_SRC
    
 ** Make emacs Discoverable

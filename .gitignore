@@ -14,3 +14,4 @@ url/*
 /jabber-history/*
 /emms/*
 /projectile-bookmarks.eld
+/.mc-lists.el
