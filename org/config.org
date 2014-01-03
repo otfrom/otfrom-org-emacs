@@ -51,7 +51,20 @@
    #+BEGIN_SRC emacs-lisp
      (maybe-install-and-require 'diminish)
    #+END_SRC
-   
+
+*** Random Default on Minor Modes
+
+    With newer version of emacs new minor modes get turned on by
+    default and clutter up my mode line. I'd like to turn them off.
+    
+**** auto-revert
+
+     OK. I get it. auto-revert mode is on.
+
+     #+BEGIN_SRC emacs-lisp
+       (diminish 'auto-revert-mode)
+     #+END_SRC
+     
 ** Tabs are Evil
 
    I mean, not like evil-mode is good for vi users who want to use
