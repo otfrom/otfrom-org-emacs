@@ -1,1 +1,0 @@
-("~/emacs-configs/otfrom-org-emacs/")
