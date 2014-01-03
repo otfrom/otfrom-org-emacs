@@ -3,16 +3,16 @@
 ;;; Code:
 
 
-;;;### (autoloads nil "grandshell-theme" "grandshell-theme.el" (21188
-;;;;;;  23630 0 0))
+;;;### (autoloads nil "grandshell-theme" "grandshell-theme.el" (21189
+;;;;;;  49966 0 0))
 ;;; Generated autoloads from grandshell-theme.el
 
 (when (and (boundp 'custom-theme-load-path) load-file-name) (add-to-list 'custom-theme-load-path (file-name-as-directory (file-name-directory load-file-name))))
 
 ;;;***
 
-;;;### (autoloads nil nil ("grandshell-theme-pkg.el") (21188 23630
-;;;;;;  202293 0))
+;;;### (autoloads nil nil ("grandshell-theme-pkg.el") (21189 49966
+;;;;;;  277276 0))
 
 ;;;***
 

@@ -6,7 +6,7 @@
 ;;         Lennart Staflin <lenst@lysator.liu.se>
 ;;         Phil Hagelberg <technomancy@gmail.com>
 ;; URL: http://github.com/clojure-emacs/clojure-mode
-;; Version: 20131227.1044
+;; Version: 20140102.1531
 ;; X-Original-Version: 2.1.1
 ;; Keywords: languages, lisp
 
@@ -408,6 +408,7 @@ in :db/id[:db.part/user]"
     (modify-syntax-entry ?\[ "(]" table)
     (modify-syntax-entry ?\] ")[" table)
     (modify-syntax-entry ?^ "'" table)
+    (modify-syntax-entry ?/ "." table)
     ;; Make hash a usual word character
     (modify-syntax-entry ?# "_ p" table)
     table))

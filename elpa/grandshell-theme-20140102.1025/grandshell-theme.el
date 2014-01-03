@@ -88,7 +88,7 @@
    `(bold-italic ((,class (:slant italic :weight bold))))
    `(underline ((,class (:underline t))))
    `(shadow ((,class (:foreground ,normal))))
-   `(link ((,class (:foreground nil :underline t))))
+   `(link ((,class (:foreground ,malachite :underline t))))
 
    `(highlight ((,class (:inverse-video nil :background ,alt-background))))
    `(isearch ((,class (:foreground ,yellow :background ,background :inverse-video t))))
@@ -533,6 +533,9 @@
    ;; sh-script
    `(sh-heredoc ((,class (:foreground nil :inherit font-lock-string-face :weight normal))))
    `(sh-quoted-exec ((,class (:foreground nil :inherit font-lock-preprocessor-face))))
+
+   ;; shr
+   `(shr-link ((,class (:foreground ,blue :underline t))))
 
    ;; slime
    `(slime-highlight-edits-face ((,class (:foreground ,strong))))
