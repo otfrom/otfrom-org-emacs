@@ -735,11 +735,14 @@
        (yas-global-mode 1)
      #+END_SRC
      
+**** Diminish it
 
-    #+BEGIN_SRC emacs-lisp
-      (yas-global-mode 1)
-    #+END_SRC
-    
+     I don't need to see it everywhere though.
+
+     #+BEGIN_SRC emacs-lisp
+       (diminish 'yas-minor-mode)
+     #+END_SRC
+
 *** smartscan
 
     A suggestion from [[http://www.masteringemacs.org/articles/2011/01/14/effective-editing-movement/][Effective Editing]] in [[http://www.masteringemacs.org/][Mastering Emacs]]. 
