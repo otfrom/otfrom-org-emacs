@@ -6,8 +6,8 @@
 ;; Keywords: clojure nrepl cheatsheet helm
 ;; URL: https://github.com/krisajenkins/clojure-cheatsheet
 ;; Created: 7th August 2013
-;; Version: 20131231.746
-;; X-Original-Version: 0.2.1
+;; Version: 20140103.2333
+;; X-Original-Version: 0.2.2
 ;; Package-Requires: ((helm "1.5.3") (cider "0.1.8"))
 
 ;;; Commentary:
@@ -21,7 +21,7 @@
 (require 'nrepl-client)
 (require 'cider-interaction)
 
-(defvar clojure-cheatsheet-hierarchy
+(defconst clojure-cheatsheet-hierarchy
   '(("Primitives"
      ("Numbers"
       ("Arithmetic"
@@ -455,7 +455,14 @@
 	 ("Higher Order"
 	  (clojure.core.async filter< filter> map map< map> mapcat< mapcat> partition partition-by reduce remove< remove> split))
 	 ("Pre-Populate"
-	  (clojure.core.async into onto-chan to-chan))))
+	  (clojure.core.async into onto-chan to-chan)))
+	("Unit Tests"
+	 ("Defining"
+	  (clojure.test deftest deftest- testing is are))
+	 ("Running"
+	  (clojure.test run-tests run-all-tests))
+	 ("Fixtures"
+	  (clojure.test use-fixtures join-fixtures compose-fixtures))))
   "A data structure designed for the maintainer's convenience, which we
 transform into the format that helm requires.
 

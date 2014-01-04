@@ -4,14 +4,19 @@
 
 
 ;;;### (autoloads (global-discover-mode discover-mode discover-add-context-menu
-;;;;;;  discover-show-context-menu) "discover" "discover.el" (21188
-;;;;;;  962 0 0))
+;;;;;;  discover-get-context-symbol discover-show-context-menu) "discover"
+;;;;;;  "discover.el" (21191 59469 0 0))
 ;;; Generated autoloads from discover.el
 
 (autoload 'discover-show-context-menu "discover" "\
 Shows a context menu GROUP-NAME
 
 \(fn GROUP-NAME)" nil nil)
+
+(autoload 'discover-get-context-symbol "discover" "\
+Macro that returns the context menu symbol for GROUP-NAME
+
+\(fn GROUP-NAME)" nil t)
 
 (autoload 'discover-add-context-menu "discover" "\
 Save a context menu to Discover and bind it to the correct keys.
@@ -105,7 +110,8 @@ See `discover-mode' for more information on Discover mode.
 
 ;;;***
 
-;;;### (autoloads nil nil ("discover-pkg.el") (21188 962 932707 0))
+;;;### (autoloads nil nil ("discover-pkg.el") (21191 59469 275252
+;;;;;;  0))
 
 ;;;***
 

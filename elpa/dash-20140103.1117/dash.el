@@ -3,8 +3,8 @@
 ;; Copyright (C) 2012 Magnar Sveen
 
 ;; Author: Magnar Sveen <magnars@gmail.com>
-;; Version: 20131223.933
-;; X-Original-Version: 2.4.0
+;; Version: 20140103.1117
+;; X-Original-Version: 2.4.1
 ;; Keywords: lists
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -525,7 +525,7 @@ from INDICES."
         (!cons (car split) r)
         (setq list (cdr (cadr split)))))
     (!cons list r)
-    (-flatten (nreverse r))))
+    (apply '-concat (nreverse r))))
 
 (defmacro --split-with (pred list)
   "Anaphoric form of `-split-with'."
