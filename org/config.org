@@ -944,10 +944,17 @@
         
         (add-hook 'cider-repl-mode-hook 'set-auto-complete-as-completion-at-point-function)
         (add-hook 'cider-mode-hook 'set-auto-complete-as-completion-at-point-function)
-        
-        (define-key cider-mode-map (kbd "C-c C-d") 'ac-nrepl-popup-doc)
       #+END_SRC
       
+***** Pop up Documentation
+
+      Now that we have popups, let's make the docs go in a popup
+      rather than another window.
+
+      #+BEGIN_SRC emacs-lisp
+        (define-key cider-mode-map (kbd "C-c C-d") 'ac-nrepl-popup-doc)
+      #+END_SRC
+ 
 **** helm and clojure
 
      Kris Jenkins has a great helm-clojure-headlines that I'd like to
