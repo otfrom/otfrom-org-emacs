@@ -1258,6 +1258,30 @@
      (maybe-install-and-require 'markdown-mode)
    #+END_SRC
 
+*** Github Flavouring
+
+    I pretty much *always* want to do [[http://github.github.com/github-flavored-markdown/][github flavoured markdown]], so
+    let's just change that auto-mode-alist.
+
+    #+BEGIN_SRC emacs-lisp
+      (add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
+    #+END_SRC
+
+**** Github Flavoured Preview
+     
+     We also need to change the preview as the standard preview
+     doesn't render github flavoured markdown correctly. I've
+     installed markdown Preview+ as a Chrome Extension and associated
+     .md files with Chrome on Mac OS X.
+
+     This is all a bit broken really, but will work for now. I'm sorry
+     that it is like this and I'm sure some day I'll fix it. This also
+     means that you use markdown-open rather than markdown-preview.
+
+     #+BEGIN_SRC emacs-lisp
+       (setq markdown-open-command "open")
+     #+END_SRC
+     
 *** helm markdown headlines
 
     I want super-h to work and give me headlines just like in
