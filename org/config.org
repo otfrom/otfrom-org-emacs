@@ -1264,7 +1264,7 @@
     let's just change that auto-mode-alist.
 
     #+BEGIN_SRC emacs-lisp
-      (add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
+      (add-to-list 'auto-mode-alist '(".md$" . gfm-mode))
     #+END_SRC
 
 **** Github Flavoured Preview
