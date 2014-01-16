@@ -579,7 +579,8 @@
 *** Tracking
     
     We want to highlight pals and diminish fools, but leave out when
-    people leave and join.
+    people leave and join. The list of all valid message types can be found at
+    https://www.alien.net.au/irc/irc2numerics.html
     
     #+BEGIN_SRC emacs-lisp
       (erc-track-mode t)
