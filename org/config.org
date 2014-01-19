@@ -1188,6 +1188,84 @@
        (setq org-reveal-root "reveal.js-2.5.0/")
      #+END_SRC
      
+**** Scheduling, Project Management, Time Keeping
+
+***** Time Tracking and Estimates
+
+      org-mode is huge. It does so much, but my reason for using it
+      was so that I could track effort vs estimates. It makes me
+      happier than a burn down chart, but probably just because I'm
+      writing elisp to do it rather than excel or google docs. This
+      hack works on my mind, but YMMV.
+
+****** clocking in, out and persistence
+
+       It is true, emacs crashes, I forget to clock out, there is just
+       life, ok? So, when we clock in to a new task we'll be prompted
+       to complete the time for the old task. Just to keep things
+       straight.  
+
+       There is more about measuring idle time in the org-mode docs
+       [[http://orgmode.org/manual/Resolving-idle-time.html][here]]. 
+       
+       #+BEGIN_SRC emacs-lisp
+         (setq org-clock-persist 'history)
+         (org-clock-persistence-insinuate)
+       #+END_SRC
+
+****** Tracking effort vs estimates with clocksum
+
+       I think of days as being working days rather than groups of 24
+       hours (I'm damaged, what can I say). So I want to see sums of
+       times always in hours rather than as days. Otherwise I just get
+       confused and wonder why spending three eight hour days working on
+       something gets summed up as just one day.
+
+       I found out about this bit of configuration on [[http://stackoverflow.com/questions/17929979/emacs-org-mode-how-to-stop-total-in-column-view-showing-number-of-days][Stack Overflow]].
+
+       This is really handy when looking at things in column mode in
+       org. I use column mode as an alternative to burn down charts to
+       track effort vs estimates.
+
+       #+BEGIN_SRC emacs-lisp
+         (setq org-time-clocksum-format
+               '(:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t))
+       #+END_SRC
+
+***** Workflow Keywords
+
+      TODO, DOING, DONE and WAITING, BLOCKED, CANCELLED, PHONE,
+      MEETING. Let's try these on for size for a while.
+      
+      #+BEGIN_SRC emacs-lisp
+        (setq org-todo-keywords
+              (quote ((sequence "TODO(t)" "DOING(g)" "|" "DONE(d)")
+                      (sequence "WAITING(w@/!)" "BLOCKED(b@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING"))))
+      #+END_SRC
+
+***** Put those logs in a drawer
+
+      It may be big and heavy and wood, but mostly I don't want to see
+      log messages for state change.
+
+      #+BEGIN_SRC emacs-lisp
+        (setq org-log-into-drawer t)
+      #+END_SRC
+
+      We also want to put the clocking in and out into the drawer.
+
+      #+BEGIN_SRC emacs-lisp
+        (setq org-clock-into-drawer t)
+      #+END_SRC
+
+***** You can depend on...
+
+      The sub tasks that are underneath the main task.
+
+      #+BEGIN_SRC emacs-lisp
+        (setq org-enforce-todo-dependencies t)
+      #+END_SRC
+
 ** html, sgml, xml
 
 *** tagedit
