@@ -67,7 +67,8 @@
       (green "#acfb5a")
       (green-darker "#77bb33")
       (cyan "#5af2ee")
-      (malachite "#3affa3")
+      (turquoise "#3affa3")
+      (malachite "#3aff83")
       (blue "#b2baf6")
       (blue-darker "#5555dd")
       (magenta-bright "#f09fff")
@@ -76,6 +77,7 @@
       (magenta-darkest "#1B0026")
       (violet "#78537A")
       (violet-darkest "#110011")
+      (violet-red "#d020a7")
       )
 
   (custom-theme-set-faces
@@ -88,7 +90,7 @@
    `(bold-italic ((,class (:slant italic :weight bold))))
    `(underline ((,class (:underline t))))
    `(shadow ((,class (:foreground ,normal))))
-   `(link ((,class (:foreground ,malachite :underline t))))
+   `(link ((,class (:foreground ,turquoise :underline t))))
 
    `(highlight ((,class (:inverse-video nil :background ,alt-background))))
    `(isearch ((,class (:foreground ,yellow :background ,background :inverse-video t))))
@@ -128,13 +130,13 @@
    `(font-lock-builtin-face ((,class (:foreground ,blue))))
    `(font-lock-comment-delimiter-face ((,class (:foreground ,yellow))))
    `(font-lock-comment-face ((,class (:foreground ,orange))))
-   `(font-lock-constant-face ((,class (:foreground ,green))))
+   `(font-lock-constant-face ((,class (:foreground ,malachite))))
    `(font-lock-doc-face ((,class (:foreground ,magenta))))
    `(font-lock-doc-string-face ((,class (:foreground ,yellow))))
    `(font-lock-function-name-face ((,class (:foreground ,magenta-bright))))
    `(font-lock-keyword-face ((,class (:foreground ,cyan))))
    `(font-lock-negation-char-face ((,class (:foreground ,green))))
-   `(font-lock-preprocessor-face ((,class (:foreground ,red-bright))))
+   `(font-lock-preprocessor-face ((,class (:foreground ,violet-red))))
    `(font-lock-regexp-grouping-backslash ((,class (:foreground ,cyan))))
    `(font-lock-regexp-grouping-construct ((,class (:foreground ,magenta))))
    `(font-lock-string-face ((,class (:foreground ,pink))))
@@ -161,6 +163,9 @@
    `(ac-yasnippet-candidate-face ((,class (:background ,pink-darker :foreground ,darkest))))
    `(ac-yasnippet-selection-face ((,class (:background ,pink :foreground ,darkest))))
 
+   ;; auto-dim-other-buffers
+   `(auto-dim-other-buffers-face ((,class (:background "#0c0c0c"))))
+
    ;; clojure
    `(clojure-test-failure-face ((,class (:background nil :inherit flymake-warnline))))
    `(clojure-test-error-face ((,class (:background nil :inherit flymake-errline))))
@@ -180,7 +185,7 @@
    `(compilation-mode-line-exit ((,class (:foreground ,green))))
    `(compilation-mode-line-fail ((,class (:foreground ,red))))
    `(compilation-mode-line-run ((,class (:foreground ,blue))))
-   `(compilation-info ((,class (:foreground ,malachite))))
+   `(compilation-info ((,class (:foreground ,turquoise))))
 
    ;; diff
    `(diff-added ((,class (:foreground ,green))))
@@ -369,6 +374,9 @@
    ;; highlight-symbol
    `(highlight-symbol-face ((,class (:background ,very-dark))))
 
+   ;; icomplete
+   `(icomplete-first-match ((,class (:foreground "white" :bold t))))
+
    ;; ido
    `(ido-subdir ((,class (:foreground ,magenta))))
    `(ido-first-match ((,class (:foreground ,yellow))))
@@ -476,8 +484,8 @@
    `(org-agenda-dimmed-todo-face ((,class (:foreground ,faint))))
    `(org-block ((,class (:foreground ,orange))))
    `(org-code ((,class (:foreground ,yellow))))
-   `(org-column ((,class (:background ,magenta))))
-   `(org-column-title ((,class (:inherit org-column :weight bold :underline t))))
+   `(org-column ((,class (:inherit default))))
+   `(org-column-title ((,class (:inherit mode-line :foreground ,magenta :weight bold :underline t))))
    `(org-date ((,class (:foreground ,blue :underline t))))
    `(org-document-info ((,class (:foreground ,pink))))
    `(org-document-info-keyword ((,class (:foreground ,pink-darker))))
@@ -491,7 +499,7 @@
    `(org-level-2 ((,class (:foreground ,blue))))
    `(org-level-3 ((,class (:foreground ,pink))))
    `(org-level-4 ((,class (:foreground ,cyan))))
-   `(org-link ((,class (:foreground ,malachite :underline t))))
+   `(org-link ((,class (:foreground ,turquoise :underline t))))
    `(org-scheduled ((,class (:foreground ,green))))
    `(org-scheduled-previously ((,class (:foreground ,yellow))))
    `(org-scheduled-today ((,class (:foreground ,green))))
@@ -548,7 +556,7 @@
    `(term-color-black ((,class (:background ,alt-background :foreground ,alt-background))))
    `(term-color-blue ((,class (:background ,blue :foreground ,blue))))
    `(term-color-cyan ((,class (:background ,cyan :foreground ,cyan))))
-   `(term-color-green ((,class (:background ,green :foreground ,green))))
+   `(term-color-green ((,class (:background ,malachite :foreground ,malachite))))
    `(term-color-magenta ((,class (:background ,magenta :foreground ,magenta))))
    `(term-color-red ((,class (:background ,red :foreground ,red))))
    `(term-color-white ((,class (:background ,contrast-background :foreground ,contrast-background))))
