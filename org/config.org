@@ -1088,11 +1088,11 @@
       (setq deft-text-mode 'org-mode)
     #+END_SRC
 
-    And we want f5 to be the key to get us to the top level search
+    And we want C-f5 to be the key to get us to the top level search
     list. The f5s are where we put our text mode things.
 
     #+BEGIN_SRC emacs-lisp
-      (global-set-key [f5] 'deft)
+      (global-set-key [C-f5] 'deft)
     #+END_SRC
 
 *** org-mode
@@ -1266,6 +1266,55 @@
         (setq org-enforce-todo-dependencies t)
       #+END_SRC
 
+**** Capturing, Templates and Refiling
+
+***** Default Notes File
+
+      I don't want to think about things when I'm just capturing
+      them. I can refile them later.
+
+      #+BEGIN_SRC emacs-lisp
+        (setq org-default-notes-file (concat org-directory "/refile.org"))
+      #+END_SRC
+      
+***** Capture Hot Key
+
+      Let's capture things with a quick f5.
+
+      #+BEGIN_SRC emacs-lisp
+        (global-set-key [f5] 'org-capture)
+      #+END_SRC
+
+***** Capture Templates
+
+      To do, respond, notes, journals, meetings and phone calls. These
+      are the things we want to keep track of and clock in and out of
+      let's see how we get on with them.
+
+      We also have a way of tracking things we are doing RFN as well
+      as capturing things for the future.
+      
+      #+BEGIN_SRC emacs-lisp
+        (setq org-capture-templates
+              '(("t" "Doing RIGHT NOW" entry (file+datetree org-default-notes-file)
+                 "* DOING %?\n%U\n%a\n" :clock-in t :clock-resume t)
+                ("f" "Do in the Future" entry (file+datetree org-default-notes-file)
+                 "* DOING %?\n%U\n%a\n" :clock-in t :clock-resume t)
+                ("r" "respond" entry (file+datetree org-default-notes-file)
+                 "* TODO Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n"
+                 :clock-in t :clock-resume t)
+                ("n" "note" entry (file+datetree org-default-notes-file)
+                 "* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t)
+                ("j" "Journal" entry (file+datetree (concat org-directory "/refile.org"))
+                 "* %?\n%U\n" :clock-in t :clock-resume t)
+                ("m" "Meeting" entry (file+datetree org-default-notes-file)
+                 "* MEETING with %? :MEETING:\n%U" :clock-in t :clock-resume t)
+                ("s" "Sit Down" entry (file+datetree org-default-notes-file)
+                 "* MEETING with Mastodon C :MEETING:\n%U\n" :clock-in t :clock-resume t)
+                ("p" "Phone call" entry (file+datetree org-default-notes-file)
+                 "* PHONE %? :PHONE:\n%U" :clock-in t :clock-resume t)))
+      #+END_SRC
+      
 ** html, sgml, xml
 
 *** tagedit
