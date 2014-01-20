@@ -1190,6 +1190,25 @@
      
 **** Scheduling, Project Management, Time Keeping
 
+***** Agenda
+      
+****** Agenda Files
+
+       There are things for me and mine. Things I do for money. Things
+       I do for the community I'm in. Let me know if you think my
+       worldview is too small.
+
+       And somethings we need in the agenda even though we don't know
+       where to file it yet which is why refile is in here.
+       
+       #+BEGIN_SRC emacs-lisp
+         (setq org-agenda-files
+               (quote ("~/org/refile.org"
+                       "~/org/personal.org"
+                       "~/org/work.org"
+                       "~/org/community.org")))
+       #+END_SRC
+       
 ***** Time Tracking and Estimates
 
       org-mode is huge. It does so much, but my reason for using it
@@ -1313,6 +1332,17 @@
                  "* MEETING with Mastodon C :MEETING:\n%U\n" :clock-in t :clock-resume t)
                 ("p" "Phone call" entry (file+datetree org-default-notes-file)
                  "* PHONE %? :PHONE:\n%U" :clock-in t :clock-resume t)))
+      #+END_SRC
+      
+***** Refiling rules
+
+      We want to be able to refile things in the file we are currently
+      in and in files that we create our agenda from.
+      
+      #+BEGIN_SRC emacs-lisp
+        (setq org-refile-targets
+              '((nil :maxlevel . 9)
+                (org-agenda-files :maxlevel . 9)))
       #+END_SRC
       
 ** html, sgml, xml
