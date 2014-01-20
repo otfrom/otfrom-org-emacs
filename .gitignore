@@ -16,3 +16,4 @@ url/*
 /projectile-bookmarks.eld
 /.mc-lists.el
 /org-clock-save.el
+/tramp
