@@ -651,7 +651,7 @@
       (setq erc-save-buffer-on-part t)
     #+END_SRC
     
-** Hailing Frequencies
+** Hailing Frequencies or comms
 
    It is good that jabber and erc die when I put the computer to
    sleep. What I'd like to be able to do is bring them all back up
@@ -664,7 +664,7 @@
        (jabber-connect-all)
        (erc))
      
-     (defun panopticon ()
+     (defun comms ()
        (interactive)
        (delete-other-windows)
      
@@ -717,8 +717,8 @@
        (window-number-select 9)
        (switch-to-buffer "#theodi"))
      
-     (global-set-key [C-M-s-f6] 'all-channels-open)
-     (global-set-key [C-f6] 'panopticon)
+     (global-set-key [C-M-s-f10] 'all-channels-open)
+     (global-set-key [C-f10] 'comms)
    #+END_SRC
    
 * Programming Modes
@@ -1055,6 +1055,31 @@
                  (lambda () (local-set-key [s-f1] 'clojure-cheatsheet)))
      #+END_SRC
      
+**** sw1nn-cider-perspective or Engineering
+
+     I really like what Neale has done to set up a quick cider
+     perspective. I just don't like what he called it. ;-)
+
+     #+BEGIN_SRC emacs-lisp
+       (defun sw1nn-nrepl-current-server-buffer ()
+         (let ((nrepl-server-buf (replace-regexp-in-string "connection" "server" (nrepl-current-connection-buffer))))
+           (when nrepl-server-buf
+             (get-buffer nrepl-server-buf))))
+       
+       ;; formerly sw1nn-cider-perspective
+       (defun engineering ()
+         (interactive)
+         (delete-other-windows)
+         (split-window-below)
+         (windmove-down)
+         (shrink-window 15)
+         (switch-to-buffer (sw1nn-nrepl-current-server-buffer))
+         (windmove-up)
+         (pop-to-buffer (cider-find-or-create-repl-buffer)))
+       
+       (global-set-key [C-f10] 'engineering)
+     #+END_SRC
+     
 ** python
    
 *** GNU Emacs IPython Notebook
@@ -1264,6 +1289,15 @@
                        "~/org/personal.org"
                        "~/org/work.org"
                        "~/org/community.org")))
+       #+END_SRC
+
+****** Ops
+
+       To go with comms and engineering, obviously we need
+       ops. Otherwise how are we supposed to know what is going on?
+
+       #+BEGIN_SRC emacs-lisp
+         (global-set-key [C-f11] 'org-agenda)
        #+END_SRC
        
 ***** Time Tracking and Estimates
