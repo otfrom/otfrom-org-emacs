@@ -1077,7 +1077,7 @@
          (windmove-up)
          (pop-to-buffer (cider-find-or-create-repl-buffer)))
        
-       (global-set-key [C-f10] 'engineering)
+       (global-set-key [C-f12] 'engineering)
      #+END_SRC
      
 ** python
