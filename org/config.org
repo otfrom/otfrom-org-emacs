@@ -512,8 +512,9 @@
 
    #+BEGIN_SRC emacs-lisp
      (setq twittering-initial-timeline-spec-string
-           '(":replies"
-             ":direct_messages"))   
+           '("otfrom/people-i-know"
+             ":replies"
+             ":direct_messages"))  
    #+END_SRC
 
 *** Tweet Button
@@ -657,11 +658,67 @@
    with a simple Vulcan grip.
 
    #+BEGIN_SRC emacs-lisp
-     (defun open-a-channel ()
+     (defun all-channels-open ()
        (interactive)
+       (twittering-mode)
        (jabber-connect-all)
-       (swtich-to-irc))
-     (global-set-key [C-M-s-f6] 'open-a-channel)
+       (erc))
+     
+     (defun panopticon ()
+       (interactive)
+       (delete-other-windows)
+     
+       ;; create our 3 columns
+       (split-window-right)
+       (split-window-right)
+     
+       ;; create our 1st 2 rows
+       (split-window-below)
+       (split-window-below)
+     
+       ;; move to the middle and split
+       (window-number-select 4)
+       (split-window-below)
+       (split-window-below)
+     
+       ;; move to the right and split
+       (window-number-select 7)
+       (split-window-below)
+       (split-window-below)
+     
+       ;; Balance it all
+       (balance-windows)
+     
+       ;; grow the top window
+       (window-number-select 1)
+       (enlarge-window 14)
+       
+       ;; shrink the bottom left window
+       (window-number-select 3)
+       (shrink-window 8)
+     
+       ;; set up the buffers as we want
+       (window-number-select 1)
+       (switch-to-buffer "otfrom/people-i-know")
+       (window-number-select 2)
+       (switch-to-buffer ":replies")
+       (window-number-select 3)
+       (switch-to-buffer ":direct_messages")
+       (window-number-select 4)
+       (switch-to-buffer "*-jabber-roster-*")
+       (window-number-select 5)
+       (switch-to-buffer "*-jabber-roster-*")
+       (window-number-select 6)
+       (switch-to-buffer "*-jabber-roster-*")
+       (window-number-select 7)
+       (switch-to-buffer "#ldnclj")
+       (window-number-select 8)
+       (switch-to-buffer "#kixi")
+       (window-number-select 9)
+       (switch-to-buffer "#theodi"))
+     
+     (global-set-key [C-M-s-f6] 'all-channels-open)
+     (global-set-key [C-f6] 'panopticon)
    #+END_SRC
    
 * Programming Modes
