@@ -1409,7 +1409,7 @@
               '(("t" "Doing RIGHT NOW" entry (file+datetree org-default-notes-file)
                  "* DOING %?\n%U\n%a\n" :clock-in t :clock-resume t)
                 ("f" "Do in the Future" entry (file+datetree org-default-notes-file)
-                 "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)
+                 "* TODO %?\n%U\n%a\n")
                 ("r" "respond" entry (file+datetree org-default-notes-file)
                  "* TODO Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n"
                  :clock-in t :clock-resume t)
