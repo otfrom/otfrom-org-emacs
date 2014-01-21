@@ -689,13 +689,13 @@
        ;; Balance it all
        (balance-windows)
      
-       ;; grow the top window
+       ;; grow the top left window
        (window-number-select 1)
-       (enlarge-window 14)
+       (enlarge-window 16)
        
        ;; shrink the bottom left window
        (window-number-select 3)
-       (shrink-window 8)
+       (shrink-window 11)
      
        ;; set up the buffers as we want
        (window-number-select 1)
