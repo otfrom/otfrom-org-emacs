@@ -1288,7 +1288,8 @@
                (quote ("~/org/refile.org"
                        "~/org/personal.org"
                        "~/org/work.org"
-                       "~/org/community.org")))
+                       "~/org/community.org"
+                       "~/org/mastodonc/world-domination.org")))
        #+END_SRC
 
 ****** Ops
