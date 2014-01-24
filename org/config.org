@@ -1347,10 +1347,13 @@
 
       TODO, DOING, DONE and WAITING, BLOCKED, CANCELLED, PHONE,
       MEETING. Let's try these on for size for a while.
+
+      I've also added CCC for Current Cake Countdown for things we
+      have scheduled in for the next week, but haven't started yet.
       
       #+BEGIN_SRC emacs-lisp
         (setq org-todo-keywords
-              (quote ((sequence "TODO(t)" "DOING(g)" "|" "DONE(d)")
+              (quote ((sequence "TODO(t)" "CCC(c)" "DOING(g)" "|" "DONE(d)")
                       (sequence "WAITING(w@/!)" "BLOCKED(b@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING"))))
       #+END_SRC
 
