@@ -1292,6 +1292,22 @@
                        "~/org/mastodonc/world-domination.org")))
        #+END_SRC
 
+****** Custom Agendas
+
+       The real power of org-agenda starts to kick in when you create
+       your own custom agenda commands that get the things *you* want
+       out of your org files.
+       
+       #+BEGIN_SRC emacs-lisp
+         (setq org-agenda-custom-commands
+               '(("D" "Doing Now" todo "DOING")
+                 ("F" "Doing Future" tags "Owner=\"Bruce\"")
+                 ("C" "Cake Countdown" agenda "" ((org-agenda-ndays 7)
+                                                  (org-agenda-start-on-weekday 3)))
+                 
+                 ))
+       #+END_SRC
+       
 ****** Ops
 
        To go with comms and engineering, obviously we need
