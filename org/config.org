@@ -1300,7 +1300,9 @@
        
        #+BEGIN_SRC emacs-lisp
          (setq org-agenda-custom-commands
-               '(("D" "Doing Now" todo "DOING")
+               '(("D" "Doing Now" todo "DOING|WAITING|BLOCKED|CCC"
+                  ((org-agenda-overriding-columns-format "%60ITEM(Task) %8Owner %8Effort(Estimated Effort){:} %CLOCKSUM")x
+                   (org-agenda-view-columns-initially t)))
                  ("F" "Doing Future" tags "Owner=\"Bruce\"")
                  ("C" "Cake Countdown" agenda "" ((org-agenda-ndays 7)
                                                   (org-agenda-start-on-weekday 3)))
