@@ -292,7 +292,7 @@ used to limit the exported source code blocks by language.
 ;;;;;;  org-search-view org-agenda-list org-batch-store-agenda-views
 ;;;;;;  org-store-agenda-views org-batch-agenda-csv org-batch-agenda
 ;;;;;;  org-agenda org-toggle-sticky-agenda) "org-agenda" "org-agenda.el"
-;;;;;;  (21207 30709))
+;;;;;;  (21214 3952))
 ;;; Generated autoloads from org-agenda.el
 
 (autoload 'org-toggle-sticky-agenda "org-agenda" "\
@@ -644,8 +644,8 @@ Extract anniversaries from BBDB for display in the agenda.
 ;;;***
 
 ;;;### (autoloads (org-capture-import-remember-templates org-capture
-;;;;;;  org-capture-string) "org-capture" "org-capture.el" (21207
-;;;;;;  30709))
+;;;;;;  org-capture-string) "org-capture" "org-capture.el" (21214
+;;;;;;  3951))
 ;;; Generated autoloads from org-capture.el
 
 (autoload 'org-capture-string "org-capture" "\
@@ -821,7 +821,7 @@ Otherwise, return nil.
 ;;;### (autoloads (org-agenda-columns org-insert-columns-dblock org-dblock-write:columnview
 ;;;;;;  org-columns-number-to-string org-columns-compute org-columns
 ;;;;;;  org-columns-get-format-and-top-level org-columns-remove-overlays)
-;;;;;;  "org-colview" "org-colview.el" (21207 30709))
+;;;;;;  "org-colview" "org-colview.el" (21214 3951))
 ;;; Generated autoloads from org-colview.el
 
 (autoload 'org-columns-remove-overlays "org-colview" "\
@@ -1891,7 +1891,7 @@ replace any running timer.
 ;;;***
 
 ;;;### (autoloads (org-git-version org-release) "org-version" "org-version.el"
-;;;;;;  (21207 48650))
+;;;;;;  (21214 31339))
 ;;; Generated autoloads from org-version.el
 
 (autoload 'org-release "org-version" "\
@@ -1917,7 +1917,7 @@ The location of ODT styles.")
 ;;;;;;  org-run-like-in-org-mode turn-on-orgstruct++ turn-on-orgstruct
 ;;;;;;  orgstruct-mode org-global-cycle org-cycle org-mode org-clock-persistence-insinuate
 ;;;;;;  turn-on-orgtbl org-version org-babel-load-file org-babel-do-load-languages)
-;;;;;;  "org" "org.el" (21207 48578))
+;;;;;;  "org" "org.el" (21214 3951))
 ;;; Generated autoloads from org.el
 
 (autoload 'org-babel-do-load-languages "org" "\
@@ -2140,7 +2140,7 @@ Call the customize function with org as argument.
 
 ;;;### (autoloads (org-export-dispatch org-export-to-file org-export-to-buffer
 ;;;;;;  org-export-insert-default-template org-export-replace-region-by
-;;;;;;  org-export-string-as org-export-as) "ox" "ox.el" "66994c7df9a718a1d1f201c43f870dcf")
+;;;;;;  org-export-string-as org-export-as) "ox" "ox.el" "466b6c2e9e886b6be3dc0db4de098e95")
 ;;; Generated autoloads from ox.el
 
 (autoload 'org-export-as "ox" "\
@@ -2310,7 +2310,7 @@ When ARG is \\[universal-argument] \\[universal-argument], display the asynchron
 
 ;;;### (autoloads (org-ascii-publish-to-utf8 org-ascii-publish-to-latin1
 ;;;;;;  org-ascii-publish-to-ascii org-ascii-export-to-ascii org-ascii-export-as-ascii)
-;;;;;;  "ox-ascii" "ox-ascii.el" "ab0cc22b58f3047e0025a3d23f10619a")
+;;;;;;  "ox-ascii" "ox-ascii.el" "68a1fb86bb07f90e06ab546dd24bd835")
 ;;; Generated autoloads from ox-ascii.el
 
 (autoload 'org-ascii-export-as-ascii "ox-ascii" "\
@@ -2413,7 +2413,7 @@ Return output file name.
 ;;;### (autoloads (org-beamer-publish-to-pdf org-beamer-publish-to-latex
 ;;;;;;  org-beamer-insert-options-template org-beamer-select-environment
 ;;;;;;  org-beamer-export-to-pdf org-beamer-export-to-latex org-beamer-export-as-latex
-;;;;;;  org-beamer-mode) "ox-beamer" "ox-beamer.el" "15002ceb95166b853a0f7277b9b19530")
+;;;;;;  org-beamer-mode) "ox-beamer" "ox-beamer.el" "d1b62baed3d34b8ad2a51b57520a420f")
 ;;; Generated autoloads from ox-beamer.el
 
 (autoload 'org-beamer-mode "ox-beamer" "\
@@ -2715,7 +2715,7 @@ The file is stored under the name chosen in
 
 ;;;### (autoloads (org-latex-publish-to-pdf org-latex-publish-to-latex
 ;;;;;;  org-latex-export-to-pdf org-latex-export-to-latex org-latex-convert-region-to-latex
-;;;;;;  org-latex-export-as-latex) "ox-latex" "ox-latex.el" "ef5d18eaca39a01b3e3078b2e7f1fca9")
+;;;;;;  org-latex-export-as-latex) "ox-latex" "ox-latex.el" "340ed11633032b0d73d92628a76fb6b8")
 ;;; Generated autoloads from ox-latex.el
 
 (autoload 'org-latex-export-as-latex "ox-latex" "\
@@ -3110,7 +3110,7 @@ this command to convert it.
 
 ;;;### (autoloads (org-export-dispatch org-export-to-file org-export-to-buffer
 ;;;;;;  org-export-insert-default-template org-export-replace-region-by
-;;;;;;  org-export-string-as org-export-as) "ox" "ox.el" "66994c7df9a718a1d1f201c43f870dcf")
+;;;;;;  org-export-string-as org-export-as) "ox" "ox.el" "466b6c2e9e886b6be3dc0db4de098e95")
 ;;; Generated autoloads from ox.el
 
 (autoload 'org-export-as "ox" "\
