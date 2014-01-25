@@ -1320,10 +1320,10 @@
                   ((org-agenda-overriding-columns-format "%60ITEM(Task) %8Owner %8Effort(Estimated Effort){:} %CLOCKSUM")x
                    (org-agenda-view-columns-initially t)))
                  ("F" "Doing Future" tags "Owner=\"Bruce\"")
-                 ("C" "Cake Countdown" agenda "" ((org-agenda-ndays 7)
-                                                  (org-agenda-start-on-weekday 3)))
-                 
-                 ))
+                 ("C" "Current Cake Countdown"
+                  ((agenda "" ((org-agenda-ndays 7)
+                               (org-agenda-start-on-weekday 3)))
+                   (todo "DOING|WAITING|BLOCKED|CCC")))))
        #+END_SRC
        
 ***** Time Tracking and Estimates
@@ -1443,7 +1443,7 @@
           
           ;; set up the buffers as we want
           (window-number-select 1)
-          (org-agenda nil "D")
+          (org-agenda nil "C")
           (window-number-select 2)
           (switch-to-buffer (find-file (concat org-directory "/work/world-domination.org")))
           (window-number-select 3)
