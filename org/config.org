@@ -1473,7 +1473,7 @@
 **** Capture Hot Key
 
      Let's capture things with a quick Vulcan Nerve Pinch on
-     C-M-f12. .
+     C-M-f12.
 
      #+BEGIN_SRC emacs-lisp
        (global-set-key [C-M-f12] 'org-capture)
