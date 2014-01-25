@@ -705,9 +705,7 @@
        (window-number-select 3)
        (switch-to-buffer ":direct_messages")
        (window-number-select 4)
-       (switch-to-buffer "*-jabber-roster-*")
-       (window-number-select 5)
-       (switch-to-buffer "*-jabber-roster-*")
+       (find-file (concat org-directory "/work/world-domination.org"))
        (window-number-select 6)
        (switch-to-buffer "*-jabber-roster-*")
        (window-number-select 7)
@@ -715,7 +713,13 @@
        (window-number-select 8)
        (switch-to-buffer "#kixi")
        (window-number-select 9)
-       (switch-to-buffer "#theodi"))
+       (switch-to-buffer "#theodi")
+     
+       ;; dump the middle window
+       (window-number-select 5)
+       (delete-window))
+     
+     
      
      (global-set-key [C-M-s-f10] 'all-channels-open)
      (global-set-key [C-f10] 'comms)
@@ -1273,7 +1277,19 @@
 **** Scheduling, Project Management, Time Keeping
 
 ***** Agenda
-      
+
+****** Agenda Windows
+
+       I'm not quite sure what possessed the org-mode people to
+       presume that they knew best about how my windows should be
+       arranged when I look at an agenda. There is a solution to that
+       though. Just use the current window, like every other command
+       that opens something up. Re-arrange frame indeed.
+
+       #+BEGIN_SRC emacs-lisp
+         (setq org-agenda-window-setup 'current-window)
+       #+END_SRC
+       
 ****** Agenda Files
 
        There are things for me and mine. Things I do for money. Things
@@ -1289,7 +1305,7 @@
                        "~/org/personal.org"
                        "~/org/work.org"
                        "~/org/community.org"
-                       "~/org/mastodonc/world-domination.org")))
+                       "~/org/work/world-domination.org")))
        #+END_SRC
 
 ****** Custom Agendas
@@ -1400,6 +1416,60 @@
 
 **** Capturing, Templates and Refiling
 
+***** DOING Captains chair
+
+      What's going on, who are we talking to. What is the ship's
+      status, where are we going.
+      
+      #+BEGIN_SRC emacs-lisp
+        (defun captains-chair ()
+          (interactive)
+          (delete-other-windows)
+          
+          (if (< (frame-width) 210)
+              ;; Small frame
+              (progn
+                ;; create our 2 columns
+                (split-window-right)
+        
+                ;; split 1st column vertically
+                (split-window-below)
+                
+                ;; move to the rightmost and split into 3 verticalally
+                (window-number-select 3)
+                (split-window-below)
+                (split-window-below))
+            ;; Big frame
+            (progn
+              ;; create our 3 columns
+              (split-window-right)
+              (split-window-right)
+              
+              ;; move to the rightmost and split
+              (window-number-select 3)
+              (split-window-below)
+              (split-window-below)))
+          
+          (balance-windows)
+          
+          ;; set up the buffers as we want
+          (window-number-select 1)
+          (org-agenda nil "D")
+          (window-number-select 2)
+          (switch-to-buffer (find-file (concat org-directory "/work/world-domination.org")))
+          (window-number-select 3)
+          (switch-to-buffer "#kixi")
+          (window-number-select 4)
+          (switch-to-buffer "#ldnclj")
+          (window-number-select 5)
+          (switch-to-buffer "*-jabber-roster-*")
+        
+          ;; And go to window 1
+          (window-number-select 1))
+      #+END_SRC
+
+
+      
 ***** Default Notes File
 
       I don't want to think about things when I'm just capturing
