@@ -1508,10 +1508,11 @@
       
 ***** Capture Hot Key
 
-      Let's capture things with a quick f5.
+      Let's capture things with a quick Vulcan Nerve Pinch on
+      C-M-s-f12. .
 
       #+BEGIN_SRC emacs-lisp
-        (global-set-key [f5] 'org-capture)
+        (global-set-key [C-M-s-f12] 'org-capture)
       #+END_SRC
 
 ***** Capture Templates
