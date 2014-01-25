@@ -753,8 +753,7 @@
            (window-number-select 5)
            (delete-window))))
      
-     (global-set-key [C-M-s-f10] 'all-channels-open)
-     (global-set-key [C-f10] 'comms)
+     (global-set-key [C-f12] 'comms)
    #+END_SRC
    
 * Programming Modes
@@ -1493,7 +1492,7 @@
           ;; And go to window 1
           (window-number-select 1))
         
-        (global-set-key [C-f11] 'captains-chair)
+        (global-set-key [C-M-f12] 'captains-chair)
       #+END_SRC
 
 **** Capturing, Templates and Refiling
