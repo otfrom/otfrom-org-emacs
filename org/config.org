@@ -1326,15 +1326,6 @@
                  ))
        #+END_SRC
        
-****** Ops
-
-       To go with comms and engineering, obviously we need
-       ops. Otherwise how are we supposed to know what is going on?
-
-       #+BEGIN_SRC emacs-lisp
-         (global-set-key [C-f11] 'org-agenda)
-       #+END_SRC
-       
 ***** Time Tracking and Estimates
 
       org-mode is huge. It does so much, but my reason for using it
@@ -1414,9 +1405,7 @@
         (setq org-enforce-todo-dependencies t)
       #+END_SRC
 
-**** Capturing, Templates and Refiling
-
-***** DOING Captains chair
+***** Captain's chair
 
       What's going on, who are we talking to. What is the ship's
       status, where are we going.
@@ -1466,9 +1455,12 @@
         
           ;; And go to window 1
           (window-number-select 1))
+        
+        (global-set-key [C-f11] 'captains-chair)
       #+END_SRC
 
 
+**** Capturing, Templates and Refiling
       
 ***** Default Notes File
 
