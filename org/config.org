@@ -1473,10 +1473,10 @@
 **** Capture Hot Key
 
      Let's capture things with a quick Vulcan Nerve Pinch on
-     C-M-s-f12. .
+     C-M-f12. .
 
      #+BEGIN_SRC emacs-lisp
-       (global-set-key [C-M-s-f12] 'org-capture)
+       (global-set-key [C-M-f12] 'org-capture)
      #+END_SRC
 
 **** Capture Templates
@@ -1657,7 +1657,7 @@
     And a control-meta to start everything off.
 
     #+BEGIN_SRC emacs-lisp
-      (global-set-key (kbd "C-M-s-<f8>") 'emms-play-playlist)
+      (global-set-key (kbd "C-M-<f8>") 'emms-play-playlist)
       (global-set-key (kbd "<f8>") 'emms-pause)
       (global-set-key (kbd "<f9>") 'emms-next)
       (global-set-key (kbd "<f7>") 'emms-previous)
