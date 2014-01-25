@@ -1491,7 +1491,6 @@
         (global-set-key [C-f11] 'captains-chair)
       #+END_SRC
 
-
 **** Capturing, Templates and Refiling
       
 ***** Default Notes File
