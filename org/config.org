@@ -1351,10 +1351,15 @@
                '(("D" "Doing Now" todo "DOING|WAITING|BLOCKED|CCC"
                   ((org-agenda-overriding-columns-format "%60ITEM(Task) %8Owner %8Effort(Estimated Effort){:} %CLOCKSUM")
                    (org-agenda-view-columns-initially t)))
-                 ("F" "Doing Future" tags "Owner=\"Bruce\"")
+                 ("N" "Me Now!" tags-todo "TODO={^[DCWB].+[^E]$}+Owner=\"Bruce\""
+                  ((org-agenda-sorting-strategy '(priority-up effort-down))))
+                 ("X" "Me Now!" tags-todo "TODO={^[DCWB].+[^E]$}+Owner={[^MFAN]}"
+                  ((org-agenda-sorting-strategy '(priority-up effort-down))))
+                 ("F" "Me in the Future!" tags-todo "Owner=\"Bruce\"")
                  ("C" "Current Cake Countdown"
                   ((agenda "" ((org-agenda-ndays 7)
-                               (org-agenda-start-on-weekday 3)))
+                               (org-agenda-start-on-weekday 3)
+                               (org-agenda-show-log t)))
                    (todo "DOING|WAITING|BLOCKED|CCC")))))
        #+END_SRC
        
