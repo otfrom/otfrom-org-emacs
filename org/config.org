@@ -1101,8 +1101,7 @@
            (when nrepl-server-buf
              (get-buffer nrepl-server-buf))))
        
-       ;; formerly sw1nn-cider-perspective
-       (defun engineering ()
+       (defun sw1nn-cider-perspective ()
          (interactive)
          (delete-other-windows)
          (split-window-below)
@@ -1111,8 +1110,6 @@
          (switch-to-buffer (sw1nn-nrepl-current-server-buffer))
          (windmove-up)
          (pop-to-buffer (cider-find-or-create-repl-buffer)))
-       
-       (global-set-key [C-f12] 'engineering)
      #+END_SRC
      
 ** python
