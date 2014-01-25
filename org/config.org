@@ -668,58 +668,90 @@
        (interactive)
        (delete-other-windows)
      
-       ;; create our 3 columns
-       (split-window-right)
-       (split-window-right)
+       (if (< (frame-width) 210)
+           (progn
+             ;; create 2 columns
+             (split-window-right)
      
-       ;; create our 1st 2 rows
-       (split-window-below)
-       (split-window-below)
+             ;; 2 rows on the left for twitter
+             (split-window-below)
      
-       ;; move to the middle and split
-       (window-number-select 4)
-       (split-window-below)
-       (split-window-below)
+             ;; 3 rows on the right for erc and jabber
+             (window-number-select 3)
+             (split-window-below)
+             (split-window-below)
      
-       ;; move to the right and split
-       (window-number-select 7)
-       (split-window-below)
-       (split-window-below)
+             ;; Balance it all
+             (balance-windows)
      
-       ;; Balance it all
-       (balance-windows)
+             ;; twitter on the left
+             (window-number-select 1)
+             (switch-to-buffer "otfrom/people-i-know")
+             (window-number-select 2)
+             (switch-to-buffer ":replies")
      
-       ;; grow the top left window
-       (window-number-select 1)
-       (enlarge-window 16)
-       
-       ;; shrink the bottom left window
-       (window-number-select 3)
-       (shrink-window 11)
+             ;; erc and jabber on the right
+             (window-number-select 3)
+             (switch-to-buffer "#kixi")
+             (window-number-select 4)
+             (switch-to-buffer "#ldnclj")
+             (window-number-select 5)
+             (switch-to-buffer "*-jabber-roster-*")
      
-       ;; set up the buffers as we want
-       (window-number-select 1)
-       (switch-to-buffer "otfrom/people-i-know")
-       (window-number-select 2)
-       (switch-to-buffer ":replies")
-       (window-number-select 3)
-       (switch-to-buffer ":direct_messages")
-       (window-number-select 4)
-       (find-file (concat org-directory "/work/world-domination.org"))
-       (window-number-select 6)
-       (switch-to-buffer "*-jabber-roster-*")
-       (window-number-select 7)
-       (switch-to-buffer "#ldnclj")
-       (window-number-select 8)
-       (switch-to-buffer "#kixi")
-       (window-number-select 9)
-       (switch-to-buffer "#theodi")
-     
-       ;; dump the middle window
-       (window-number-select 5)
-       (delete-window))
-     
-     
+             ;; go to and grow the top left window
+             (window-number-select 1)
+             (enlarge-window 9))
+         (progn
+           ;; create our 3 columns
+           (split-window-right)
+           (split-window-right)
+           
+           ;; create our 1st 2 rows
+           (split-window-below)
+           (split-window-below)
+           
+           ;; move to the middle and split
+           (window-number-select 4)
+           (split-window-below)
+           (split-window-below)
+           
+           ;; move to the right and split
+           (window-number-select 7)
+           (split-window-below)
+           (split-window-below)
+           
+           ;; Balance it all
+           (balance-windows)
+           
+           ;; grow the top left window
+           (window-number-select 1)
+           (enlarge-window 16)
+           
+           ;; shrink the bottom left window
+           (window-number-select 3)
+           (shrink-window 11)
+           
+           ;; set up the buffers as we want
+           (window-number-select 1)
+           (switch-to-buffer "otfrom/people-i-know")
+           (window-number-select 2)
+           (switch-to-buffer ":replies")
+           (window-number-select 3)
+           (switch-to-buffer ":direct_messages")
+           (window-number-select 4)
+           (find-file (concat org-directory "/work/world-domination.org"))
+           (window-number-select 6)
+           (switch-to-buffer "*-jabber-roster-*")
+           (window-number-select 7)
+           (switch-to-buffer "#ldnclj")
+           (window-number-select 8)
+           (switch-to-buffer "#kixi")
+           (window-number-select 9)
+           (switch-to-buffer "#theodi")
+           
+           ;; dump the middle window
+           (window-number-select 5)
+           (delete-window))))
      
      (global-set-key [C-M-s-f10] 'all-channels-open)
      (global-set-key [C-f10] 'comms)
