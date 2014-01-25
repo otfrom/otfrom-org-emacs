@@ -1677,6 +1677,7 @@
     #+END_SRC
     
 * Local Config
+
 ** custom.el
 
    custom.el is great for configuring things through that "gui" in
@@ -1689,6 +1690,7 @@
      (setq custom-file "~/.emacs.d/local/custom.el")
      (load-if-exists custom-file)
    #+END_SRC
+
 * Utilities and General Keybindings
   
 ** join-line
