@@ -1273,6 +1273,15 @@
 
 **** Agenda
 
+***** Diary
+
+      There are a lot of things that can go into the venerable diary
+      and I quite like the idea of functional scheduling.
+
+      #+BEGIN_SRC emacs-lisp
+        (setq org-agenda-include-diary t)
+      #+END_SRC
+      
 ***** Agenda Windows
 
       I'm not quite sure what possessed the org-mode people to
