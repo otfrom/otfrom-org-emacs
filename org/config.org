@@ -1312,18 +1312,38 @@
       #+BEGIN_SRC emacs-lisp
         (setq org-agenda-custom-commands
               '(("D" "Doing Now" todo "DOING|WAITING|BLOCKED|CCC"
-                 ((org-agenda-overriding-columns-format "%60ITEM(Task) %8Owner %8Effort(Estimated Effort){:} %CLOCKSUM")
+                 ((org-agenda-overriding-columns-format
+                   "%60ITEM(Task) %8Owner %8Effort(Estimated Effort){:} %CLOCKSUM")
                   (org-agenda-view-columns-initially t)))
                 ("N" "Me Now!" tags-todo "TODO={^[DCWB].+[^E]$}+Owner=\"Bruce\""
                  ((org-agenda-sorting-strategy '(priority-up effort-down))))
-                ("X" "Me Now!" tags-todo "TODO={^[DCWB].+[^E]$}+Owner={[^MFAN]}"
-                 ((org-agenda-sorting-strategy '(priority-up effort-down))))
-                ("F" "Me in the Future!" tags-todo "Owner=\"Bruce\"")
-                ("C" "Current Cake Countdown"
-                 ((agenda "" ((org-agenda-ndays 7)
+                ("F" "Me in the Future!" tags-todo "TODO={^[TDCWB].+[^E]$}+Owner=\"Bruce\""
+                 ((org-agenda-sorting-strategy '('deadline-up priority-up effort-down))))
+                ("C" . "Current Cake Countdown Searches")
+                ("Cm" "My Current Cake Countdown"
+                 ((agenda "" ((org-agenda-span 'week)
                               (org-agenda-start-on-weekday 3)
                               (org-agenda-show-log t)))
-                  (todo "DOING|WAITING|BLOCKED|CCC")))))
+                  (tags-todo "TODO={^[DCWB].+[^E]$}+Owner=\"Bruce\""
+                        ((org-agenda-sorting-strategy '(deadline-up priority-up effort-down))))))
+                ("Ch" "My Current Cake Countdown History"
+                 ((agenda "" ((org-agenda-span 'week)
+                              (org-agenda-start-on-weekday 3)))
+                  (tags-todo "TODO={^[DCWB].+[^E]$}+Owner=\"Bruce\""
+                        ((org-agenda-sorting-strategy '(deadline-up priority-up effort-down))))))
+                ("Ct" "Team Current Cake Countdown"
+                 ((agenda "CATEGORY=\"MC\"" ((org-agenda-files '("~/org/work/world-domination.org"))
+                                             (org-agenda-span 'week)
+                                             (org-agenda-start-on-weekday 3)))
+                  (tags-todo "+CATEGORY=\"MC\"+TODO={^[DCWB].+[^E]$}"
+                             ((org-agenda-sorting-strategy '(deadline-up priority-up effort-down))))))
+                ("Cl" "Team Current Cake Countdown Log"
+                 ((agenda "CATEGORY=\"MC\"" ((org-agenda-files '("~/org/work/world-domination.org"))
+                                             (org-agenda-span 'week)
+                                             (org-agenda-start-on-weekday 3)
+                                             (org-agenda-show-log t)))
+                  (tags-todo "+CATEGORY=\"MC\"+TODO={^[DCWB].+[^E]$}"
+                             ((org-agenda-sorting-strategy '(deadline-up priority-up effort-down))))))))
       #+END_SRC
       
 **** Time Tracking and Estimates
@@ -1443,7 +1463,7 @@
          
          ;; set up the buffers as we want
          (window-number-select 1)
-         (org-agenda nil "C")
+         (org-agenda nil "Ct")
          (window-number-select 2)
          (switch-to-buffer (find-file (concat org-directory "/work/world-domination.org")))
          (window-number-select 3)
