@@ -1456,7 +1456,7 @@
          ;; And go to window 1
          (window-number-select 1))
        
-       (global-set-key [C-M-f12] 'captains-chair)
+       (global-set-key [M-f12] 'captains-chair)
      #+END_SRC
 
 *** Capturing, Templates and Refiling
