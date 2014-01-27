@@ -1107,7 +1107,7 @@
          (delete-other-windows)
          (split-window-below)
          (windmove-down)
-         (shrink-window 15)
+         (shrink-window 25)
          (switch-to-buffer (sw1nn-nrepl-current-server-buffer))
          (windmove-up)
          (pop-to-buffer (cider-find-or-create-repl-buffer)))
