@@ -1273,6 +1273,8 @@
 
     Because sometimes you want to link to that particular commit.
 
+    I added this functionality with this commit: [[magit:~/emacs-configs/otfrom-org-emacs/::commit@1dd7516][1dd7516]]
+
     #+BEGIN_SRC emacs-lisp
       (maybe-install-and-require 'org-magit)
     #+END_SRC
