@@ -1269,6 +1269,14 @@
       (setq org-reveal-root "reveal.js-2.5.0/")
     #+END_SRC
     
+*** org and magit
+
+    Because sometimes you want to link to that particular commit.
+
+    #+BEGIN_SRC emacs-lisp
+      (maybe-install-and-require 'org-magit)
+    #+END_SRC
+    
 *** Scheduling, Project Management, Time Keeping
 
 **** Agenda
