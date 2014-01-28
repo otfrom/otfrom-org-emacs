@@ -82,19 +82,6 @@
      (setq uniquify-buffer-name-style 'post-forward)   
    #+END_SRC
  
-** which-func
-
-   It is ever so handy to know which function you are in, though I
-   hope that in the code that I write that my functions are short
-   enough that I don't really need to look on the mode-line to see
-   which function I am in. In other words, I hope I only need this
-   for others' code.
-   
-   #+BEGIN_SRC emacs-lisp
-     (require 'which-func)
-     (which-func-mode 1)
-   #+END_SRC
-
 ** Multiple Cursors
 
    This is a replacement for the iedit that I used to have. Neale
