@@ -42,6 +42,18 @@
      (put 'upcase-region 'disabled nil)
    #+END_SRC
 
+** Narrowing the region to what I want to look at
+
+   This isn't needed quite so much now that searches, regexp and
+   otherwise operate, sometimes annoyingly to an old timer like me, on
+   the region rather than the whole buffer window. I still like to
+   narrow down to what I'm interested in though and not every handy
+   tool in emacs is quite so region oriented.
+
+   #+BEGIN_SRC emacs-lisp
+     (put 'narrow-to-region 'disabled nil)
+   #+END_SRC
+   
 ** diminish
 
    As we add lots of useful minor-modes the mode line can get a bit
