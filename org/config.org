@@ -1332,6 +1332,12 @@
                       "~/org/work/world-domination.org")))
       #+END_SRC
 
+***** Agenda Sorting
+
+      #+BEGIN_SRC emacs-lisp
+        (setq org-agenda-sorting-strategy '(time-up priority-down todo-state-down deadline-up scheduled-up tag-up effort-down))
+      #+END_SRC
+      
 ***** Custom Agendas
 
       The real power of org-agenda starts to kick in when you create
@@ -1341,45 +1347,43 @@
       #+BEGIN_SRC emacs-lisp
         (setq org-agenda-custom-commands
               '(("D" "Doing Now" todo "DOING|WAITING|BLOCKED|CCC"
-                 ((org-agenda-sorting-strategy '(todo-state-down tag-up priority-up effort-down))
-                  (org-agenda-overriding-columns-format
+                 ((org-agenda-overriding-columns-format
                    "%60ITEM(Task) %8CATEGORY %8Owner %8Effort(Estimated Effort){:} %CLOCKSUM")
                   (org-agenda-view-columns-initially t)))
-                ("N" "Me Now!" tags-todo "TODO={^[DCWB].+[^E]$}+Owner=\"Bruce\""
-                 ((org-agenda-sorting-strategy '(todo-state-down tag-up priority-up effort-down))))
-                ("F" "Me in the Future!" tags-todo "TODO={^[TDCWB].+[^E]$}+Owner=\"Bruce\""
-                 ((org-agenda-sorting-strategy '(todo-state-down tag-up deadline-up priority-up effort-down))))
+                ("N" "Me Now!" tags-todo "TODO={^[DCWB].+[^E]$}+Owner=\"Bruce\"")
+                ("F" "Me in the Future!" tags-todo "TODO={^[TDCWB].+[^E]$}+Owner=\"Bruce\"")
                 ("C" . "Current Cake Countdown Searches")
                 ("Cm" "My Current Cake Countdown"
                  ((agenda "" ((org-agenda-span 'week)
                               (org-agenda-start-on-weekday 3)))
-                  (tags-todo "TODO={^[DCWB].+[^E]$}+Owner=\"Bruce\""
-                        ((org-agenda-sorting-strategy '(todo-state-down tag-up deadline-up priority-up effort-down))))))
+                  (tags-todo "TODO={^[DCWB].+[^E]$}+Owner=\"Bruce\"")))
                 ("Ch" "My Current Cake Countdown History"
                  ((agenda "" ((org-agenda-span 'week)
                               (org-agenda-start-on-weekday 3)))
-                  (tags-todo "TODO={^[DCWB].+}+Owner=\"Bruce\""
-                        ((org-agenda-sorting-strategy '(todo-state-down tag-up deadline-up priority-up effort-down))))))
+                  (tags-todo "TODO={^[DCWB].+}+Owner=\"Bruce\"")))
                 ("Ct" "Team Current Cake Countdown"
-                 ((agenda "CATEGORY=\"MC\"" ((org-agenda-files '("~/org/work/world-domination.org"))
-                                             (org-agenda-span 'week)
-                                             (org-agenda-start-on-weekday 3)))
+                 ((agenda "Team Current Cake Countdown" ((org-agenda-files '("~/org/work/world-domination.org"))
+                                                         (org-agenda-span 'week)
+                                                         (org-agenda-start-on-weekday 3)))
                   (tags-todo "+CATEGORY=\"MC\"+TODO={^[DCWB].+[^E]$}"
-                             ((org-agenda-sorting-strategy '(todo-state-down tag-up deadline-up priority-up effort-down))))))
+                             ((org-agenda-overriding-columns-format
+                                "%60ITEM(Task) %8CATEGORY %8Owner %8Effort(Estimated Effort){:} %CLOCKSUM")))))
                 ("Cl" "Team Current Cake Countdown Log"
                  ((agenda "Current Cake Countdow" ((org-agenda-files '("~/org/work/world-domination.org"))
                                                    (org-agenda-span 'week)
                                                    (org-agenda-start-on-weekday 3)
                                                    (org-agenda-show-log t)))
                   (tags-todo "+CATEGORY=\"MC\"+TODO={^[DCWB].+}"
-                             ((org-agenda-sorting-strategy '(todo-state-down tag-up deadline-up priority-up effort-down))))))
+                             ((org-agenda-overriding-columns-format
+                                "%60ITEM(Task) %8CATEGORY %8Owner %8Effort(Estimated Effort){:} %CLOCKSUM")))))
                 ("Cf" "Team Next Cake Countdown Log"
                  ((agenda "Next Cake Countdown" ((org-agenda-files '("~/org/work/world-domination.org"))
                                                  (org-agenda-span 'week)
                                                  (org-agenda-start-on-weekday 3)
                                                  (org-agenda-show-log t)))
                   (tags-todo "+CATEGORY=\"MC\"+TODO={^[TDCWB].+[^E]$}"
-                             ((org-agenda-sorting-strategy '(todo-state-down tag-up deadline-up priority-up effort-down))))))))
+                             ((org-agenda-overriding-columns-format
+                                "%60ITEM(Task) %8CATEGORY %8Owner %8Effort(Estimated Effort){:} %CLOCKSUM")))))))
       #+END_SRC
       
 **** Time Tracking and Estimates
@@ -1434,7 +1438,7 @@
      
      #+BEGIN_SRC emacs-lisp
        (setq org-todo-keywords
-             (quote ((sequence "TODO(t)" "CCC(c)" "DOING(g)" "|" "DONE(d)")
+             (quote ((sequence "TODO(t) CCC(c!) DOING(g!) | DONE(d!)")
                      (sequence "WAITING(w@/!)" "BLOCKED(b@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING"))))
      #+END_SRC
 
