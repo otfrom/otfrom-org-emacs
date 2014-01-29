@@ -678,7 +678,7 @@
        (interactive)
        (delete-other-windows)
      
-       (if (< (frame-width) 240)
+       (if (< (frame-width) 220)
            (progn
              ;; create 2 columns
              (split-window-right)
@@ -1471,7 +1471,7 @@
          (interactive)
          (delete-other-windows)
          
-         (if (< (frame-width) 240)
+         (if (< (frame-width) 220)
              ;; Small frame
              (progn
                ;; create our 2 columns
