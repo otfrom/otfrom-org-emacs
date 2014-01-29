@@ -137,7 +137,8 @@
    that problem. The # problem is solved with this bit of code below.
    
    #+BEGIN_SRC emacs-lisp
-     (global-set-key (kbd "M-3") '(lambda () (interactive) (insert "#")))
+     (when (memq window-system '(mac ns))
+       (global-set-key (kbd "M-3") '(lambda () (interactive) (insert "#"))))
    #+END_SRC
 
    We also need to deal with £ being a UTF-8 character so we don't get
@@ -149,12 +150,19 @@
    
 ** window-number-super mode
 
-   On a mac we have M-3 mapped to be the
+   On a mac we have M-3 mapped to be the #
 
    #+BEGIN_SRC emacs-lisp
-     (require 'window-number-super)
-     (window-number-mode 1) ;; for the window numbers
-     (window-number-super-mode 1) ;; for the super key binding        
+     (if (memq window-system '(mac ns))
+         (progn
+           (require 'window-number-super)
+           (window-number-mode 1) ; for the window numbers
+           (window-number-super-mode 1) ; for the super key binding      
+           )
+       (progn
+         (maybe-install-and-require 'window-number)
+         (window-number-mode 1)
+         (window-number-meta-mode 1)))
    #+END_SRC
    
 ** $PATH is broken
@@ -171,9 +179,10 @@
    [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]].
 
    #+BEGIN_SRC emacs-lisp
-     (maybe-install-and-require 'exec-path-from-shell)
      (when (memq window-system '(mac ns))
-       (exec-path-from-shell-initialize))
+       (progn
+         (maybe-install-and-require 'exec-path-from-shell)
+         (exec-path-from-shell-initialize)))
    #+END_SRC
 
 ** ns-win keys that I want to die
@@ -191,7 +200,8 @@
     instead. 
     
     #+BEGIN_SRC emacs-lisp
-      (global-unset-key (kbd "s-h"))
+      (when (memq window-system '(mac ns))
+        (global-unset-key (kbd "s-h")))
     #+END_SRC
 
 * Make it Pretty
@@ -239,8 +249,9 @@
    emacs. Menlo seems to be the one I'm happiest with on my MBA.
 
    #+BEGIN_SRC emacs-lisp
-     (when (memq window-system '(mac ns))
-       (set-default-font "-apple-Menlo-medium-normal-normal-*-12-*-*-*-m-0-iso10646-1"))
+     (if (memq window-system '(mac ns))
+         (set-default-font "-apple-Menlo-medium-normal-normal-*-12-*-*-*-m-0-iso10646-1")
+       (set-default-font "Inconsolata-10"))
    #+END_SRC
    
 ** bars, menus and numbers
