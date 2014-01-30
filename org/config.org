@@ -1406,6 +1406,21 @@
                                 "%60ITEM(Task) %8CATEGORY %8Owner %8Effort(Estimated Effort){:} %CLOCKSUM")))))))
       #+END_SRC
       
+***** Ops
+
+      There are a few tricks and tweaks we need to do in order to make
+      org-column-mode look good on a big screen with a big font. The
+      column mode is an overlay so we can hack things by setting a new
+      default font before going to the column mode.
+
+      #+BEGIN_SRC emacs-lisp
+        (defun ops ()
+          (interactive)
+          (set-default-font "Inconsolata-16")
+          (org-agenda nil "Ct")
+          (delete-other-windows))
+      #+END_SRC
+      
 **** Time Tracking and Estimates
 
      org-mode is huge. It does so much, but my reason for using it
