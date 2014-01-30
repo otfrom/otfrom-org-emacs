@@ -253,7 +253,23 @@
          (set-default-font "-apple-Menlo-medium-normal-normal-*-12-*-*-*-m-0-iso10646-1")
        (set-default-font "Inconsolata-10"))
    #+END_SRC
-   
+
+*** Font Switching
+
+    The screen on my sputnik is amazing, but while I can see the font
+    with the great resolution, it is a bit tricky to read when I'm
+    tired. 
+    
+    #+BEGIN_SRC emacs-lisp
+      (defun bigger-font ()
+        (interactive)
+        (set-default-font "Inconsolata-12"))
+      
+      (defun smaller-font ()
+        (interactive)
+        (set-default-font "Inconsolata-10"))
+    #+END_SRC
+    
 ** bars, menus and numbers
 
    I like no scroll bars, no toolbars and line and column numbers in
@@ -678,7 +694,7 @@
        (interactive)
        (delete-other-windows)
      
-       (if (< (frame-width) 220)
+       (if (< (frame-width) 240)
            (progn
              ;; create 2 columns
              (split-window-right)
@@ -1475,7 +1491,7 @@
          (interactive)
          (delete-other-windows)
          
-         (if (< (frame-width) 220)
+         (if (< (frame-width) 240)
              ;; Small frame
              (progn
                ;; create our 2 columns
