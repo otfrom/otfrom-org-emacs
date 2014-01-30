@@ -722,7 +722,9 @@
              (window-number-select 4)
              (switch-to-buffer "#ldnclj")
              (window-number-select 5)
-             (switch-to-buffer "*-jabber-roster-*")
+             (if (get-buffer boss-chat)
+                 (switch-to-buffer boss-chat)
+               (switch-to-buffer "*-jabber-roster-*"))
      
              ;; go to and grow the top left window
              (window-number-select 1)
@@ -767,7 +769,9 @@
            (window-number-select 4)
            (org-agenda nil "Cm") ;; My Agenda
            (window-number-select 6)
-           (switch-to-buffer "*-jabber-roster-*")
+           (if (get-buffer boss-chat)
+                 (switch-to-buffer boss-chat)
+               (switch-to-buffer "*-jabber-roster-*"))
            (window-number-select 7)
            (switch-to-buffer "#ldnclj")
            (window-number-select 8)
@@ -1527,7 +1531,9 @@
          (window-number-select 4)
          (switch-to-buffer "#ldnclj")
          (window-number-select 5)
-         (switch-to-buffer "*-jabber-roster-*")
+         (if (get-buffer boss-chat)
+           (switch-to-buffer boss-chat)
+         (switch-to-buffer "*-jabber-roster-*"))
        
          ;; And go to window 1
          (window-number-select 1))
