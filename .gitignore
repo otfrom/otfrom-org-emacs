@@ -17,3 +17,4 @@ url/*
 /.mc-lists.el
 /org-clock-save.el
 /tramp
+/erc/logs/
