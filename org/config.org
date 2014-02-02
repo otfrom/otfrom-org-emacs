@@ -676,6 +676,17 @@
       (setq erc-log-channels-directory (concat user-emacs-directory "erc/logs/"))
       (setq erc-save-buffer-on-part t)
     #+END_SRC
+
+*** notify on nick
+
+    irc is great fun, but I need something to ping me when they want
+    me on a channel.
+    
+    #+BEGIN_SRC emacs-lisp
+      (add-to-list 'erc-modules 'notify)
+      (add-to-list 'erc-modules 'notifications)
+    #+END_SRC
+    
 ** email with notmuch
 
    I'm still looking at mu4e as well, but notmuch seems to be doing an
