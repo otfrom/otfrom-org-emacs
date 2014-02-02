@@ -1603,7 +1603,7 @@
      C-M-f12.
 
      #+BEGIN_SRC emacs-lisp
-       (global-set-key [C-M-f12] 'org-capture)
+       (global-set-key [f12] 'org-capture)
      #+END_SRC
 
 **** Capture Templates
