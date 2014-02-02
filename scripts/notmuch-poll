@@ -1,3 +1,8 @@
 #! /bin/bash
-offlineimap
-notmuch new
+
+if ping -W 5 -c 1 google.com >/dev/null; then
+    echo "Fetching mail"
+    /usr/bin/offlineimap
+    /usr/local/bin/notmuch new
+    echo "New mail fetched and indexed."
+fi
