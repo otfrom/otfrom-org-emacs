@@ -714,7 +714,7 @@
    with a simple Vulcan grip.
 
    #+BEGIN_SRC emacs-lisp
-     (defun all-channels-open ()
+     (defun comms-up ()
        (interactive)
        (twittering-mode)
        (jabber-connect-all)
