@@ -4,5 +4,7 @@ if ping -W 5 -c 1 google.com >/dev/null; then
     echo "Fetching mail"
     /usr/bin/offlineimap
     /usr/local/bin/notmuch new
-    echo "New mail fetched and indexed."
+    /usr/local/bin/notmuch tag +otfrom 'folder:otfrom tag:inbox'
+    /usr/local/bin/notmuch tag +mastodonc 'folder:mastodonc tag:inbox'
+    /usr/local/bin/notmuch tag +me 'tag:inbox AND (from:bld@otfrom.com OR from:bruce@mastodonc.com)'
 fi
