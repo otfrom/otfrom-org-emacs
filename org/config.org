@@ -490,6 +490,14 @@
     
 * Communication Modes
 
+** The Big Brother Database bbdb
+
+   The best thing about bbdb is interwingularity. 
+   
+   #+BEGIN_SRC emacs-lisp
+     (maybe-install-and-require 'bbdb)
+   #+END_SRC
+   
 ** twittering-mode
 
    I have been accused by many ([[http://twitter.com/rrees][Robert Rees]] and [[http://twitter.com/cluttercup][Jane Dickson]] to name
@@ -687,6 +695,14 @@
       (add-to-list 'erc-modules 'notifications)
     #+END_SRC
     
+*** bbdb and irc
+
+    Pop up bbdb when contacts show up in irc.
+    
+    #+BEGIN_SRC emacs-lisp
+      (maybe-install-and-require 'bbdb2erc)
+    #+END_SRC
+
 ** email with notmuch
 
    I'm still looking at mu4e as well, but notmuch seems to be doing an
