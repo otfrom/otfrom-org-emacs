@@ -786,6 +786,23 @@
        (setq gnus-alias-identity-rules
              '(("mastodonc" ("to" ".*@mastodonc.com" both) "mastodonc")))
      #+END_SRC
+
+**** bbdb and message mode integration
+
+     We need to interwingle message mode and bbdb
+
+     #+BEGIN_SRC emacs-lisp
+       (bbdb-initialize 'message)
+       (add-hook 'message-setup-hook 'bbdb-mail-aliases)
+     #+END_SRC
+
+**** bbdb and pgp
+
+     Starting with some pgp support. Won't @ntoll be surprised.
+
+     #+BEGIN_SRC emacs-lisp
+       (bbdb-initialize 'pgp)
+     #+END_SRC
      
 ** Hailing Frequencies or comms
 
