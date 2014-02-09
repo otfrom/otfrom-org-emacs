@@ -718,6 +718,59 @@
       (setq notmuch-poll-script (concat user-emacs-directory "scripts/notmuch-poll"))
     #+END_SRC
     
+*** Sending Mail
+
+    We want to send mail with msmtpq, which sends the mail if the
+    interwebs are up and queues it if the internet is down.
+
+    At the moment I can't get msmtpq working consistently so I'm just
+    doing msmtp and waiting before I reply.
+
+    #+BEGIN_SRC emacs-lisp
+      (setq message-send-mail-function 'message-send-mail-with-sendmail)
+      (setq
+       sendmail-program "/usr/bin/msmtp"
+       ;;sendmail-program "~/bin/msmtpq"
+       mail-specify-envelope-from t
+       message-sendmail-f-is-evil nil                
+       mail-envelope-from 'header
+       message-sendmail-envelope-from 'header)
+    #+END_SRC
+    
+**** Choosing the right email address with gnus-alias
+
+     Our ~/.msmtprc file has a from field in addition to a user
+     field. It uses the from field to match against the account as it
+     sends email so that it goes via the correct server. This is much
+     easier than having to pass through -a <account name> on the
+     command line the way you used to. Luckily I've not had to suffer
+     through that and can use gnus-alias.
+     
+     #+BEGIN_SRC emacs-lisp
+       (maybe-install-and-require 'gnus-alias)
+       ;; Define two identities, "home" and "work"
+       (setq gnus-alias-identity-alist
+             '(("otfrom"
+                nil ;; Does not refer to any other identity
+                "Bruce Durling <bld@otfrom.com>" ;; Sender address
+                "otfrom" ;; No organization header
+                (("Fcc" . "/home/bld/maildir/otfrom-sent"))
+                nil ;; No extra body text
+                "~/.signature")
+               ("mastodonc"
+                nil
+                "Bruce Durling <bruce@mastodonc.com>"
+                "Mastodon C Ltd"
+                (("Fcc" . "/home/bld/maildir/mc-sent"))
+                nil
+                "~/.signature.work")))
+       ;; Use "home" identity by default
+       (setq gnus-alias-default-identity "otfrom")
+       ;; Define rules to match work identity
+       (setq gnus-alias-identity-rules
+             '(("mastodonc" ("to" ".*@mastodonc.com" both) "mastodonc")))
+     #+END_SRC
+     
 ** Hailing Frequencies or comms
 
    It is good that jabber and erc die when I put the computer to
