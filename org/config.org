@@ -700,6 +700,7 @@
     Pop up bbdb when contacts show up in irc.
     
     #+BEGIN_SRC emacs-lisp
+      ;;(require 'erc-bbdb)
       (maybe-install-and-require 'bbdb2erc)
     #+END_SRC
 
