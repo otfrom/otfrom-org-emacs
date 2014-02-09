@@ -18,3 +18,4 @@ url/*
 /org-clock-save.el
 /tramp
 /erc/logs/
+/bbdb
