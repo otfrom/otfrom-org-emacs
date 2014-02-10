@@ -981,6 +981,15 @@
       (add-hook 'prog-mode-hook 'highlight-symbol-mode)
     #+END_SRC
     
+*** color-identifiers-mode
+
+    This is a suggestion from @sw1nn.
+    
+    #+BEGIN_SRC emacs-lisp
+      (maybe-install-and-require 'color-identifiers-mode)
+      (global-color-identifiers-mode t)
+    #+END_SRC
+
 *** autocomplete
 
     Let's setup the basics of autocomplete for everything.
