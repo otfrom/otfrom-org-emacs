@@ -771,14 +771,14 @@
                 nil ;; Does not refer to any other identity
                 "Bruce Durling <bld@otfrom.com>" ;; Sender address
                 "otfrom" ;; No organization header
-                (("Fcc" . "/home/bld/maildir/otfrom-sent"))
+                (("Fcc" . "/home/bld/maildir/otfrom/sent"))
                 nil ;; No extra body text
                 "~/.signature")
                ("mastodonc"
                 nil
                 "Bruce Durling <bruce@mastodonc.com>"
                 "Mastodon C Ltd"
-                (("Fcc" . "/home/bld/maildir/mc-sent"))
+                (("Fcc" . "/home/bld/maildir/mastodonc/sent"))
                 nil
                 "~/.signature.work")))
        ;; Use "home" identity by default
