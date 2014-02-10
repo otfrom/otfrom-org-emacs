@@ -591,6 +591,12 @@
      (add-hook 'jabber-chat-mode-hook 'goto-address)
    #+END_SRC
 
+   And those BIG AVATARS are just TOO BIG, so let's get rid of them.
+
+   #+BEGIN_SRC emacs-lisp
+     (setq jabber-chat-buffer-show-avatar nil)
+   #+END_SRC
+   
    And while we want to know when we receive messages having something
    flicker in the echo area every time someone's status changes is
    just waaaaay too chatty.
