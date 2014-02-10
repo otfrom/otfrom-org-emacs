@@ -762,6 +762,9 @@
      easier than having to pass through -a <account name> on the
      command line the way you used to. Luckily I've not had to suffer
      through that and can use gnus-alias.
+
+     Remember when setting up the Fcc directory that it should point
+     at a real maildir directory.
      
      #+BEGIN_SRC emacs-lisp
        (maybe-install-and-require 'gnus-alias)
