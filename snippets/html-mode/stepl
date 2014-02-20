@@ -1,0 +1,27 @@
+# -*- mode: snippet -*-
+# uuid: 1ED0313D-C4DF-48FA-9843-DD597BD6FD81
+# key: stepl
+# contributor: a CDEC step
+# name: stepl
+# --
+<div class="step">
+  <div class="step-circle">${1:[stepnumber]}</div>
+     
+  <div class="row step-content">
+    <div class="col-sm-6">
+      
+      <p>
+        $0          
+      </p>
+            
+    </div>
+
+    <div class="col-sm-6">
+      <!-- Step left column example content. -->
+      <h4>Step ${2:[stepnumbertext]} - ${3:[title]}</h4>
+      <p>
+      </p>
+            
+    </div><!-- /.col-sm-6 -->
+  </div><!-- /.row.step-content -->
+</div><!-- /.step -->
