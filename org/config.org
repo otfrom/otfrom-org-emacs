@@ -311,6 +311,19 @@
      (global-set-key (kbd "C-c t") 'toggle-transparency)
    #+END_SRC
 
+* Tool Configuration
+  
+** ediff
+
+   ediff is my favourite way of comparing files, directories, versions
+   and buffers in emacs. It does annoy me the way it brings up a new
+   frame though. I'd much rather keep everything in the same frame
+   even when I'm on a windowing system.
+
+   #+BEGIN_SRC emacs-lisp
+     (setq ediff-window-setup-function 'ediff-setup-windows-plain)
+   #+END_SRC
+   
 * directories, navigation, searching, movement
 ** dired
 
