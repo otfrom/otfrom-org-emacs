@@ -16,7 +16,7 @@
 
     <div class="col-sm-6">
 
-      <!-- Step right column example content. -->
+      <!-- Step right column content. -->
       <h4>Step ${2:[stepnumbertext]} - ${3:[title]}</h4>
 
       <p>
