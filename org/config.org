@@ -1915,11 +1915,13 @@
     And a control-meta to start everything off.
 
     #+BEGIN_SRC emacs-lisp
-      (global-set-key (kbd "C-M-<f8>") 'emms-play-playlist)
-      (global-set-key (kbd "<f8>") 'emms-pause)
-      (global-set-key (kbd "<f9>") 'emms-next)
-      (global-set-key (kbd "<f7>") 'emms-previous)
-      (global-set-key (kbd "s-<f8>") 'emms-stop)
+      (global-set-key (kbd "<f8>") 'emms-previous)
+
+      (global-set-key (kbd "<f9>") 'emms-pause)
+      (global-set-key (kbd "C-M-<f9>") 'emms-play-playlist)
+      (global-set-key (kbd "s-<f9>") 'emms-stop)
+
+      (global-set-key (kbd "<f10>") 'emms-next)
     #+END_SRC
     
 *** Turn off emms-mode-line
