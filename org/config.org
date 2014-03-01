@@ -835,7 +835,19 @@
                 ;; important to have a catch-all at the end!
                 (t  "/archive"))))
      #+END_SRC
-    
+
+**** Dynamic Trash
+
+     We want to have the right Trash folders set up as well.
+
+     #+BEGIN_SRC emacs-lisp
+       (setq mu4e-trash-folder
+             (lambda (msg)
+               (cond
+                ((string= "/mastodonc/INBOX" (mu4e-message-field msg :maildir)) "/mastodonc/trash")
+                ((string= "/otfrom/INBOX" (mu4e-message-field msg :maildir)) "/otfrom/trash"))))
+     #+END_SRC
+
 **** Unicode
 
     We want to be able to read non-ascii characters. 
@@ -843,6 +855,38 @@
      #+BEGIN_SRC emacs-lisp
        ;; Use fancy chars
        (setq mu4e-use-fancy-chars t)
+     #+END_SRC
+
+**** mu4e and org-mode capturing
+
+     We want to be able to link to messages in org-mode. That's part
+     of the reason for having email in emacs anyway.
+
+     #+BEGIN_SRC emacs-lisp
+       (require 'org-mu4e)
+     #+END_SRC
+
+**** mu4e and org-contacts
+
+     I want to use org-contacts rather than bbdb.
+     
+     #+BEGIN_SRC emacs-lisp
+       (require 'org-contacts)
+       (setq org-contacts-files (quote ("~/org/contacts.org")))
+       (setq mu4e-org-contacts-file  "~/org/contacts.org")
+       (add-to-list 'mu4e-headers-actions
+                    '("org-contact-add" . mu4e-action-add-org-contact) t)
+       (add-to-list 'mu4e-view-actions
+                    '("org-contact-add" . mu4e-action-add-org-contact) t)
+     #+END_SRC
+
+**** And a hot key
+
+     And we want to be able to switch to mu4e quickly so let's set f11
+     to be the hot key.
+
+     #+BEGIN_SRC emacs-lisp
+       (global-set-key [f11] 'mu4e)
      #+END_SRC
      
 *** email with notmuch
