@@ -1778,6 +1778,17 @@
                (org-agenda-files :maxlevel . 9)))
      #+END_SRC
      
+*** org and the pomodoro technique
+
+    When I need to just grind through something or find a way to keep
+    myself focused when I'm having trouble I like to use the
+    [[http://www.pomodorotechnique.com/][pomodoro technique]]. Luckily there is org-pomodoro that let's us
+    put these two great things together.
+
+    #+BEGIN_SRC emacs-lisp
+      (maybe-install-and-require 'org-pomodoro)
+    #+END_SRC
+    
 ** html, sgml, xml
 
 *** tagedit
