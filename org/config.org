@@ -1805,7 +1805,7 @@
                 "* TODO Respond to %:from on %:subject\nSCHEDULED: %t\n%^{Owner}p\n%U\n%a\n"
                 :clock-in t :clock-resume t :empty-lines-after 1)
                ("n" "note" entry (file+datetree org-default-notes-file)
-                "* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t :empty-lines-after 1)
+                "* %? :NOTE:\n%U\n%a\n" :clock-resume t :empty-lines-after 1)
                ("j" "Journal" entry (file+datetree (concat org-directory "/refile.org"))
                 "* %?\n%U\n" :clock-in t :clock-resume t :empty-lines-after 1 :empty-lines-after 1)
                ("m" "Meeting" entry (file+datetree org-default-notes-file)
