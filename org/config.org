@@ -723,38 +723,9 @@
       (maybe-install-and-require 'bbdb2erc)
     #+END_SRC
 
-** email with notmuch
+** email
 
-   I'm still looking at mu4e as well, but notmuch seems to be doing an
-   interesting job even if I don't understand how to properly use it
-   yet. Having links into org mode, tags and good searching are a very
-   good start through.
-
-   #+BEGIN_SRC emacs-lisp
-     (require 'notmuch)
-   #+END_SRC
-
-*** notmuch and org-mode
-
-    org-mode integration is probably my biggest reason for wanting to
-    use an email client that integrates with emacs. Lots of tasks and
-    todos come from email and I _really_ want to be able to link to
-    them and always be able to get back to them.
-    
-    #+BEGIN_SRC emacs-lisp
-      (require 'org-notmuch)
-    #+END_SRC
-
-*** Refreshing on demand
-
-    notmuch-poll calls offlineimap to get the mail and then notmuch
-    new to download it.
-    
-    #+BEGIN_SRC emacs-lisp
-      (setq notmuch-poll-script (concat user-emacs-directory "scripts/notmuch-poll"))
-    #+END_SRC
-    
-*** Sending Mail
+*** Sending Mail with msmtp
 
     We want to send mail with msmtpq, which sends the mail if the
     interwebs are up and queues it if the internet is down.
@@ -771,6 +742,8 @@
        message-sendmail-f-is-evil nil                
        mail-envelope-from 'header
        message-sendmail-envelope-from 'header)
+       
+      (setq message-kill-buffer-on-exit t)
     #+END_SRC
     
 **** Choosing the right email address with gnus-alias
@@ -825,6 +798,82 @@
 
      #+BEGIN_SRC emacs-lisp
        (bbdb-initialize 'pgp)
+     #+END_SRC
+     
+*** email with mu4e
+
+    #+BEGIN_SRC emacs-lisp
+      (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e/")
+      (require 'mu4e)
+      (setq mu4e-get-mail-command "offlineimap")
+      (setq mu4e-user-mail-address-list (list "bld@otfrom.com" "bruce@mastodonc.com"))
+    #+END_SRC
+
+**** Shortcuts
+
+     A few quick shortcuts to let us jump to the folders we are
+     interested in.
+
+     #+BEGIN_SRC emacs-lisp
+       (setq mu4e-maildir-shortcuts
+             '(("/mastodonc/INBOX" . ?w)
+               ("/otfrom/INBOX" . ?p)))
+     #+END_SRC
+
+**** Refiling messages
+
+     I want to be able to refile or archive things into the appropriate
+     all mail folder. The following cond statement allows us to do that.
+
+     #+BEGIN_SRC emacs-lisp
+       (setq mu4e-refile-folder
+             (lambda (msg)
+               (cond
+                ((string= "/mastodonc/INBOX" (mu4e-message-field msg :maildir)) "/mastodonc/all")
+                ((string= "/otfrom/INBOX" (mu4e-message-field msg :maildir)) "/otfrom/all")
+                ;; everything else goes to /archive
+                ;; important to have a catch-all at the end!
+                (t  "/archive"))))
+     #+END_SRC
+    
+**** Unicode
+
+    We want to be able to read non-ascii characters. 
+     
+     #+BEGIN_SRC emacs-lisp
+       ;; Use fancy chars
+       (setq mu4e-use-fancy-chars t)
+     #+END_SRC
+     
+*** email with notmuch
+
+    I'm still looking at mu4e as well, but notmuch seems to be doing an
+    interesting job even if I don't understand how to properly use it
+    yet. Having links into org mode, tags and good searching are a very
+    good start through.
+
+    #+BEGIN_SRC emacs-lisp
+      (require 'notmuch)
+    #+END_SRC
+
+**** notmuch and org-mode
+
+     org-mode integration is probably my biggest reason for wanting to
+     use an email client that integrates with emacs. Lots of tasks and
+     todos come from email and I _really_ want to be able to link to
+     them and always be able to get back to them.
+     
+     #+BEGIN_SRC emacs-lisp
+       (require 'org-notmuch)
+     #+END_SRC
+
+**** Refreshing on demand
+
+     notmuch-poll calls offlineimap to get the mail and then notmuch
+     new to download it.
+     
+     #+BEGIN_SRC emacs-lisp
+       (setq notmuch-poll-script (concat user-emacs-directory "scripts/notmuch-poll"))
      #+END_SRC
      
 ** Hailing Frequencies or comms
@@ -1701,7 +1750,7 @@
          (org-agenda nil "Cm")
          (window-number-select 2)
          ;;(switch-to-buffer (find-file (concat org-directory "/work/world-domination.org")))
-         (notmuch)
+         (mu4e)
          (window-number-select 3)
          (switch-to-buffer "#kixi")
          (window-number-select 4)
