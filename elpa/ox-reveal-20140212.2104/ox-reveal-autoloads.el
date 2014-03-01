@@ -3,8 +3,8 @@
 ;;; Code:
 
 
-;;;### (autoloads nil nil ("ox-reveal-pkg.el" "ox-reveal.el") (21265
-;;;;;;  52184 752251 166000))
+;;;### (autoloads nil nil ("ox-reveal-pkg.el" "ox-reveal.el") (21266
+;;;;;;  25440 970318 766000))
 
 ;;;***
 
