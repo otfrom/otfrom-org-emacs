@@ -1789,6 +1789,20 @@
       (maybe-install-and-require 'org-pomodoro)
     #+END_SRC
     
+*** diary integration
+
+    I've got a script now to get the iCalendar files from google
+    calendar and use icalendar-import-file to convert them to diary
+    files. And with org-agenda-include-diary set to true we can
+    include these diary files in our org-agenda.
+    
+    #+BEGIN_SRC emacs-lisp
+      (setq org-agenda-include-diary t)
+      (add-hook 'diary-list-entries-hook 'diary-sort-entries t)
+      (add-hook 'diary-list-entries-hook 'diary-include-other-diary-files)
+      (add-hook 'diary-mark-entries-hook 'diary-mark-included-diary-files)
+    #+END_SRC
+    
 ** html, sgml, xml
 
 *** tagedit
