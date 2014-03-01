@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: hl
+# key: hl
+# --
+{% highlight ${1:[language]} %}
+$0
+{% endhighlight %}

@@ -11,7 +11,7 @@
       <!-- Step left column content. -->
       <h4>Step ${2:[stepnumbertext]} - ${3:[title]}</h4>
     
-      <p>
+      <p class="lead">
         $0          
       </p>
             

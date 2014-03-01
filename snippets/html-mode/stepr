@@ -8,9 +8,7 @@
 
   <div class="row step-content">
     <div class="col-sm-6">
-      <p>
-        $0          
-      </p>
+    
     </div>
 
     <div class="col-sm-6">
@@ -18,8 +16,8 @@
       <!-- Step right column content. -->
       <h4>Step ${2:[stepnumbertext]} - ${3:[title]}</h4>
 
-      <p>
-
+      <p class="lead">
+        $0
       </p>
 
     </div><!-- /.col-sm-6 -->
