@@ -8,6 +8,7 @@
 (require 'package)
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
 			 ;; ("marmalade" . "http://marmalade-repo.org/packages/")
+                         ("org" . "http://orgmode.org/elpa/")
 			 ("melpa" . "http://melpa.milkbox.net/packages/")))
 
 ;; This means we prefer things from ~/.emacs.d/elpa over the standard packages.
@@ -24,6 +25,8 @@
   (require p))
 
 ;; org-mode always needs to be installed in an emacs where it isn't loaded.
+(when (not (package-installed-p 'org-plus-contrib))
+  (package-install 'org-plus-contrib))
 (require 'org)
 
 (org-babel-load-file (concat (getenv "HOME") "/.emacs.d/org/config.org"))
