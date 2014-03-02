@@ -830,12 +830,17 @@
      #+BEGIN_SRC emacs-lisp
        (setq mu4e-refile-folder
              (lambda (msg)
+               (message "Message contact: %s" (mu4e-message-field msg :to))
                (cond
-                ((string= "/mastodonc/INBOX" (mu4e-message-field msg :maildir)) "/mastodonc/all")
-                ((string= "/otfrom/INBOX" (mu4e-message-field msg :maildir)) "/otfrom/all")
-                ;; everything else goes to /archive
+                ;; work email
+                ((string-match-p "/mastodonc/" (mu4e-message-field msg :maildir)) "/mastodonc/all")
+                
+                ;; personal email
+                ((string-match-p "/otfrom/" (mu4e-message-field msg :maildir)) "/otfrom/all")
+                
+                ;; by default things go into /otfrom/all
                 ;; important to have a catch-all at the end!
-                (t  "/archive"))))
+                (t  "/otfrom/all"))))
      #+END_SRC
 
 **** Dynamic Trash
