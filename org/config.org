@@ -503,14 +503,6 @@
     
 * Communication Modes
 
-** The Big Brother Database bbdb
-
-   The best thing about bbdb is interwingularity. 
-   
-   #+BEGIN_SRC emacs-lisp
-     (maybe-install-and-require 'bbdb)
-   #+END_SRC
-   
 ** twittering-mode
 
    I have been accused by many ([[http://twitter.com/rrees][Robert Rees]] and [[http://twitter.com/cluttercup][Jane Dickson]] to name
@@ -714,15 +706,6 @@
       (add-to-list 'erc-modules 'notifications)
     #+END_SRC
     
-*** bbdb and irc
-
-    Pop up bbdb when contacts show up in irc.
-    
-    #+BEGIN_SRC emacs-lisp
-      ;;(require 'erc-bbdb)
-      (maybe-install-and-require 'bbdb2erc)
-    #+END_SRC
-
 ** email
 
 *** Sending Mail with msmtp
@@ -793,23 +776,6 @@
              '(("mastodonc" ("to" ".*@mastodonc.com" both) "mastodonc")))
      #+END_SRC
 
-**** bbdb and message mode integration
-
-     We need to interwingle message mode and bbdb
-
-     #+BEGIN_SRC emacs-lisp
-       (bbdb-initialize 'message)
-       (add-hook 'message-setup-hook 'bbdb-mail-aliases)
-     #+END_SRC
-
-**** bbdb and pgp
-
-     Starting with some pgp support. Won't @ntoll be surprised.
-
-     #+BEGIN_SRC emacs-lisp
-       (bbdb-initialize 'pgp)
-     #+END_SRC
-     
 *** email with mu4e
 
     [[http://www.djcbsoftware.nl/code/mu/][mu4e]] is a maildir based email indexer with an emacs client. It
