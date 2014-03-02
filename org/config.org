@@ -1417,9 +1417,18 @@
      #+BEGIN_SRC emacs-lisp
        (setq mu4e-trash-folder
              (lambda (msg)
-               (cond
-                ((string= "/mastodonc/INBOX" (mu4e-message-field msg :maildir)) "/mastodonc/trash")
-                ((string= "/otfrom/INBOX" (mu4e-message-field msg :maildir)) "/otfrom/trash"))))
+               (message "Message contact: %s" (mu4e-message-field msg :to))
+                      (cond
+                       ;; work email
+                       ((string-match-p "/mastodonc/" (mu4e-message-field msg :maildir)) "/mastodonc/trash")
+                       
+                       ;; personal email
+                       ((string-match-p "/otfrom/" (mu4e-message-field msg :maildir)) "/otfrom/trash")
+                       
+                       ;; by default things go into /otfrom/trash
+                       ;; important to have a catch-all at the end!
+                       (t  "/otfrom/trash"))))
+       
      #+END_SRC
 
 **** Unicode
