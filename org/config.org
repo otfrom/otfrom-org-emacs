@@ -911,14 +911,27 @@
        (require 'org-notmuch)
      #+END_SRC
 
-**** Including related messages
+**** Gmail quirks and feature simulations
 
-     I want to be able to see everything that goes with the thread
-     when I'm looking at messages in my inbox.
+     
+***** Including related messages
 
-     #+BEGIN_SRC emacs-lisp
-       (setq mu4e-headers-include-related t)
-     #+END_SRC
+      I want to be able to see everything that goes with the thread
+      when I'm looking at messages in my inbox.
+
+      #+BEGIN_SRC emacs-lisp
+        (setq mu4e-headers-include-related t)
+      #+END_SRC
+      
+***** Skip duplicates
+
+      All mail contains duplicates of what is in INBOX, sent, trash
+      and others. So if we want to include the related we'll also want
+      to skip the duplicates.
+      
+      #+BEGIN_SRC emacs-lisp
+        (setq mu4e-headers-skip-duplicates t)
+      #+END_SRC
 
 **** Refreshing on demand
 
