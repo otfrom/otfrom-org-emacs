@@ -1033,7 +1033,7 @@
            (window-number-select 5)
            (delete-window))))
      
-     (global-set-key [C-M-f6] 'all-channels-open)
+     (global-set-key [C-f6] 'comms-up)
      (global-set-key [C-f12] 'comms)
    #+END_SRC
    
