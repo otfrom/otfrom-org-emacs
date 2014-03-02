@@ -2071,6 +2071,19 @@
       (emms-mode-line 0)
     #+END_SRC
     
+* Notification Systems
+  
+** The great eye of Sauron
+
+   With all these various systems going on we probably want to be able
+   to have a log of what has happened so we can step through
+   it. Sauron should help us with this. I'm sure nothing can go
+   wrong. I feel so powerful that it must be right.
+   
+   #+BEGIN_SRC emacs-lisp
+     (maybe-install-and-require 'sauron)
+   #+END_SRC
+   
 * Local Config
 
 ** custom.el
