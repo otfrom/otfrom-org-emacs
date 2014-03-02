@@ -954,7 +954,17 @@
       (add-hook 'diary-list-entries-hook 'diary-include-other-diary-files)
       (add-hook 'diary-mark-entries-hook 'diary-mark-included-diary-files)
     #+END_SRC
-    
+
+**** Activate Appointment Mode
+
+     And now that we have our ical stuff in our diary we'll want
+     notifications inside emacs too as we don't have gmail and google
+     calendar open all the time.
+
+     #+BEGIN_SRC emacs-lisp
+       (appt-activate 1)
+     #+END_SRC
+     
 ** html, sgml, xml
 
 *** tagedit
