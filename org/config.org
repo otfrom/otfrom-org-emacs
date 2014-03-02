@@ -2093,7 +2093,16 @@
    #+BEGIN_SRC emacs-lisp
      (maybe-install-and-require 'sauron)
    #+END_SRC
-   
+
+*** dbus hacks
+
+    If we want new mail notifications with sauron as described [[http://www.djcbsoftware.nl/code/mu/mu4e/Getting-new-mail-notifications-with-Sauron.html][here]],
+    then we apparently need to turn the dbus cookie on.
+    
+    #+BEGIN_SRC emacs-lisp
+      (setq sauron-dbus-cookie t)
+    #+END_SRC
+    
 * Local Config
 
 ** custom.el
