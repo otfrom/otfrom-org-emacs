@@ -933,6 +933,16 @@
         (setq mu4e-headers-skip-duplicates t)
       #+END_SRC
 
+**** View html only emails in the browser
+
+     With this added we can view html only emails in the browser by
+     hitting aV.
+     
+     #+BEGIN_SRC emacs-lisp
+       (add-to-list 'mu4e-view-actions
+                    '("ViewInBrowser" . mu4e-action-view-in-browser) t)
+     #+END_SRC
+
 **** Refreshing on demand
 
      notmuch-poll calls offlineimap to get the mail and then notmuch
