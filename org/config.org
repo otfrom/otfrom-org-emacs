@@ -745,7 +745,17 @@
        
       (setq message-kill-buffer-on-exit t)
     #+END_SRC
-    
+
+**** Queueing mail
+
+     Sometimes we want to send mail when we don't have any network. We
+     can queueing email with the following.
+     
+     #+BEGIN_SRC emacs-lisp
+       (setq smtpmail-queue-mail  nil  ;; start in non-queuing mode
+             smtpmail-queue-dir   "~/Maildir/queue/cur")
+     #+END_SRC
+     
 **** Choosing the right email address with gnus-alias
 
      Our ~/.msmtprc file has a from field in addition to a user
