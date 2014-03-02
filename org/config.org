@@ -911,6 +911,15 @@
        (require 'org-notmuch)
      #+END_SRC
 
+**** Including related messages
+
+     I want to be able to see everything that goes with the thread
+     when I'm looking at messages in my inbox.
+
+     #+BEGIN_SRC emacs-lisp
+       (setq mu4e-headers-include-related t)
+     #+END_SRC
+
 **** Refreshing on demand
 
      notmuch-poll calls offlineimap to get the mail and then notmuch
