@@ -813,10 +813,19 @@
     #+BEGIN_SRC emacs-lisp
       (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e/")
       (require 'mu4e)
-      (setq mu4e-get-mail-command "offlineimap")
       (setq mu4e-user-mail-address-list (list "bld@otfrom.com" "bruce@mastodonc.com"))
     #+END_SRC
 
+**** Fetching mail
+
+     We use offlineimap to get our mail and want to get it every 13
+     minutes, just to be lucky.
+
+     #+BEGIN_SRC emacs-lisp
+       (setq mu4e-get-mail-command "offlineimap")
+       (setq mu4e-update-interval (* 13 60))
+     #+END_SRC
+     
 **** Shortcuts
 
      A few quick shortcuts to let us jump to the folders we are
