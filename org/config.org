@@ -622,6 +622,15 @@
    Internet Relay Chat is a great way of talking to lots of
    interesting people in what feels a bit like a pub.
 
+*** Connect to freenode
+
+    According to the [[http://freenode.net/irc_servers.shtml][freenode]] site we should be connecting to
+    chat.freenode.net. 
+    
+    #+BEGIN_SRC emacs-lisp
+      (setq erc-server "chat.freenode.net")
+    #+END_SRC
+    
 *** Tracking
     
     We want to highlight pals and diminish fools, but leave out when
