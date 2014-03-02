@@ -808,7 +808,7 @@
 
      #+BEGIN_SRC emacs-lisp
        (setq mu4e-get-mail-command "offlineimap")
-       (setq mu4e-update-interval (* 13 60))
+       (setq mu4e-update-interval (* 32 60))
      #+END_SRC
      
 **** Shortcuts
