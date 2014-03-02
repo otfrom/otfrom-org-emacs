@@ -802,6 +802,14 @@
      
 *** email with mu4e
 
+    [[http://www.djcbsoftware.nl/code/mu/][mu4e]] is a maildir based email indexer with an emacs client. It
+    does a good job of moving files around to the right directories so
+    that syncing with imap and a local store actually works in
+    addition to having good indexing with mu.
+    
+    We installed mu4e from a source tarball. It put its configuration
+    files in /usr/local/share/emacs/site-lisp/mu4e/. 
+    
     #+BEGIN_SRC emacs-lisp
       (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e/")
       (require 'mu4e)
