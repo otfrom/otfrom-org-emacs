@@ -5,7 +5,7 @@
 ;; Author: Bozhidar Batsov <bozhidar@batsov.com>
 ;; URL: https://github.com/bbatsov/projectile
 ;; Keywords: project, convenience
-;; Version: 20140226.821
+;; Version: 20140302.221
 ;; X-Original-Version: 0.10.0
 ;; Package-Requires: ((s "1.6.0") (dash "1.5.0") (pkg-info "0.4"))
 
@@ -1026,7 +1026,7 @@ With a prefix ARG invalidates the cache first."
       (require 'grep)
       ;; in git projects users have the option to use `vc-git-grep' instead of `rgrep'
       (if (and (eq (projectile-project-vcs) 'git) projectile-use-git-grep)
-          (vc-git-grep search-regexp "'*'" root-dir)
+          (vc-git-grep search-regexp "" root-dir)
         ;; paths for find-grep should relative and without trailing /
         (let ((grep-find-ignored-directories (-union (-map (lambda (dir) (s-chop-suffix "/" (file-relative-name dir root-dir)))
                                                            (cdr (projectile-ignored-directories))) grep-find-ignored-directories))
@@ -1034,14 +1034,13 @@ With a prefix ARG invalidates the cache first."
           (grep-compute-defaults)
           (rgrep search-regexp "* .*" root-dir))))))
 
-(defvar ack-and-a-half-arguments)
 (defun projectile-ack (regexp)
   "Run an ack search with REGEXP in the project."
   (interactive
    (list (read-from-minibuffer
           (projectile-prepend-project-name "Ack search for: ")
           (projectile-symbol-at-point))))
-  (if (fboundp 'ack-and-a-half)
+  (if (require 'ack-and-a-half nil 'noerror)
       (let* ((saved-arguments ack-and-a-half-arguments)
              (ack-and-a-half-arguments
               (append saved-arguments
