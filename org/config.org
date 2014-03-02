@@ -501,6 +501,573 @@
       (global-set-key (kbd "s-t") 'helm-projectile)
     #+END_SRC
     
+* Text Modes
+** Text Mode Basics
+
+   If we are in a text mode we want flyspell and auto-fill-mode.
+
+   #+BEGIN_SRC emacs-lisp
+     (add-hook 'text-mode-hook
+               (lambda ()
+                       (flyspell-mode 1)
+                       (diminish 'flyspell-mode)
+                       (auto-fill-mode 1)
+                       (diminish 'auto-fill-function)))
+   #+END_SRC
+
+** org-mode
+
+   I also use org-mode on its own and would like to use it more. I
+   used to be a complete planner-mode addict. I've never really
+   gotten into org-mode in the same way. Having a way to sync to
+   trello and link to my email, magit and everything else keeps
+   making me want to try though.
+
+*** fontify
+
+    This is all written in org-mode. It would be good if the source
+    code examples were fonitfies according to their major mode.
+
+    #+BEGIN_SRC emacs-lisp
+      (setq org-src-fontify-natively t)
+    #+END_SRC
+
+*** spelling
+
+    On a Mac we need to tell org-mode to use aspell, which we
+    installed using homebrew.
+
+    #+BEGIN_SRC emacs-lisp
+      (setq ispell-program-name (executable-find "aspell"))
+    #+END_SRC
+
+*** org-headlines
+
+    Just like in [[helm and clojure]] we'd like to be able to look at
+    the headlines in org-mode too.
+    
+    #+BEGIN_SRC emacs-lisp
+      (add-hook 'org-mode-hook
+                (lambda () (local-set-key (kbd "s-h") 'helm-org-headlines)))
+    #+END_SRC
+
+*** org-cheatsheet
+
+    Having cheatsheets around is handy. Especially for sprawling
+    modes like org-mode.
+
+    #+BEGIN_SRC emacs-lisp
+      (maybe-install-and-require 'helm-orgcard)
+      (add-hook 'org-mode-hook
+                       (lambda () (local-set-key [s-f1] 'helm-orgcard)))
+    #+END_SRC
+
+*** org and magit
+
+    Because sometimes you want to link to that particular commit.
+
+    I added this functionality with this commit: [[magit:~/emacs-configs/otfrom-org-emacs/::commit@1dd7516][1dd7516]]
+
+    #+BEGIN_SRC emacs-lisp
+      (maybe-install-and-require 'org-magit)
+    #+END_SRC
+    
+*** org-feed
+
+    I really quite liked google as a blog reader. Before that I used
+    to use Bloglines, which I liked more. Now I find that I can use
+    emacs and org-mode to read RSS and atom.
+
+    #+BEGIN_SRC emacs-lisp
+      (setq org-feed-retrieve-method 'curl)
+    #+END_SRC
+
+**** The Blog Roll
+
+     And this is my incomplete and silly blog roll. There are many
+     more things that I should read and I read very few on the ones
+     in here regularly. If I know you and you are in here, you
+     should really tweet about your new blog posts more.
+
+     If I'm honest, really this is how I keep up with various
+     webcomics.
+
+     #+BEGIN_SRC emacs-lisp
+       (load-if-exists (concat user-emacs-directory "local/blog-roll.el"))
+     #+END_SRC
+
+*** ox-reveal
+
+    [[https://github.com/hakimel/reveal.js/][reveal.js]] is a great way of making pretty presentations,
+    especially if you have a fair bit of code. Kris Jenkins suggested
+    that [[https://github.com/yjwen/org-reveal][ox-reveal]] would be a great way of generating the slides for
+    reveal.js.
+
+    #+BEGIN_SRC emacs-lisp
+      (maybe-install-and-require 'ox-reveal)
+    #+END_SRC
+
+    As a part of the installation we need to point at where we have
+    our copy of reveal.js. It uses a lot of disk space, but put it
+    into a sub directory for each presentation. Then you can serve it
+    up using http-server in node or a python webserver locally and
+    then things like speaker notes will work. Full screen in Lion is
+    still b0rken. Yet another reason to go over to linux.
+
+    #+BEGIN_SRC emacs-lisp
+      (setq org-reveal-root "reveal.js-2.5.0/")
+    #+END_SRC
+    
+*** Scheduling, Project Management, Time Keeping
+
+**** Agenda
+
+***** Diary
+
+      There are a lot of things that can go into the venerable diary
+      and I quite like the idea of functional scheduling.
+
+      #+BEGIN_SRC emacs-lisp
+        (setq org-agenda-include-diary t)
+      #+END_SRC
+      
+***** Agenda Windows
+
+      I'm not quite sure what possessed the org-mode people to
+      presume that they knew best about how my windows should be
+      arranged when I look at an agenda. There is a solution to that
+      though. Just use the current window, like every other command
+      that opens something up. Re-arrange frame indeed.
+
+      #+BEGIN_SRC emacs-lisp
+        (setq org-agenda-window-setup 'current-window)
+      #+END_SRC
+      
+***** Agenda Files
+
+      There are things for me and mine. Things I do for money. Things
+      I do for the community I'm in. Let me know if you think my
+      worldview is too small.
+
+      And somethings we need in the agenda even though we don't know
+      where to file it yet which is why refile is in here.
+      
+      #+BEGIN_SRC emacs-lisp
+        (setq org-agenda-files
+              (quote ("~/org/refile.org"
+                      "~/org/personal.org"
+                      "~/org/work.org"
+                      "~/org/community.org"
+                      "~/org/work/world-domination.org")))
+      #+END_SRC
+
+***** Agenda Sorting
+
+      #+BEGIN_SRC emacs-lisp
+        (setq org-agenda-sorting-strategy '(time-up priority-down todo-state-down deadline-up scheduled-up tag-up effort-down))
+      #+END_SRC
+      
+***** Custom Agendas
+
+      The real power of org-agenda starts to kick in when you create
+      your own custom agenda commands that get the things *you* want
+      out of your org files.
+      
+      #+BEGIN_SRC emacs-lisp
+        (setq org-agenda-custom-commands
+              '(("D" "Doing Now" todo "DOING|WAITING|BLOCKED|CCC"
+                 ((org-agenda-overriding-columns-format
+                   "%60ITEM(Task) %8CATEGORY %8Owner %8Effort(Estimated Effort){:} %CLOCKSUM")
+                  (org-agenda-view-columns-initially t)))
+                ("N" "Me Now!" tags-todo "TODO={^[DCWB].+[^E]$}+Owner=\"Bruce\"")
+                ("A" "All Now!" tags-todo "TODO={^[DCWB].+[^E]$}")
+                ("F" "Me in the Future!" tags-todo "TODO={^[TDCWB].+[^E]$}+Owner=\"Bruce\"")
+                ("C" . "Current Cake Countdown Searches")
+                ("Cm" "My Current Cake Countdown"
+                 ((agenda "" ((org-agenda-span 'week)
+                              (org-agenda-start-on-weekday 3)))
+                  (tags-todo "TODO={^[DCWB].+[^E]$}+Owner=\"Bruce\"")))
+                ("Ch" "My Current Cake Countdown History"
+                 ((agenda "" ((org-agenda-span 'week)
+                              (org-agenda-start-on-weekday 3)))
+                  (tags-todo "TODO={^[DCWB].+}+Owner=\"Bruce\"")))
+                ("Ct" "Team Current Cake Countdown"
+                 ((agenda "Team Current Cake Countdown" ((org-agenda-files '("~/org/work/world-domination.org"))
+                                                         (org-agenda-span 'week)
+                                                         (org-agenda-start-on-weekday 3)))
+                  (tags-todo "+CATEGORY=\"MC\"+TODO={^[DCWB].+[^E]$}"
+                             ((org-agenda-overriding-columns-format
+                                "%60ITEM(Task) %8CATEGORY %8Owner %8Effort(Estimated Effort){:} %CLOCKSUM")))))
+                ("Cl" "Team Current Cake Countdown Log"
+                 ((agenda "Current Cake Countdow" ((org-agenda-files '("~/org/work/world-domination.org"))
+                                                   (org-agenda-span 'week)
+                                                   (org-agenda-start-on-weekday 3)
+                                                   (org-agenda-show-log t)))
+                  (tags-todo "+CATEGORY=\"MC\"+TODO={^[DCWB].+}"
+                             ((org-agenda-overriding-columns-format
+                                "%60ITEM(Task) %8CATEGORY %8Owner %8Effort(Estimated Effort){:} %CLOCKSUM")))))
+                ("Cf" "Team Next Cake Countdown Log"
+                 ((agenda "Next Cake Countdown" ((org-agenda-files '("~/org/work/world-domination.org"))
+                                                 (org-agenda-span 'week)
+                                                 (org-agenda-start-on-weekday 3)
+                                                 (org-agenda-show-log t)))
+                  (tags-todo "+CATEGORY=\"MC\"+TODO={^[TDCWB].+[^E]$}"
+                             ((org-agenda-overriding-columns-format
+                                "%60ITEM(Task) %8CATEGORY %8Owner %8Effort(Estimated Effort){:} %CLOCKSUM")))))))
+      #+END_SRC
+      
+***** Ops
+
+      There are a few tricks and tweaks we need to do in order to make
+      org-column-mode look good on a big screen with a big font. The
+      column mode is an overlay so we can hack things by setting a new
+      default font before going to the column mode.
+
+      #+BEGIN_SRC emacs-lisp
+        (defun ops ()
+          (interactive)
+          (set-default-font "Inconsolata-16")
+          (org-agenda nil "Ct")
+          (delete-other-windows))
+      #+END_SRC
+      
+**** Time Tracking and Estimates
+
+     org-mode is huge. It does so much, but my reason for using it
+     was so that I could track effort vs estimates. It makes me
+     happier than a burn down chart, but probably just because I'm
+     writing elisp to do it rather than excel or google docs. This
+     hack works on my mind, but YMMV.
+
+***** clocking in, out and persistence
+
+      It is true, emacs crashes, I forget to clock out, there is just
+      life, ok? So, when we clock in to a new task we'll be prompted
+      to complete the time for the old task. Just to keep things
+      straight.  
+
+      There is more about measuring idle time in the org-mode docs
+      [[http://orgmode.org/manual/Resolving-idle-time.html][here]]. 
+      
+      #+BEGIN_SRC emacs-lisp
+        (setq org-clock-persist 'history)
+        (org-clock-persistence-insinuate)
+      #+END_SRC
+
+***** Tracking effort vs estimates with clocksum
+
+      I think of days as being working days rather than groups of 24
+      hours (I'm damaged, what can I say). So I want to see sums of
+      times always in hours rather than as days. Otherwise I just get
+      confused and wonder why spending three eight hour days working on
+      something gets summed up as just one day.
+
+      I found out about this bit of configuration on [[http://stackoverflow.com/questions/17929979/emacs-org-mode-how-to-stop-total-in-column-view-showing-number-of-days][Stack Overflow]].
+
+      This is really handy when looking at things in column mode in
+      org. I use column mode as an alternative to burn down charts to
+      track effort vs estimates.
+
+      #+BEGIN_SRC emacs-lisp
+        (setq org-time-clocksum-format
+              '(:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t))
+      #+END_SRC
+
+**** Workflow Keywords
+
+     TODO, DOING, DONE and WAITING, BLOCKED, CANCELLED, PHONE,
+     MEETING. Let's try these on for size for a while.
+
+     I've also added CCC for Current Cake Countdown for things we
+     have scheduled in for the next week, but haven't started yet.
+     
+     #+BEGIN_SRC emacs-lisp
+       (setq org-todo-keywords
+             (quote ((sequence "TODO(t) CCC(c!) DOING(g!) | DONE(d!)")
+                     (sequence "WAITING(w@/!)" "BLOCKED(b@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING"))))
+     #+END_SRC
+
+**** Put those logs in a drawer
+
+     It may be big and heavy and wood, but mostly I don't want to see
+     log messages for state change.
+
+     #+BEGIN_SRC emacs-lisp
+       (setq org-log-into-drawer t)
+     #+END_SRC
+
+     We also want to put the clocking in and out into the drawer.
+
+     #+BEGIN_SRC emacs-lisp
+       (setq org-clock-into-drawer t)
+     #+END_SRC
+
+**** You can depend on...
+
+     The sub tasks that are underneath the main task.
+
+     #+BEGIN_SRC emacs-lisp
+       (setq org-enforce-todo-dependencies t)
+     #+END_SRC
+
+**** Captain's chair
+
+     What's going on, who are we talking to. What is the ship's
+     status, where are we going.
+     
+     #+BEGIN_SRC emacs-lisp
+       (defun captains-chair ()
+         (interactive)
+         (delete-other-windows)
+         
+         (if (< (frame-width) 240)
+             ;; Small frame
+             (progn
+               ;; create our 2 columns
+               (split-window-right)
+       
+               ;; split 1st column vertically
+               (split-window-below)
+               
+               ;; move to the rightmost and split into 3 verticalally
+               (window-number-select 3)
+               (split-window-below)
+               (split-window-below))
+           ;; Big frame
+           (progn
+             ;; create our 3 columns
+             (split-window-right)
+             (split-window-right)
+             
+             ;; move to the rightmost and split
+             (window-number-select 3)
+             (split-window-below)
+             (split-window-below)))
+         
+         (balance-windows)
+         
+         ;; set up the buffers as we want
+         (window-number-select 1)
+         (org-agenda nil "Cm")
+         (window-number-select 2)
+         ;;(switch-to-buffer (find-file (concat org-directory "/work/world-domination.org")))
+         (mu4e)
+         (window-number-select 3)
+         (switch-to-buffer "#kixi")
+         (window-number-select 4)
+         (switch-to-buffer "#ldnclj")
+         (window-number-select 5)
+         (if (get-buffer boss-chat)
+           (switch-to-buffer boss-chat)
+         (switch-to-buffer "*-jabber-roster-*"))
+       
+         ;; And go to window 1
+         (window-number-select 1))
+       
+       (global-set-key [M-f12] 'captains-chair)
+     #+END_SRC
+
+*** Capturing, Templates and Refiling
+     
+**** Default Notes File
+
+     I don't want to think about things when I'm just capturing
+     them. I can refile them later.
+
+     #+BEGIN_SRC emacs-lisp
+       (setq org-default-notes-file (concat org-directory "/refile.org"))
+     #+END_SRC
+     
+**** Capture Hot Key
+
+     Let's capture things with a quick Vulcan Nerve Pinch on
+     C-M-f12.
+
+     #+BEGIN_SRC emacs-lisp
+       (global-set-key [f12] 'org-capture)
+     #+END_SRC
+
+**** Capture Templates
+
+     To do, respond, notes, journals, meetings and phone calls. These
+     are the things we want to keep track of and clock in and out of
+     let's see how we get on with them.
+
+     We also have a way of tracking things we are doing RFN as well
+     as capturing things for the future.
+     
+     #+BEGIN_SRC emacs-lisp
+       (setq org-capture-templates
+             '(("c" "Contacts" entry (file "~/org/contacts.org")
+                "* %(org-contacts-template-name)\n:PROPERTIES:\n:EMAIL: %(org-contacts-template-email)\n:PHONE:\n:ALIAS:\n:NICKNAME:\n:IGNORE:\n:ICON:\n:NOTE:\n:ADDRESS:\n:BIRTHDAY:\n:LAST_READ_MAIL:\n:END:" :empty-lines-after 1)
+               ("t" "Doing RIGHT NOW" entry (file+datetree org-default-notes-file)
+                "* DOING %?\n%^{Owner}p\n%U\n%a\n" :clock-in t :clock-resume t :empty-lines-after 1)
+               ("f" "Do in the Future" entry (file+datetree org-default-notes-file)
+                "* TODO %?\n%^{Owner}p\n%U\n%a\n" :empty-lines-after 1)
+               ("r" "respond" entry (file+datetree org-default-notes-file)
+                "* TODO Respond to %:from on %:subject\nSCHEDULED: %t\n%^{Owner}p\n%U\n%a\n"
+                :clock-in t :clock-resume t :empty-lines-after 1)
+               ("n" "note" entry (file+datetree org-default-notes-file)
+                "* %? :NOTE:\n%U\n%a\n" :clock-resume t :empty-lines-after 1)
+               ("j" "Journal" entry (file+datetree (concat org-directory "/refile.org"))
+                "* %?\n%U\n" :clock-in t :clock-resume t :empty-lines-after 1 :empty-lines-after 1)
+               ("m" "Meeting" entry (file+datetree org-default-notes-file)
+                "* MEETING with %? :MEETING:\n%^{Owner}p\n%U" :clock-in t :clock-resume t :empty-lines-after 1)
+               ("s" "Sit Down" entry (file+datetree org-default-notes-file)
+                "* MEETING with Mastodon C :MEETING:\n%^{Owner}p\n%U\n" :clock-in t :clock-resume t :empty-lines-after 1)
+               ("p" "Phone call" entry (file+datetree org-default-notes-file)
+                "* PHONE %? :PHONE:\n%^{Owner}p\n%U" :clock-in t :clock-resume t :empty-lines-after 1)))
+     #+END_SRC
+     
+**** Refiling rules
+
+     We want to be able to refile things in the file we are currently
+     in and in files that we create our agenda from.
+     
+     #+BEGIN_SRC emacs-lisp
+       (setq org-refile-targets
+             '((nil :maxlevel . 9)
+               (org-agenda-files :maxlevel . 9)))
+     #+END_SRC
+     
+*** org and the pomodoro technique
+
+    When I need to just grind through something or find a way to keep
+    myself focused when I'm having trouble I like to use the
+    [[http://www.pomodorotechnique.com/][pomodoro technique]]. Luckily there is org-pomodoro that let's us
+    put these two great things together.
+
+    #+BEGIN_SRC emacs-lisp
+      (maybe-install-and-require 'org-pomodoro)
+    #+END_SRC
+    
+*** diary integration
+
+    I've got a script now to get the iCalendar files from google
+    calendar and use icalendar-import-file to convert them to diary
+    files. And with org-agenda-include-diary set to true we can
+    include these diary files in our org-agenda.
+    
+    #+BEGIN_SRC emacs-lisp
+      (setq org-agenda-include-diary t)
+      (add-hook 'diary-list-entries-hook 'diary-sort-entries t)
+      (add-hook 'diary-list-entries-hook 'diary-include-other-diary-files)
+      (add-hook 'diary-mark-entries-hook 'diary-mark-included-diary-files)
+    #+END_SRC
+    
+** html, sgml, xml
+
+*** tagedit
+
+    This gives us paredit like editing for html
+
+    #+BEGIN_SRC emacs-lisp
+      (maybe-install-and-require 'tagedit)
+      (eval-after-load "sgml-mode"
+        '(progn
+           (require 'tagedit)
+           (tagedit-add-paredit-like-keybindings)
+           (add-hook 'html-mode-hook (lambda () (tagedit-mode 1)))))
+    #+END_SRC
+
+    I quite like the sound of the experimental editing stuff. Let's
+    put it in and see if it helps or destroys our code.
+
+    #+BEGIN_SRC emacs-lisp
+      (tagedit-add-experimental-features)
+    #+END_SRC
+    
+*** css
+
+    I should probably look at adding more sugar to this.
+    
+**** paredit
+     
+     I *always* want my parens to match (except in text modes).
+
+     #+BEGIN_SRC emacs-lisp
+       (add-hook 'css-mode-hook 'paredit-mode)
+     #+END_SRC
+     
+**** rainbow mode
+
+     And I want to see the colours I'm using.
+     
+     #+BEGIN_SRC emacs-lisp
+       (add-hook 'css-mode-hook 'rainbow-mode)     
+     #+END_SRC
+
+**** eldoc
+
+     And who doesn't want eldoc tips when they are editing things. 
+
+     #+BEGIN_SRC emacs-lisp
+       (maybe-install-and-require 'css-eldoc)
+     #+END_SRC
+
+**** helm support
+
+     And to be able to navigate around our selectors using helm. And
+     then we want to make it a headline key just like in our other
+     modes. 
+
+     #+BEGIN_SRC emacs-lisp
+       (maybe-install-and-require 'helm-css-scss)
+       (add-hook 'css-mode-hook
+                 (lambda () (local-set-key (kbd "s-h") 'helm-css-scss)))
+     #+END_SRC
+
+** markdown
+
+   I love org-mode, but lots of other systems use markdown, github
+   wiki pages being a very good example.
+
+   #+BEGIN_SRC emacs-lisp
+     (maybe-install-and-require 'markdown-mode)
+   #+END_SRC
+
+*** Github Flavouring
+
+    I pretty much *always* want to do [[http://github.github.com/github-flavored-markdown/][github flavoured markdown]], so
+    let's just change that auto-mode-alist.
+
+    #+BEGIN_SRC emacs-lisp
+      (add-to-list 'auto-mode-alist '(".md$" . gfm-mode))
+    #+END_SRC
+
+**** Github Flavoured Preview
+     
+     We also need to change the preview as the standard preview
+     doesn't render github flavoured markdown correctly. I've
+     installed markdown Preview+ as a Chrome Extension and associated
+     .md files with Chrome on Mac OS X.
+
+     This is all a bit broken really, but will work for now. I'm sorry
+     that it is like this and I'm sure some day I'll fix it. This also
+     means that you use markdown-open rather than markdown-preview.
+
+     #+BEGIN_SRC emacs-lisp
+       (setq markdown-open-command "open")
+     #+END_SRC
+     
+*** helm markdown headlines
+
+    I want super-h to work and give me headlines just like in
+    org-mode. I feel this could perhaps be a bit better, but this will
+    do for now.
+    
+    #+BEGIN_SRC emacs-lisp
+      (defun helm-markdown-headlines ()
+        "Display headlines for the current Clojure file."
+        (interactive)
+        (helm :sources '(((name . "Markdown Headlines")
+                          (volatile)
+                          (headline "^[#]")))))
+      
+      (add-hook 'markdown-mode-hook
+                (lambda () (local-set-key (kbd "s-h") 'helm-markdown-headlines)))
+    #+END_SRC
+    
 * Communication Modes
 
 ** twittering-mode
@@ -1451,572 +2018,6 @@
       (maybe-install-and-require 'refheap)
     #+END_SRC
 
-* Text Modes
-** Text Mode Basics
-
-   If we are in a text mode we want flyspell and auto-fill-mode.
-
-   #+BEGIN_SRC emacs-lisp
-     (add-hook 'text-mode-hook
-               (lambda ()
-                       (flyspell-mode 1)
-                       (diminish 'flyspell-mode)
-                       (auto-fill-mode 1)
-                       (diminish 'auto-fill-function)))
-   #+END_SRC
-
-** org-mode
-
-   I also use org-mode on its own and would like to use it more. I
-   used to be a complete planner-mode addict. I've never really
-   gotten into org-mode in the same way. Having a way to sync to
-   trello and link to my email, magit and everything else keeps
-   making me want to try though.
-
-*** fontify
-
-    This is all written in org-mode. It would be good if the source
-    code examples were fonitfies according to their major mode.
-
-    #+BEGIN_SRC emacs-lisp
-      (setq org-src-fontify-natively t)
-    #+END_SRC
-
-*** spelling
-
-    On a Mac we need to tell org-mode to use aspell, which we
-    installed using homebrew.
-
-    #+BEGIN_SRC emacs-lisp
-      (setq ispell-program-name (executable-find "aspell"))
-    #+END_SRC
-
-*** org-headlines
-
-    Just like in [[helm and clojure]] we'd like to be able to look at
-    the headlines in org-mode too.
-    
-    #+BEGIN_SRC emacs-lisp
-      (add-hook 'org-mode-hook
-                (lambda () (local-set-key (kbd "s-h") 'helm-org-headlines)))
-    #+END_SRC
-
-*** org-cheatsheet
-
-    Having cheatsheets around is handy. Especially for sprawling
-    modes like org-mode.
-
-    #+BEGIN_SRC emacs-lisp
-      (maybe-install-and-require 'helm-orgcard)
-      (add-hook 'org-mode-hook
-                       (lambda () (local-set-key [s-f1] 'helm-orgcard)))
-    #+END_SRC
-
-*** org-feed
-
-    I really quite liked google as a blog reader. Before that I used
-    to use Bloglines, which I liked more. Now I find that I can use
-    emacs and org-mode to read RSS and atom.
-
-    #+BEGIN_SRC emacs-lisp
-      (setq org-feed-retrieve-method 'curl)
-    #+END_SRC
-
-**** The Blog Roll
-
-     And this is my incomplete and silly blog roll. There are many
-     more things that I should read and I read very few on the ones
-     in here regularly. If I know you and you are in here, you
-     should really tweet about your new blog posts more.
-
-     If I'm honest, really this is how I keep up with various
-     webcomics.
-
-     #+BEGIN_SRC emacs-lisp
-       (load-if-exists (concat user-emacs-directory "local/blog-roll.el"))
-     #+END_SRC
-
-*** ox-reveal
-
-    [[https://github.com/hakimel/reveal.js/][reveal.js]] is a great way of making pretty presentations,
-    especially if you have a fair bit of code. Kris Jenkins suggested
-    that [[https://github.com/yjwen/org-reveal][ox-reveal]] would be a great way of generating the slides for
-    reveal.js.
-
-    #+BEGIN_SRC emacs-lisp
-      (maybe-install-and-require 'ox-reveal)
-    #+END_SRC
-
-    As a part of the installation we need to point at where we have
-    our copy of reveal.js. It uses a lot of disk space, but put it
-    into a sub directory for each presentation. Then you can serve it
-    up using http-server in node or a python webserver locally and
-    then things like speaker notes will work. Full screen in Lion is
-    still b0rken. Yet another reason to go over to linux.
-
-    #+BEGIN_SRC emacs-lisp
-      (setq org-reveal-root "reveal.js-2.5.0/")
-    #+END_SRC
-    
-*** org and magit
-
-    Because sometimes you want to link to that particular commit.
-
-    I added this functionality with this commit: [[magit:~/emacs-configs/otfrom-org-emacs/::commit@1dd7516][1dd7516]]
-
-    #+BEGIN_SRC emacs-lisp
-      (maybe-install-and-require 'org-magit)
-    #+END_SRC
-    
-*** Scheduling, Project Management, Time Keeping
-
-**** Agenda
-
-***** Diary
-
-      There are a lot of things that can go into the venerable diary
-      and I quite like the idea of functional scheduling.
-
-      #+BEGIN_SRC emacs-lisp
-        (setq org-agenda-include-diary t)
-      #+END_SRC
-      
-***** Agenda Windows
-
-      I'm not quite sure what possessed the org-mode people to
-      presume that they knew best about how my windows should be
-      arranged when I look at an agenda. There is a solution to that
-      though. Just use the current window, like every other command
-      that opens something up. Re-arrange frame indeed.
-
-      #+BEGIN_SRC emacs-lisp
-        (setq org-agenda-window-setup 'current-window)
-      #+END_SRC
-      
-***** Agenda Files
-
-      There are things for me and mine. Things I do for money. Things
-      I do for the community I'm in. Let me know if you think my
-      worldview is too small.
-
-      And somethings we need in the agenda even though we don't know
-      where to file it yet which is why refile is in here.
-      
-      #+BEGIN_SRC emacs-lisp
-        (setq org-agenda-files
-              (quote ("~/org/refile.org"
-                      "~/org/personal.org"
-                      "~/org/work.org"
-                      "~/org/community.org"
-                      "~/org/work/world-domination.org")))
-      #+END_SRC
-
-***** Agenda Sorting
-
-      #+BEGIN_SRC emacs-lisp
-        (setq org-agenda-sorting-strategy '(time-up priority-down todo-state-down deadline-up scheduled-up tag-up effort-down))
-      #+END_SRC
-      
-***** Custom Agendas
-
-      The real power of org-agenda starts to kick in when you create
-      your own custom agenda commands that get the things *you* want
-      out of your org files.
-      
-      #+BEGIN_SRC emacs-lisp
-        (setq org-agenda-custom-commands
-              '(("D" "Doing Now" todo "DOING|WAITING|BLOCKED|CCC"
-                 ((org-agenda-overriding-columns-format
-                   "%60ITEM(Task) %8CATEGORY %8Owner %8Effort(Estimated Effort){:} %CLOCKSUM")
-                  (org-agenda-view-columns-initially t)))
-                ("N" "Me Now!" tags-todo "TODO={^[DCWB].+[^E]$}+Owner=\"Bruce\"")
-                ("A" "All Now!" tags-todo "TODO={^[DCWB].+[^E]$}")
-                ("F" "Me in the Future!" tags-todo "TODO={^[TDCWB].+[^E]$}+Owner=\"Bruce\"")
-                ("C" . "Current Cake Countdown Searches")
-                ("Cm" "My Current Cake Countdown"
-                 ((agenda "" ((org-agenda-span 'week)
-                              (org-agenda-start-on-weekday 3)))
-                  (tags-todo "TODO={^[DCWB].+[^E]$}+Owner=\"Bruce\"")))
-                ("Ch" "My Current Cake Countdown History"
-                 ((agenda "" ((org-agenda-span 'week)
-                              (org-agenda-start-on-weekday 3)))
-                  (tags-todo "TODO={^[DCWB].+}+Owner=\"Bruce\"")))
-                ("Ct" "Team Current Cake Countdown"
-                 ((agenda "Team Current Cake Countdown" ((org-agenda-files '("~/org/work/world-domination.org"))
-                                                         (org-agenda-span 'week)
-                                                         (org-agenda-start-on-weekday 3)))
-                  (tags-todo "+CATEGORY=\"MC\"+TODO={^[DCWB].+[^E]$}"
-                             ((org-agenda-overriding-columns-format
-                                "%60ITEM(Task) %8CATEGORY %8Owner %8Effort(Estimated Effort){:} %CLOCKSUM")))))
-                ("Cl" "Team Current Cake Countdown Log"
-                 ((agenda "Current Cake Countdow" ((org-agenda-files '("~/org/work/world-domination.org"))
-                                                   (org-agenda-span 'week)
-                                                   (org-agenda-start-on-weekday 3)
-                                                   (org-agenda-show-log t)))
-                  (tags-todo "+CATEGORY=\"MC\"+TODO={^[DCWB].+}"
-                             ((org-agenda-overriding-columns-format
-                                "%60ITEM(Task) %8CATEGORY %8Owner %8Effort(Estimated Effort){:} %CLOCKSUM")))))
-                ("Cf" "Team Next Cake Countdown Log"
-                 ((agenda "Next Cake Countdown" ((org-agenda-files '("~/org/work/world-domination.org"))
-                                                 (org-agenda-span 'week)
-                                                 (org-agenda-start-on-weekday 3)
-                                                 (org-agenda-show-log t)))
-                  (tags-todo "+CATEGORY=\"MC\"+TODO={^[TDCWB].+[^E]$}"
-                             ((org-agenda-overriding-columns-format
-                                "%60ITEM(Task) %8CATEGORY %8Owner %8Effort(Estimated Effort){:} %CLOCKSUM")))))))
-      #+END_SRC
-      
-***** Ops
-
-      There are a few tricks and tweaks we need to do in order to make
-      org-column-mode look good on a big screen with a big font. The
-      column mode is an overlay so we can hack things by setting a new
-      default font before going to the column mode.
-
-      #+BEGIN_SRC emacs-lisp
-        (defun ops ()
-          (interactive)
-          (set-default-font "Inconsolata-16")
-          (org-agenda nil "Ct")
-          (delete-other-windows))
-      #+END_SRC
-      
-**** Time Tracking and Estimates
-
-     org-mode is huge. It does so much, but my reason for using it
-     was so that I could track effort vs estimates. It makes me
-     happier than a burn down chart, but probably just because I'm
-     writing elisp to do it rather than excel or google docs. This
-     hack works on my mind, but YMMV.
-
-***** clocking in, out and persistence
-
-      It is true, emacs crashes, I forget to clock out, there is just
-      life, ok? So, when we clock in to a new task we'll be prompted
-      to complete the time for the old task. Just to keep things
-      straight.  
-
-      There is more about measuring idle time in the org-mode docs
-      [[http://orgmode.org/manual/Resolving-idle-time.html][here]]. 
-      
-      #+BEGIN_SRC emacs-lisp
-        (setq org-clock-persist 'history)
-        (org-clock-persistence-insinuate)
-      #+END_SRC
-
-***** Tracking effort vs estimates with clocksum
-
-      I think of days as being working days rather than groups of 24
-      hours (I'm damaged, what can I say). So I want to see sums of
-      times always in hours rather than as days. Otherwise I just get
-      confused and wonder why spending three eight hour days working on
-      something gets summed up as just one day.
-
-      I found out about this bit of configuration on [[http://stackoverflow.com/questions/17929979/emacs-org-mode-how-to-stop-total-in-column-view-showing-number-of-days][Stack Overflow]].
-
-      This is really handy when looking at things in column mode in
-      org. I use column mode as an alternative to burn down charts to
-      track effort vs estimates.
-
-      #+BEGIN_SRC emacs-lisp
-        (setq org-time-clocksum-format
-              '(:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t))
-      #+END_SRC
-
-**** Workflow Keywords
-
-     TODO, DOING, DONE and WAITING, BLOCKED, CANCELLED, PHONE,
-     MEETING. Let's try these on for size for a while.
-
-     I've also added CCC for Current Cake Countdown for things we
-     have scheduled in for the next week, but haven't started yet.
-     
-     #+BEGIN_SRC emacs-lisp
-       (setq org-todo-keywords
-             (quote ((sequence "TODO(t) CCC(c!) DOING(g!) | DONE(d!)")
-                     (sequence "WAITING(w@/!)" "BLOCKED(b@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING"))))
-     #+END_SRC
-
-**** Put those logs in a drawer
-
-     It may be big and heavy and wood, but mostly I don't want to see
-     log messages for state change.
-
-     #+BEGIN_SRC emacs-lisp
-       (setq org-log-into-drawer t)
-     #+END_SRC
-
-     We also want to put the clocking in and out into the drawer.
-
-     #+BEGIN_SRC emacs-lisp
-       (setq org-clock-into-drawer t)
-     #+END_SRC
-
-**** You can depend on...
-
-     The sub tasks that are underneath the main task.
-
-     #+BEGIN_SRC emacs-lisp
-       (setq org-enforce-todo-dependencies t)
-     #+END_SRC
-
-**** Captain's chair
-
-     What's going on, who are we talking to. What is the ship's
-     status, where are we going.
-     
-     #+BEGIN_SRC emacs-lisp
-       (defun captains-chair ()
-         (interactive)
-         (delete-other-windows)
-         
-         (if (< (frame-width) 240)
-             ;; Small frame
-             (progn
-               ;; create our 2 columns
-               (split-window-right)
-       
-               ;; split 1st column vertically
-               (split-window-below)
-               
-               ;; move to the rightmost and split into 3 verticalally
-               (window-number-select 3)
-               (split-window-below)
-               (split-window-below))
-           ;; Big frame
-           (progn
-             ;; create our 3 columns
-             (split-window-right)
-             (split-window-right)
-             
-             ;; move to the rightmost and split
-             (window-number-select 3)
-             (split-window-below)
-             (split-window-below)))
-         
-         (balance-windows)
-         
-         ;; set up the buffers as we want
-         (window-number-select 1)
-         (org-agenda nil "Cm")
-         (window-number-select 2)
-         ;;(switch-to-buffer (find-file (concat org-directory "/work/world-domination.org")))
-         (mu4e)
-         (window-number-select 3)
-         (switch-to-buffer "#kixi")
-         (window-number-select 4)
-         (switch-to-buffer "#ldnclj")
-         (window-number-select 5)
-         (if (get-buffer boss-chat)
-           (switch-to-buffer boss-chat)
-         (switch-to-buffer "*-jabber-roster-*"))
-       
-         ;; And go to window 1
-         (window-number-select 1))
-       
-       (global-set-key [M-f12] 'captains-chair)
-     #+END_SRC
-
-*** Capturing, Templates and Refiling
-     
-**** Default Notes File
-
-     I don't want to think about things when I'm just capturing
-     them. I can refile them later.
-
-     #+BEGIN_SRC emacs-lisp
-       (setq org-default-notes-file (concat org-directory "/refile.org"))
-     #+END_SRC
-     
-**** Capture Hot Key
-
-     Let's capture things with a quick Vulcan Nerve Pinch on
-     C-M-f12.
-
-     #+BEGIN_SRC emacs-lisp
-       (global-set-key [f12] 'org-capture)
-     #+END_SRC
-
-**** Capture Templates
-
-     To do, respond, notes, journals, meetings and phone calls. These
-     are the things we want to keep track of and clock in and out of
-     let's see how we get on with them.
-
-     We also have a way of tracking things we are doing RFN as well
-     as capturing things for the future.
-     
-     #+BEGIN_SRC emacs-lisp
-       (setq org-capture-templates
-             '(("c" "Contacts" entry (file "~/org/contacts.org")
-                "* %(org-contacts-template-name)\n:PROPERTIES:\n:EMAIL: %(org-contacts-template-email)\n:PHONE:\n:ALIAS:\n:NICKNAME:\n:IGNORE:\n:ICON:\n:NOTE:\n:ADDRESS:\n:BIRTHDAY:\n:LAST_READ_MAIL:\n:END:" :empty-lines-after 1)
-               ("t" "Doing RIGHT NOW" entry (file+datetree org-default-notes-file)
-                "* DOING %?\n%^{Owner}p\n%U\n%a\n" :clock-in t :clock-resume t :empty-lines-after 1)
-               ("f" "Do in the Future" entry (file+datetree org-default-notes-file)
-                "* TODO %?\n%^{Owner}p\n%U\n%a\n" :empty-lines-after 1)
-               ("r" "respond" entry (file+datetree org-default-notes-file)
-                "* TODO Respond to %:from on %:subject\nSCHEDULED: %t\n%^{Owner}p\n%U\n%a\n"
-                :clock-in t :clock-resume t :empty-lines-after 1)
-               ("n" "note" entry (file+datetree org-default-notes-file)
-                "* %? :NOTE:\n%U\n%a\n" :clock-resume t :empty-lines-after 1)
-               ("j" "Journal" entry (file+datetree (concat org-directory "/refile.org"))
-                "* %?\n%U\n" :clock-in t :clock-resume t :empty-lines-after 1 :empty-lines-after 1)
-               ("m" "Meeting" entry (file+datetree org-default-notes-file)
-                "* MEETING with %? :MEETING:\n%^{Owner}p\n%U" :clock-in t :clock-resume t :empty-lines-after 1)
-               ("s" "Sit Down" entry (file+datetree org-default-notes-file)
-                "* MEETING with Mastodon C :MEETING:\n%^{Owner}p\n%U\n" :clock-in t :clock-resume t :empty-lines-after 1)
-               ("p" "Phone call" entry (file+datetree org-default-notes-file)
-                "* PHONE %? :PHONE:\n%^{Owner}p\n%U" :clock-in t :clock-resume t :empty-lines-after 1)))
-     #+END_SRC
-     
-**** Refiling rules
-
-     We want to be able to refile things in the file we are currently
-     in and in files that we create our agenda from.
-     
-     #+BEGIN_SRC emacs-lisp
-       (setq org-refile-targets
-             '((nil :maxlevel . 9)
-               (org-agenda-files :maxlevel . 9)))
-     #+END_SRC
-     
-*** org and the pomodoro technique
-
-    When I need to just grind through something or find a way to keep
-    myself focused when I'm having trouble I like to use the
-    [[http://www.pomodorotechnique.com/][pomodoro technique]]. Luckily there is org-pomodoro that let's us
-    put these two great things together.
-
-    #+BEGIN_SRC emacs-lisp
-      (maybe-install-and-require 'org-pomodoro)
-    #+END_SRC
-    
-*** diary integration
-
-    I've got a script now to get the iCalendar files from google
-    calendar and use icalendar-import-file to convert them to diary
-    files. And with org-agenda-include-diary set to true we can
-    include these diary files in our org-agenda.
-    
-    #+BEGIN_SRC emacs-lisp
-      (setq org-agenda-include-diary t)
-      (add-hook 'diary-list-entries-hook 'diary-sort-entries t)
-      (add-hook 'diary-list-entries-hook 'diary-include-other-diary-files)
-      (add-hook 'diary-mark-entries-hook 'diary-mark-included-diary-files)
-    #+END_SRC
-    
-** html, sgml, xml
-
-*** tagedit
-
-    This gives us paredit like editing for html
-
-    #+BEGIN_SRC emacs-lisp
-      (maybe-install-and-require 'tagedit)
-      (eval-after-load "sgml-mode"
-        '(progn
-           (require 'tagedit)
-           (tagedit-add-paredit-like-keybindings)
-           (add-hook 'html-mode-hook (lambda () (tagedit-mode 1)))))
-    #+END_SRC
-
-    I quite like the sound of the experimental editing stuff. Let's
-    put it in and see if it helps or destroys our code.
-
-    #+BEGIN_SRC emacs-lisp
-      (tagedit-add-experimental-features)
-    #+END_SRC
-    
-*** css
-
-    I should probably look at adding more sugar to this.
-    
-**** paredit
-     
-     I *always* want my parens to match (except in text modes).
-
-     #+BEGIN_SRC emacs-lisp
-       (add-hook 'css-mode-hook 'paredit-mode)
-     #+END_SRC
-     
-**** rainbow mode
-
-     And I want to see the colours I'm using.
-     
-     #+BEGIN_SRC emacs-lisp
-       (add-hook 'css-mode-hook 'rainbow-mode)     
-     #+END_SRC
-
-**** eldoc
-
-     And who doesn't want eldoc tips when they are editing things. 
-
-     #+BEGIN_SRC emacs-lisp
-       (maybe-install-and-require 'css-eldoc)
-     #+END_SRC
-
-**** helm support
-
-     And to be able to navigate around our selectors using helm. And
-     then we want to make it a headline key just like in our other
-     modes. 
-
-     #+BEGIN_SRC emacs-lisp
-       (maybe-install-and-require 'helm-css-scss)
-       (add-hook 'css-mode-hook
-                 (lambda () (local-set-key (kbd "s-h") 'helm-css-scss)))
-     #+END_SRC
-
-** markdown
-
-   I love org-mode, but lots of other systems use markdown, github
-   wiki pages being a very good example.
-
-   #+BEGIN_SRC emacs-lisp
-     (maybe-install-and-require 'markdown-mode)
-   #+END_SRC
-
-*** Github Flavouring
-
-    I pretty much *always* want to do [[http://github.github.com/github-flavored-markdown/][github flavoured markdown]], so
-    let's just change that auto-mode-alist.
-
-    #+BEGIN_SRC emacs-lisp
-      (add-to-list 'auto-mode-alist '(".md$" . gfm-mode))
-    #+END_SRC
-
-**** Github Flavoured Preview
-     
-     We also need to change the preview as the standard preview
-     doesn't render github flavoured markdown correctly. I've
-     installed markdown Preview+ as a Chrome Extension and associated
-     .md files with Chrome on Mac OS X.
-
-     This is all a bit broken really, but will work for now. I'm sorry
-     that it is like this and I'm sure some day I'll fix it. This also
-     means that you use markdown-open rather than markdown-preview.
-
-     #+BEGIN_SRC emacs-lisp
-       (setq markdown-open-command "open")
-     #+END_SRC
-     
-*** helm markdown headlines
-
-    I want super-h to work and give me headlines just like in
-    org-mode. I feel this could perhaps be a bit better, but this will
-    do for now.
-    
-    #+BEGIN_SRC emacs-lisp
-      (defun helm-markdown-headlines ()
-        "Display headlines for the current Clojure file."
-        (interactive)
-        (helm :sources '(((name . "Markdown Headlines")
-                          (volatile)
-                          (headline "^[#]")))))
-      
-      (add-hook 'markdown-mode-hook
-                (lambda () (local-set-key (kbd "s-h") 'helm-markdown-headlines)))
-    #+END_SRC
 * Multimedia
 
 ** emms to play music
