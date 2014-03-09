@@ -2122,6 +2122,20 @@
       (maybe-install-and-require 'refheap)
     #+END_SRC
 
+* Data Modes
+
+  Some things aren't really text and aren't really source code
+  files. We'll deal with them below.
+  
+** csv-mode
+
+   Lots of great things for sorting, unsorting, munging and editing
+   csv files.
+
+   #+BEGIN_SRC emacs-lisp
+     (maybe-install-and-require 'csv-mode)
+   #+END_SRC
+   
 * Multimedia
 
 ** emms to play music
