@@ -1764,7 +1764,18 @@
       (require 'auto-complete-config)
       (ac-config-default)
     #+END_SRC
-    
+
+**** ac-helm
+
+     As we are using helm everywhere else, we might as well use it for
+     auto-complete. 
+     
+     #+BEGIN_SRC emacs-lisp
+       (maybe-install-and-require 'ac-helm)
+       (global-set-key (kbd "C-;") 'ac-complete-with-helm)
+       (define-key ac-complete-mode-map (kbd "C-;") 'ac-complete-with-helm)
+     #+END_SRC
+     
 *** yasnippet
 
     I had some lovely things in skeleton mode ages ago to write out
