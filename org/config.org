@@ -1140,7 +1140,25 @@
     #+BEGIN_SRC emacs-lisp
       (global-set-key [M-f6] 'twittering-update-status-interactive)
     #+END_SRC
-    
+
+*** Tweeps I know with a hotkey
+
+    You won't believe it, but twitter is actually important to my
+    job. When I don't pay attention to it important things actually
+    happen there. Honest!
+
+    #+BEGIN_SRC emacs-lisp
+      (defun tweeps-i-know ()
+        (interactive)
+        (let* ((p-i-k "otfrom/people-i-know")
+               (twoot (get-buffer p-i-k)))
+          (if twoot
+              (switch-to-buffer twoot)
+            (twittering-visit-timeline p-i-k))))
+      
+      (global-set-key [C-f11] 'tweeps-i-know)
+    #+END_SRC
+
 ** jabber.el for gtalk and other jabber servers
 
    It looks like there will be a time in the near future when Google
