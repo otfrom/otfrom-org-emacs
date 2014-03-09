@@ -2011,6 +2011,15 @@
        (maybe-install-and-require 'clj-refactor)
      #+END_SRC
      
+**** clojurescript
+
+     Get those cljs files building automatically and get the errors
+     popping up in your emacs.
+     
+     #+BEGIN_SRC emacs-lisp
+       (maybe-install-and-require 'cljsbuild-mode)
+     #+END_SRC
+     
 **** helm and clojure
 
      Kris Jenkins has a great helm-clojure-headlines that I'd like to
