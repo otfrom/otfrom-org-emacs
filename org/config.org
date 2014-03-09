@@ -2065,7 +2065,8 @@
       (global-set-key (kbd "<f8>") 'emms-previous)
 
       (global-set-key (kbd "<f9>") 'emms-pause)
-      (global-set-key (kbd "C-M-<f9>") 'emms-play-playlist)
+      (global-set-key (kbd "C-<f9>") 'emms-play-playlist)
+      (global-set-key (kbd "M-<f9>") 'emms-play-directory)
       (global-set-key (kbd "s-<f9>") 'emms-stop)
 
       (global-set-key (kbd "<f10>") 'emms-next)
