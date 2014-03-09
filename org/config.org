@@ -1815,7 +1815,9 @@
 
 *** smartscan
 
-    A suggestion from [[http://www.masteringemacs.org/articles/2011/01/14/effective-editing-movement/][Effective Editing]] in [[http://www.masteringemacs.org/][Mastering Emacs]]. 
+    A suggestion from [[http://www.masteringemacs.org/articles/2011/01/14/effective-editing-movement/][Effective Editing]] in [[http://www.masteringemacs.org/][Mastering Emacs]]. This
+    allows you to go to the next identifier like the one you are
+    currently on by using M-n and M-p.
     
     #+BEGIN_SRC emacs-lisp
       (maybe-install-and-require 'smartscan)
