@@ -1399,48 +1399,88 @@
                ("/otfrom/INBOX" . ?p)))
      #+END_SRC
 
-**** Refiling messages
+**** Multiple Accounts
 
-     I want to be able to refile or archive things into the appropriate
-     all mail folder. The following cond statement allows us to do that.
+     There is a good little howto on using multiple accounts with mu4e
+     [[http://www.djcbsoftware.nl/code/mu/mu4e/Multiple-accounts.html][here]].
 
-     #+BEGIN_SRC emacs-lisp
-       (setq mu4e-refile-folder
-             (lambda (msg)
-               (message "Message contact: %s" (mu4e-message-field msg :to))
-               (cond
-                ;; work email
-                ((string-match-p "/mastodonc/" (mu4e-message-field msg :maildir)) "/mastodonc/all")
-                
-                ;; personal email
-                ((string-match-p "/otfrom/" (mu4e-message-field msg :maildir)) "/otfrom/all")
-                
-                ;; by default things go into /otfrom/all
-                ;; important to have a catch-all at the end!
-                (t  "/otfrom/all"))))
-     #+END_SRC
+***** The default account.
 
-**** Dynamic Trash
+      I've defaulted to my mastodonc account as it is easier to
+      explain to my friends about my work account than my clients
+      about my personal account.
 
-     We want to have the right Trash folders set up as well.
+      #+BEGIN_SRC emacs-lisp
+        (setq mu4e-refile-folder "/mastodonc/all"
+              mu4e-sent-folder "/mastodonc/sent"
+              mu4e-drafts-folder "/mastodonc/drafts"
+              mu4e-trash-folder "/mastodonc/trash"
+              user-mail-address "bruce@mastodonc.com"
+              message-signature-file ".signature.work"
+              user-mail-address "bruce@mastodonc.com")
+      #+END_SRC
 
-     #+BEGIN_SRC emacs-lisp
-       (setq mu4e-trash-folder
-             (lambda (msg)
-               (message "Message contact: %s" (mu4e-message-field msg :to))
-                      (cond
-                       ;; work email
-                       ((string-match-p "/mastodonc/" (mu4e-message-field msg :maildir)) "/mastodonc/trash")
-                       
-                       ;; personal email
-                       ((string-match-p "/otfrom/" (mu4e-message-field msg :maildir)) "/otfrom/trash")
-                       
-                       ;; by default things go into /otfrom/trash
-                       ;; important to have a catch-all at the end!
-                       (t  "/otfrom/trash"))))
-       
-     #+END_SRC
+***** The account switching
 
+      I'll copy and paste these instructions from the web page here
+      just to make it clear what I'm doing. Again, remember that we
+      handle the smtp bit differently and the account switching there
+      is done based on the From: field of the message.
+      
+      #+BEGIN_QUOTE
+        Then create a variable my-mu4e-account-alist, which should
+        contain a list for each of your accounts. Each list should
+        start with the account name, (which must be identical to the
+        account's directory name under ~/Maildir), followed by
+        (variable value) pairs:
+      #+END_QUOTE
+
+      #+BEGIN_SRC emacs-lisp
+        (defvar my-mu4e-account-alist
+          '(("mastodonc"
+             (mu4e-refile-folder "/mastodonc/all")
+             (mu4e-sent-folder "/mastodonc/sent")
+             (mu4e-drafts-folder "/mastodonc/drafts")
+             (mu4e-trash-folder "/mastodonc/trash")
+             (user-mail-address "bruce@mastodonc.com")
+             (message-signature-file "/home/bld/.signature.work"))
+            ("otfrom"
+             (mu4e-refile-folder "/otfrom/all")
+             (mu4e-sent-folder "/otfrom/sent")
+             (mu4e-drafts-folder "/otfrom/drafts")
+             (mu4e-trash-folder "/otfrom/trash")
+             (user-mail-address "bld@otfrom.com")
+             (message-signature-file "/home/bld/.signature"))))
+      #+END_SRC
+
+***** Add a switch function to the hook
+
+      I think it is great that mu4e is this extensible, but I am a bit
+      confused as to whey the following function isn't a part of mu4e
+      that you can just turn on.
+      
+      #+BEGIN_SRC emacs-lisp
+         (defun my-mu4e-set-account ()
+               "Set the account for composing a message."
+               (let* ((account
+                       (if mu4e-compose-parent-message
+                           (let ((maildir (mu4e-message-field mu4e-compose-parent-message :maildir)))
+                             (string-match "/\\(.*?\\)/" maildir)
+                             (match-string 1 maildir))
+                         (completing-read (format "Compose with account: (%s) "
+                                                  (mapconcat #'(lambda (var) (car var)) my-mu4e-account-alist "/"))
+                                          (mapcar #'(lambda (var) (car var)) my-mu4e-account-alist)
+                                          nil t nil nil (caar my-mu4e-account-alist))))
+                      (account-vars (cdr (assoc account my-mu4e-account-alist))))
+                 (if account-vars
+                     (mapc #'(lambda (var)
+                               (set (car var) (cadr var)))
+                           account-vars)
+                   (error "No email account found"))))
+        
+        (add-hook 'mu4e-compose-pre-hook 'my-mu4e-set-account)
+      #+END_SRC
+      
 **** Unicode
 
     We want to be able to read non-ascii characters. 
