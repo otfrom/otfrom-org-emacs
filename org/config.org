@@ -311,6 +311,16 @@
      (global-set-key (kbd "C-c t") 'toggle-transparency)
    #+END_SRC
 
+** Powerline
+
+   Is this just useless clutter? Does it add to anything or make
+   things nicer? Let's do an experiment and find out.
+   
+   #+BEGIN_SRC emacs-lisp
+     (maybe-install-and-require 'powerline)
+     (powerline-center-theme)
+   #+END_SRC
+   
 * Tool Configuration
   
 ** ediff
