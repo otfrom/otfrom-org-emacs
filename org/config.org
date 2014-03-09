@@ -2003,6 +2003,14 @@
        (maybe-install-and-require 'align-cljlet)
      #+END_SRC
      
+**** clj-refactor
+
+     Lots of cool little time savers in here.
+     
+     #+BEGIN_SRC emacs-lisp
+       (maybe-install-and-require 'clj-refactor)
+     #+END_SRC
+     
 **** helm and clojure
 
      Kris Jenkins has a great helm-clojure-headlines that I'd like to
