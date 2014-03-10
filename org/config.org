@@ -1434,7 +1434,7 @@
               mu4e-drafts-folder "/mastodonc/drafts"
               mu4e-trash-folder "/mastodonc/trash"
               user-mail-address "bruce@mastodonc.com"
-              message-signature-file ".signature.work"
+              message-signature-file "/home/bld/.signature.work"
               user-mail-address "bruce@mastodonc.com")
       #+END_SRC
 
