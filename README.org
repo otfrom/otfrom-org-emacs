@@ -1,9 +1,12 @@
 * Introduction
 
-  I was inspired by [[https://github.com/t-ob/dotfiles][Tom O'Brien's dotfiles]] to do a org-mode version of
-  my emacs config. I also completely broke my emacs config trying to
-  do some other things and I figured I should fix it properly rather
-  than just getting the basics back together.
+  It really started with a [[https://skillsmatter.com/skillscasts/3537-lightening-talk-literate-programming-with-clojure-and-org-babel][magical talk]] by [[https://twitter.com/magic_bloat][Andrew Cowper]] on literate
+  programming with org-mode and clojure.
+
+  I was then inspired by [[https://github.com/t-ob/dotfiles][Tom O'Brien's dotfiles]] to do a org-mode
+  version of my emacs config. I also completely broke my emacs config
+  trying to do some other things and I figured I should fix it
+  properly rather than just getting the basics back together.
 
   The real content is in [[./org/config.org][config.org]], which would probably be more
   interesting to read.
