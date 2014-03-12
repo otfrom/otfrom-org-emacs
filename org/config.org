@@ -108,6 +108,20 @@
      (global-discover-mode 1)
    #+END_SRC
    
+** What do I use
+
+   Profile your usage.
+     Find out what you use the most
+   by using keyfreq.
+
+    - [[http://twitter.com/EmacsHaiku/status/443757260682956800][@EmacsHaiku]]
+   
+   #+BEGIN_SRC emacs-lisp
+     (maybe-install-and-require 'keyfreq)
+     (keyfreq-mode 1)
+     (keyfreq-autosave-mode 1)
+   #+END_SRC
+   
 * non-elpa and work arounds
 
   At the moment we don't have any workarounds. It looked like we might
