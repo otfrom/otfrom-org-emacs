@@ -700,7 +700,9 @@
                 ("Cm" "My Current Cake Countdown"
                  ((agenda "" ((org-agenda-span 'week)
                               (org-agenda-start-on-weekday 3)))
-                  (tags-todo "TODO={^[DCWB].+[^E]$}+Owner=\"Bruce\"")))
+                  (tags-todo "TODO={^[DCWB].+[^E]$}+Owner=\"Bruce\""
+                             ((org-agenda-skip-entry-if 'deadline)
+                              (org-agenda-overriding-header "My tasks for the Current Cake Countdown: ")))))
                 ("Ch" "My Current Cake Countdown History"
                  ((agenda "" ((org-agenda-span 'week)
                               (org-agenda-start-on-weekday 3)))
@@ -979,6 +981,18 @@
        (appt-activate 1)
      #+END_SRC
      
+
+*** Default Agenda Hotkey
+
+    M-f11 so we can see our default agenda quickly.
+
+    #+BEGIN_SRC emacs-lisp
+      (defun default-agenda ()
+        (interactive)
+        (org-agenda nil "Cm"))
+      (global-set-key [M-f11] 'default-agenda)
+    #+END_SRC
+    
 ** html, sgml, xml
 
 *** tagedit
