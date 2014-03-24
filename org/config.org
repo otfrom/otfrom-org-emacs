@@ -2050,7 +2050,6 @@
       At the moment, indenting go loops like defn's is the only extra
       bit of overriding we do.
 
-
       #+BEGIN_SRC emacs-lisp
         (put-clojure-indent 'go-loop 'defun)
       #+END_SRC
