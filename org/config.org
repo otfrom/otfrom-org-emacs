@@ -2023,17 +2023,38 @@
         (define-key cider-mode-map (kbd "C-c C-d") 'ac-nrepl-popup-doc)
       #+END_SRC
  
-**** align let forms
+**** Alignment Changes
 
-     Pretty alignment of let, when-let, if-let, binding, loop,
-     with-open, literal hashes {}, defroute, cond, and condp
-     (except :>> subforms). This is partly to keep things formatted
-     the same way as Neale Swinnerton.
+     There are very few bits of alignment that I would *ever* do
+     differently from how emacs does it by default. Sometimes though
+     the language moves faster than the modes that support it, or we
+     have house rule (like let alignment).
+
+     All formatting, beyond remaining consistent it a file, is
+     fundamentally arbitrary and arguments about it descend into
+     [[http://c2.com/cgi/wiki?BikeShed][bikeshedding]] very quickly. Here are our rules
      
-     #+BEGIN_SRC emacs-lisp
-       (maybe-install-and-require 'align-cljlet)
-     #+END_SRC
-     
+***** align let forms
+
+      Pretty alignment of let, when-let, if-let, binding, loop,
+      with-open, literal hashes {}, defroute, cond, and condp
+      (except :>> subforms). This is partly to keep things formatted
+      the same way as Neale Swinnerton.
+      
+      #+BEGIN_SRC emacs-lisp
+        (maybe-install-and-require 'align-cljlet)
+      #+END_SRC
+      
+***** Indentation Override
+
+      At the moment, indenting go loops like defn's is the only extra
+      bit of overriding we do.
+
+
+      #+BEGIN_SRC emacs-lisp
+        (put-clojure-indent 'go-loop 'defun)
+      #+END_SRC
+      
 **** clj-refactor
 
      Lots of cool little time savers in here.
