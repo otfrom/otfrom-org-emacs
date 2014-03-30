@@ -234,6 +234,15 @@
       (setq custom-theme-directory (concat user-emacs-directory "themes"))
     #+END_SRC
 
+*** noctilux
+
+    [[http://www.lighttable.com/][LightTable]] is awfully pretty. And now that it is GPL I might even
+    use it (please don't tell emacs).
+
+    #+BEGIN_SRC emacs-lisp
+      (maybe-install-and-require 'noctilux-theme)
+    #+END_SRC
+    
 *** grandshell
 
     I've been finding lots of interesting things from [[https://twitter.com/steckerhalter][steckerhalter]]
@@ -241,7 +250,7 @@
     for a while.
     
     #+BEGIN_SRC emacs-lisp
-      (maybe-install-and-require 'grandshell-theme)
+;;      (maybe-install-and-require 'grandshell-theme)
     #+END_SRC
 
 *** cyberpunk, I still love you
