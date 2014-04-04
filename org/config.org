@@ -658,15 +658,18 @@
 
 **** Agenda
 
-***** Diary
+***** org-gcal
 
-      There are a lot of things that can go into the venerable diary
-      and I quite like the idea of functional scheduling.
+      Instead of importing google calendar events using a shell script
+      and diary mode can we get gcal events into org-mode?
 
-      #+BEGIN_SRC emacs-lisp
-        (setq org-agenda-include-diary t)
-      #+END_SRC
+      org-gcal-file-alist, org-gcal-client-id and
+      org-gcal-client-secret are all set in mellon.el.gpg.
       
+      #+BEGIN_SRC emacs-lisp
+        (maybe-install-and-require 'org-gcal)
+      #+END_SRC
+            
 ***** Agenda Windows
 
       I'm not quite sure what possessed the org-mode people to
@@ -694,6 +697,8 @@
                       "~/org/personal.org"
                       "~/org/work.org"
                       "~/org/community.org"
+                      "~/org/mc-schedule.org"
+                      "~/org/otfrom-schedule.org"
                       "~/org/work/world-domination.org")))
       #+END_SRC
 
