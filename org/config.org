@@ -794,6 +794,21 @@
                          (org-agenda-overriding-columns-format
                           "%60ITEM(Task) %8CATEGORY %8Owner %8Effort(Estimated Effort){:} %CLOCKSUM"))))))
        #+END_SRC
+
+****** What are my available projects?
+
+       I try to keep things out of my head and recorded some place. I
+       need to be able to review the projects out there and find the
+       tasks I want to do next.
+
+       #+BEGIN_SRC emacs-lisp
+         (add-to-list
+          'org-agenda-custom-commands
+          '("P" "Available Projects"
+            ((tags-todo "TODO=\"PROJECT\""
+                         ((org-agenda-overriding-header "Available projects."))))))
+       #+END_SRC
+
        
 ***** Ops
 
