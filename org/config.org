@@ -760,12 +760,12 @@
        
        #+BEGIN_SRC emacs-lisp
          (setq org-agenda-custom-commands
-               '("Cm" "My Current Cake Countdown"
-                 ((agenda "" ((org-agenda-span 'week)
-                              (org-agenda-start-on-weekday 3)))
-                  (tags-todo "TODO={^[DCWB].+[^E]$}+Owner=\"Bruce\""
-                             ((org-agenda-skip-entry-if 'deadline)
-                              (org-agenda-overriding-header "My tasks for the Current Cake Countdown: "))))))
+               '(("Cm" "My Current Cake Countdown"
+                   ((agenda "" ((org-agenda-span 'week)
+                                (org-agenda-start-on-weekday 3)))
+                    (tags-todo "TODO={^[DCWB].+[^E]$}+Owner=\"Bruce\""
+                               ((org-agenda-skip-entry-if 'deadline)
+                                (org-agenda-overriding-header "My tasks for the Current Cake Countdown: ")))))))
        #+END_SRC
 
 ****** What is the whole team doing in the Current Cake Countdown?
