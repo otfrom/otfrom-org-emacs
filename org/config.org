@@ -809,6 +809,11 @@
                          ((org-agenda-overriding-header "Available projects."))))))
        #+END_SRC
 
+****** org-agenda hotkey
+
+       #+BEGIN_SRC emacs-lisp
+         (global-set-key (kbd "C-c a") 'org-agenda)
+       #+END_SRC
        
 ***** Ops
 
