@@ -759,14 +759,13 @@
        the Owner property set to my name.
        
        #+BEGIN_SRC emacs-lisp
-         (add-to-list
-          'org-agenda-custom-commands
-          '("Cm" "My Current Cake Countdown"
-            ((agenda "" ((org-agenda-span 'week)
-                         (org-agenda-start-on-weekday 3)))
-             (tags-todo "TODO={^[DCWB].+[^E]$}+Owner=\"Bruce\""
-                        ((org-agenda-skip-entry-if 'deadline)
-                         (org-agenda-overriding-header "My tasks for the Current Cake Countdown: "))))))
+         (setq org-agenda-custom-commands
+               '("Cm" "My Current Cake Countdown"
+                 ((agenda "" ((org-agenda-span 'week)
+                              (org-agenda-start-on-weekday 3)))
+                  (tags-todo "TODO={^[DCWB].+[^E]$}+Owner=\"Bruce\""
+                             ((org-agenda-skip-entry-if 'deadline)
+                              (org-agenda-overriding-header "My tasks for the Current Cake Countdown: "))))))
        #+END_SRC
 
 ****** What is the whole team doing in the Current Cake Countdown?
