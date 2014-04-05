@@ -378,6 +378,21 @@
      (diminish 'helm-mode)
    #+END_SRC
 
+*** helm-mode exceptions
+
+    There are few times where helm mode is really quite annoying and I
+    prefer other ways of getting at things like ido-mode or similar.
+    
+**** find-file and ffap with ido
+
+     find-file and helm I just find annoying. Let's use ido
+     instead. The same with find file at point or ffap.
+
+     #+BEGIN_SRC emacs-lisp
+       (add-to-list 'helm-completing-read-handlers-alist '(find-file . ido))
+       (add-to-list 'helm-completing-read-handlers-alist '(ffap . ido))
+     #+END_SRC
+     
 ** git
 
 *** magit
