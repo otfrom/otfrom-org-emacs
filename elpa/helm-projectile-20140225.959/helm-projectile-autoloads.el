@@ -4,7 +4,7 @@
 
 
 ;;;### (autoloads (helm-projectile) "helm-projectile" "helm-projectile.el"
-;;;;;;  (21265 51398 78231 114000))
+;;;;;;  (21312 19551 290373 148000))
 ;;; Generated autoloads from helm-projectile.el
 
 (autoload 'helm-projectile "helm-projectile" "\
@@ -16,8 +16,8 @@ Use projectile with Helm instead of ido.
 
 ;;;***
 
-;;;### (autoloads nil nil ("helm-projectile-pkg.el") (21265 51398
-;;;;;;  87428 984000))
+;;;### (autoloads nil nil ("helm-projectile-pkg.el") (21312 19551
+;;;;;;  307553 402000))
 
 ;;;***
 

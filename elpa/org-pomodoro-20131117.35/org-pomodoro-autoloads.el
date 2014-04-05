@@ -4,7 +4,7 @@
 
 
 ;;;### (autoloads (org-pomodoro) "org-pomodoro" "org-pomodoro.el"
-;;;;;;  (21266 25444 829693 108000))
+;;;;;;  (21312 19579 290374 390000))
 ;;; Generated autoloads from org-pomodoro.el
 
 (autoload 'org-pomodoro "org-pomodoro" "\
@@ -18,7 +18,7 @@ kill the current timer, this may be a break or a running pomodoro.
 ;;;***
 
 ;;;### (autoloads nil nil ("org-pomodoro-pidgin.el" "org-pomodoro-pkg.el"
-;;;;;;  "org-pomodoro-tests.el") (21266 25444 840195 292000))
+;;;;;;  "org-pomodoro-tests.el") (21312 19579 300204 185000))
 
 ;;;***
 
