@@ -729,51 +729,73 @@
       your own custom agenda commands that get the things *you* want
       out of your org files.
       
-      #+BEGIN_SRC emacs-lisp
-        (setq org-agenda-custom-commands
-              '(("D" "Doing Now" todo "DOING|WAITING|BLOCKED|CCC"
-                 ((org-agenda-overriding-columns-format
-                   "%60ITEM(Task) %8CATEGORY %8Owner %8Effort(Estimated Effort){:} %CLOCKSUM")
-                  (org-agenda-view-columns-initially t)))
-                ("N" "Me Now!" tags-todo "TODO={^[DCWB].+[^E]$}+Owner=\"Bruce\"")
-                ("A" "All Now!" tags-todo "TODO={^[DCWB].+[^E]$}")
-                ("F" "Me in the Future!" tags-todo "TODO={^[TDCWB].+[^E]$}+Owner=\"Bruce\"")
-                ("C" . "Current Cake Countdown Searches")
-                ("Cm" "My Current Cake Countdown"
-                 ((agenda "" ((org-agenda-span 'week)
-                              (org-agenda-start-on-weekday 3)))
-                  (tags-todo "TODO={^[DCWB].+[^E]$}+Owner=\"Bruce\""
-                             ((org-agenda-skip-entry-if 'deadline)
-                              (org-agenda-overriding-header "My tasks for the Current Cake Countdown: ")))))
-                ("Ch" "My Current Cake Countdown History"
-                 ((agenda "" ((org-agenda-span 'week)
-                              (org-agenda-start-on-weekday 3)))
-                  (tags-todo "TODO={^[DCWB].+}+Owner=\"Bruce\"")))
-                ("Ct" "Team Current Cake Countdown"
-                 ((agenda "Team Current Cake Countdown" ((org-agenda-files '("~/org/work/world-domination.org"))
-                                                         (org-agenda-span 'week)
-                                                         (org-agenda-start-on-weekday 3)))
-                  (tags-todo "+CATEGORY=\"MC\"+TODO={^[DCWB].+[^E]$}"
-                             ((org-agenda-overriding-columns-format
-                                "%60ITEM(Task) %8CATEGORY %8Owner %8Effort(Estimated Effort){:} %CLOCKSUM")))))
-                ("Cl" "Team Current Cake Countdown Log"
-                 ((agenda "Current Cake Countdow" ((org-agenda-files '("~/org/work/world-domination.org"))
-                                                   (org-agenda-span 'week)
-                                                   (org-agenda-start-on-weekday 3)
-                                                   (org-agenda-show-log t)))
-                  (tags-todo "+CATEGORY=\"MC\"+TODO={^[DCWB].+}"
-                             ((org-agenda-overriding-columns-format
-                                "%60ITEM(Task) %8CATEGORY %8Owner %8Effort(Estimated Effort){:} %CLOCKSUM")))))
-                ("Cf" "Team Next Cake Countdown Log"
-                 ((agenda "Next Cake Countdown" ((org-agenda-files '("~/org/work/world-domination.org"))
-                                                 (org-agenda-span 'week)
-                                                 (org-agenda-start-on-weekday 3)
-                                                 (org-agenda-show-log t)))
-                  (tags-todo "+CATEGORY=\"MC\"+TODO={^[TDCWB].+[^E]$}"
-                             ((org-agenda-overriding-columns-format
-                                "%60ITEM(Task) %8CATEGORY %8Owner %8Effort(Estimated Effort){:} %CLOCKSUM")))))))
-      #+END_SRC
-      
+****** What am I doing in the Current Cake Countdown?
+
+       My default view, as I mostly use org for keeping my working
+       days in line is around the Current Cake Countdown, which is
+       what we call our iterations as we celebrate the end of each
+       iteration with cake and don't do a lot of fast running as we
+       are programmers.
+
+       This is a composite agenda view that shows the agenda by date
+       at the top and the todo list below that.
+       
+       The agenda spans one week and starts on a Wednesday (weekday
+       3).
+
+       It filters the todo list is a pretty bad way as I was having
+       quite a bit of trouble with some of the regular expressions. I
+       do have it so that it finds the DOING, CCC, WAITING and BLOCKED
+       tasks and skips the DONE ones so that my view isn't too
+       cluttered as I try to find the next task.
+
+       It is *supposed* to skip todo items that have a deadline marked
+       as I have them already in the agenda at the top. It also
+       overrides the text that describes the todo list. By default it
+       is the regular expression we are using to filter the todo
+       list.
+
+       The todo items are also filtered to only show things that have
+       the Owner property set to my name.
+       
+       #+BEGIN_SRC emacs-lisp
+         (add-to-list
+          'org-agenda-custom-commands
+          '("Cm" "My Current Cake Countdown"
+            ((agenda "" ((org-agenda-span 'week)
+                         (org-agenda-start-on-weekday 3)))
+             (tags-todo "TODO={^[DCWB].+[^E]$}+Owner=\"Bruce\""
+                        ((org-agenda-skip-entry-if 'deadline)
+                         (org-agenda-overriding-header "My tasks for the Current Cake Countdown: "))))))
+       #+END_SRC
+
+****** What is the whole team doing in the Current Cake Countdown?
+
+       This is basically the same view as above, but without filtering
+       on my name in the todo list.
+
+       It also has a column format so we can see how our estimates are
+       working against our effort. We're not using this all that much
+       as doing team organisation with org-mode and git didn't work
+       all that well.
+
+       The tags-todo filter also limits things that are in the MC
+       category, as this is just a list for work and not personal
+       things. 
+
+       #+BEGIN_SRC emacs-lisp
+         (add-to-list
+          'org-agenda-custom-commands
+          '("Ct" "Team Current Cake Countdown"
+            ((agenda "Current Cake Countdown" ((org-agenda-files '("~/org/work/world-domination.org"))
+                                              (org-agenda-span 'week)
+                                              (org-agenda-start-on-weekday 3)))
+             (tags-todo "+CATEGORY=\"MC\"+TODO={^[DCWB].+}"
+                        ((org-agenda-overriding-header "The team's tasks for the Current Cake Countdown: ")
+                         (org-agenda-overriding-columns-format
+                          "%60ITEM(Task) %8CATEGORY %8Owner %8Effort(Estimated Effort){:} %CLOCKSUM"))))))
+       #+END_SRC
+       
 ***** Ops
 
       There are a few tricks and tweaks we need to do in order to make
@@ -1008,7 +1030,6 @@
     #+BEGIN_SRC emacs-lisp
       (appt-activate 1)
     #+END_SRC
-    
 
 *** Default Agenda Hotkey
 
