@@ -240,7 +240,7 @@
     use it (please don't tell emacs).
 
     #+BEGIN_SRC emacs-lisp
-      (maybe-install-and-require 'noctilux-theme)
+;;      (maybe-install-and-require 'noctilux-theme)
     #+END_SRC
     
 *** grandshell
@@ -250,7 +250,7 @@
     for a while.
     
     #+BEGIN_SRC emacs-lisp
-;;      (maybe-install-and-require 'grandshell-theme)
+      (maybe-install-and-require 'grandshell-theme)
     #+END_SRC
 
 *** cyberpunk, I still love you
