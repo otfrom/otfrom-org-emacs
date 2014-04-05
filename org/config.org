@@ -658,13 +658,13 @@
 
 **** Agenda
 
-***** org-gcal
+***** org-mode and Google Calendar with org-gcal 
 
       Instead of importing google calendar events using a shell script
       and diary mode can we get gcal events into org-mode?
 
       org-gcal-file-alist, org-gcal-client-id and
-      org-gcal-client-secret are all set in mellon.el.gpg.
+      org-gcal-client-secret are all set in [[../local/mellon.el.gpg][mellon.el.gpg]].
       
       #+BEGIN_SRC emacs-lisp
         (maybe-install-and-require 'org-gcal)
@@ -697,8 +697,8 @@
                       "~/org/personal.org"
                       "~/org/work.org"
                       "~/org/community.org"
-                      "~/org/mc-schedule.org"
-                      "~/org/otfrom-schedule.org"
+                      "~/org/mc-cal.org"
+                      "~/org/otfrom-cal.org"
                       "~/org/work/world-domination.org")))
       #+END_SRC
 
