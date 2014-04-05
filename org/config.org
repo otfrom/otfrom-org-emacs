@@ -1209,6 +1209,13 @@
              ":direct_messages"))  
    #+END_SRC
 
+   I also want to slow it down. It updates way too often when I'm not
+   interested.
+
+   #+BEGIN_SRC emacs-lisp
+     (setq twittering-timer-interval (* 60 30))
+   #+END_SRC
+   
 *** Tweet Button
 
     Sometimes I just want to scream. Twitter lets me do that.
