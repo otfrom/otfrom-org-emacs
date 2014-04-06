@@ -849,7 +849,9 @@
           '("Ct" "Team Current Cake Countdown"
             ((agenda "Current Cake Countdown" ((org-agenda-files '("~/org/work/world-domination.org"))
                                                (org-agenda-span 'week)
-                                               (org-agenda-start-on-weekday 3)))
+                                               (org-agenda-start-on-weekday 3)
+                                               (org-agenda-skip-deadline-if-done t)
+                                               (org-agenda-skip-scheduled-if-done t)))
              (tags-todo "+CATEGORY=\"MC\"+TODO={^[DCWB].+}"
                         ((org-agenda-overriding-header "The team's tasks for the Current Cake Countdown: ")
                          (org-agenda-overriding-columns-format
