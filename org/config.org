@@ -439,6 +439,16 @@
       (diminish 'git-gutter+-mode)
     #+END_SRC
     
+*** magit-auto-revert
+
+    I like that I get an auto-revert when magit changes files based on
+    a pull or merge. I don't need to see it cluttering up my mode-line
+    though.
+
+    #+BEGIN_SRC emacs-lisp
+      (diminish 'magit-auto-revert-mode)
+    #+END_SRC
+    
 ** ace-jump-mode
 
    Move quickly anywhere in the buffer in 3 keystrokes. We can move
