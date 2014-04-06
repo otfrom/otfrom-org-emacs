@@ -734,8 +734,33 @@
 
 ***** Agenda Sorting
 
+      I want to sort my tasks in the agenda by the deadline, then
+      schedule and then priority.
+
+      Todo items I want to sort by deadline, schedule and then
+      priority, but I usually filter out the things with deadline and
+      schedule time in most agenda views.
+
+      Tags and search are the same as the default values.
+      
       #+BEGIN_SRC emacs-lisp
-        (setq org-agenda-sorting-strategy '(time-up priority-down todo-state-down deadline-up scheduled-up tag-up effort-down))
+        (setq org-agenda-sorting-strategy
+              '((agenda deadline-up
+                        scheduled-up
+                        priority-down
+                        habit-down
+                        time-up
+                        category-keep)
+                (todo deadline-up
+                      scheduled-up
+                      priority-down
+                      time-up
+                      todo-state-down
+                      tag-up
+                      effort-down)
+                (tags priority-down
+                      category-keep)
+                (search category-keep)))
       #+END_SRC
       
 ***** Custom Agendas
@@ -764,11 +789,11 @@
        tasks and skips the DONE ones so that my view isn't too
        cluttered as I try to find the next task.
 
-       It is *supposed* to skip todo items that have a deadline marked
-       as I have them already in the agenda at the top. It also
-       overrides the text that describes the todo list. By default it
-       is the regular expression we are using to filter the todo
-       list.
+       It is also skips todo items that have a deadline or are
+       scheduled as I have them already in the agenda at the top. It
+       also overrides the text that describes the todo list. By
+       default it is the regular expression we are using to filter the
+       todo list.
 
        The todo items are also filtered to only show things that have
        the Owner property set to my name.
@@ -779,7 +804,7 @@
                    ((agenda "" ((org-agenda-span 'week)
                                 (org-agenda-start-on-weekday 3)))
                     (tags-todo "TODO={^[DCWB].+[^E]$}+Owner=\"Bruce\""
-                               ((org-agenda-skip-entry-if 'deadline)
+                               ((org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))
                                 (org-agenda-overriding-header "My tasks for the Current Cake Countdown: ")))))))
        #+END_SRC
 
