@@ -689,13 +689,18 @@
 **** todo keywords
 
      I seem to have come to some conclusions about which todo keywords
-     actually work for me.
+     actually work for me. The config below doesn't quite work yet
+     though, so I'm still using per file keywords.
      
      #+BEGIN_SRC emacs-lisp
-       (setq org-todo-keywords
-             '((sequence "TODO(t)" "CCC(c!)" "DOING(g!)" "|" "DONE(d!)")
-               (sequence "WAITING(w@/!)" "BLOCKED(b@/!)" "|" "CANCELLED(n@/!)" "PHONE" "MEETING" "DECISION" "NOTE")
-               (sequence "PROJECT(p!)" "|" "COMPLETE(m!)")))
+       ;; (setq org-todo-keywords
+       ;;       '((sequence "TODO(t)" "WAIT(w@/!)" "|" "DONE(d!)" "CANCELED(c@)")))
+       ;; (setq org-todo-keywords
+       ;;       '((sequence "TODO(t)" "CCC(c!)" "DOING(g!)" "|" "DONE(d!)")
+       ;;         (sequence "WAITING(w@/!)" "BLOCKED(b@/!)" "|")
+       ;;         (sequence "PROJECT(p!)" "|" "COMPLETE(m!)")
+       ;;         (sequence "|"  "CANCELLED(n@/!)" "PHONE" "MEETING" "DECISION" "NOTE")))
+     #+END_SRC
 
 **** Log when things are done
 
