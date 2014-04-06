@@ -4,7 +4,7 @@
 
 
 ;;;### (autoloads nil "noctilux-definitions" "noctilux-definitions.el"
-;;;;;;  (21282 10686 898757 241000))
+;;;;;;  (21313 34638 589950 716000))
 ;;; Generated autoloads from noctilux-definitions.el
 
 (when (boundp 'custom-theme-load-path) (add-to-list 'custom-theme-load-path (file-name-as-directory (file-name-directory load-file-name))))
@@ -12,7 +12,7 @@
 ;;;***
 
 ;;;### (autoloads nil nil ("noctilux-theme-pkg.el" "noctilux-theme.el")
-;;;;;;  (21282 10686 916085 254000))
+;;;;;;  (21313 34638 607334 399000))
 
 ;;;***
 
