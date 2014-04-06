@@ -693,13 +693,11 @@
      though, so I'm still using per file keywords.
      
      #+BEGIN_SRC emacs-lisp
-       ;; (setq org-todo-keywords
-       ;;       '((sequence "TODO(t)" "WAIT(w@/!)" "|" "DONE(d!)" "CANCELED(c@)")))
-       ;; (setq org-todo-keywords
-       ;;       '((sequence "TODO(t)" "CCC(c!)" "DOING(g!)" "|" "DONE(d!)")
-       ;;         (sequence "WAITING(w@/!)" "BLOCKED(b@/!)" "|")
-       ;;         (sequence "PROJECT(p!)" "|" "COMPLETE(m!)")
-       ;;         (sequence "|"  "CANCELLED(n@/!)" "PHONE" "MEETING" "DECISION" "NOTE")))
+       (setq org-todo-keywords
+             '((sequence "TODO(t)" "CCC(c!)" "DOING(g!)" "|" "DONE(d!)")
+               (sequence "WAITING(w@/!)" "BLOCKED(b@/!)" "|")
+               (sequence "PROJECT(p!)" "|" "COMPLETE(m!)")
+               (sequence "|"  "CANCELLED(n@/!)" "PHONE" "MEETING" "DECISION" "NOTE")))
      #+END_SRC
 
 **** Log when things are done
@@ -947,20 +945,6 @@
         (setq org-time-clocksum-format
               '(:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t))
       #+END_SRC
-
-**** Workflow Keywords
-
-     TODO, DOING, DONE and WAITING, BLOCKED, CANCELLED, PHONE,
-     MEETING. Let's try these on for size for a while.
-
-     I've also added CCC for Current Cake Countdown for things we
-     have scheduled in for the next week, but haven't started yet.
-     
-     #+BEGIN_SRC emacs-lisp
-       (setq org-todo-keywords
-             (quote ((sequence "TODO(t) CCC(c!) DOING(g!) | DONE(d!)")
-                     (sequence "WAITING(w@/!)" "BLOCKED(b@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING"))))
-     #+END_SRC
 
 **** Put those logs in a drawer
 
