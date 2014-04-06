@@ -808,17 +808,25 @@
        default it is the regular expression we are using to filter the
        todo list.
 
+       I also remove items that are scheduled or with deadlines from
+       the weekly agenda when they are done. This is so I can keep the
+       clutter down in this view and decide on what I want my next
+       step to be.
+
        The todo items are also filtered to only show things that have
        the Owner property set to my name.
        
        #+BEGIN_SRC emacs-lisp
          (setq org-agenda-custom-commands
                '(("Cm" "My Current Cake Countdown"
-                   ((agenda "" ((org-agenda-span 'week)
-                                (org-agenda-start-on-weekday 3)))
-                    (tags-todo "TODO={^[DCWB].+[^E]$}+Owner=\"Bruce\""
-                               ((org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))
-                                (org-agenda-overriding-header "My tasks for the Current Cake Countdown: ")))))))
+                  ((agenda "My Current Cake Countdown"
+                           ((org-agenda-span 'week)
+                            (org-agenda-start-on-weekday 3)
+                            (org-agenda-skip-deadline-if-done t)
+                            (org-agenda-skip-scheduled-if-done t)))
+                   (tags-todo "TODO={^[DCWB].+[^E]$}+Owner=\"Bruce\""
+                              ((org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))
+                               (org-agenda-overriding-header "My tasks for the Current Cake Countdown: ")))))))
        #+END_SRC
 
 ****** What is the whole team doing in the Current Cake Countdown?
