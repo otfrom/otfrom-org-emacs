@@ -368,31 +368,36 @@
    
    #+BEGIN_SRC emacs-lisp
      (maybe-install-and-require 'helm)
-     (helm-mode 1)
    #+END_SRC
 
-   We can diminish how much room helm-mode takes up on the command
-   line.
+** ido
+
+   I've gotten a bit fed up with helm and it really freaks people out
+   who aren't used to it when they come to use my emacs. ido mode does
+   similar things to helm in a number of circumstances and I can still
+   use helm for cheatsheets and other things
 
    #+BEGIN_SRC emacs-lisp
-     (diminish 'helm-mode)
+     (ido-mode 1)
    #+END_SRC
 
-*** helm-mode exceptions
+*** ido flex matching
 
-    There are few times where helm mode is really quite annoying and I
-    prefer other ways of getting at things like ido-mode or similar.
-    
-**** find-file and ffap with ido
+    Anything that lets me type less to get to where I want to be is
+    what I'm after.
 
-     find-file and helm I just find annoying. Let's use ido
-     instead. The same with find file at point or ffap.
+    #+BEGIN_SRC emacs-lisp
+      (setq ido-enable-flex-matching 1)
+    #+END_SRC
 
-     #+BEGIN_SRC emacs-lisp
-       (add-to-list 'helm-completing-read-handlers-alist '(find-file . ido))
-       (add-to-list 'helm-completing-read-handlers-alist '(ffap . ido))
-     #+END_SRC
-     
+*** ido use filename at point
+
+    I like having ffap be a default.
+
+    #+BEGIN_SRC emacs-lisp
+      (setq ido-use-filename-at-point 1)    
+    #+END_SRC
+
 ** git
 
 *** magit
