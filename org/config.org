@@ -686,6 +686,18 @@
     
 *** Scheduling, Project Management, Time Keeping
 
+**** todo keywords
+
+     I seem to have come to some conclusions about which todo keywords
+     actually work for me.
+     
+     #+BEGIN_SRC emacs-lisp
+       (setq org-todo-keywords
+             '((sequence "TODO(t)" "CCC(c!)" "DOING(g!)" "|" "DONE(d!)")
+               (sequence "WAITING(w@/!)" "BLOCKED(b@/!)" "|" "CANCELLED(n@/!)" "PHONE" "MEETING" "DECISION" "NOTE")
+               (sequence "PROJECT(p!)" "|" "COMPLETE(m!)")))
+     #+END_SRC
+     
 **** Agenda
 
 ***** org-mode and Google Calendar with org-gcal 
