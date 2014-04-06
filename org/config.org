@@ -758,11 +758,11 @@
       
       #+BEGIN_SRC emacs-lisp
         (setq org-agenda-sorting-strategy
-              '((agenda deadline-up
+              '((agenda time-up
+                        deadline-up
                         scheduled-up
                         priority-down
                         habit-down
-                        time-up
                         category-keep)
                 (todo deadline-up
                       scheduled-up
