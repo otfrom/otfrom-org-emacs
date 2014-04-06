@@ -696,6 +696,14 @@
              '((sequence "TODO(t)" "CCC(c!)" "DOING(g!)" "|" "DONE(d!)")
                (sequence "WAITING(w@/!)" "BLOCKED(b@/!)" "|" "CANCELLED(n@/!)" "PHONE" "MEETING" "DECISION" "NOTE")
                (sequence "PROJECT(p!)" "|" "COMPLETE(m!)")))
+
+**** Log when things are done
+
+     I quite like to see in the agenda log when I've done things and
+     I'd like to be prompted for a note as well.
+     
+     #+BEGIN_SRC emacs-lisp
+        (setq org-log-done 'note)
      #+END_SRC
      
 **** Agenda
