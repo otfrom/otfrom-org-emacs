@@ -741,6 +741,7 @@
                       "~/org/community.org"
                       "~/org/mc-cal.org"
                       "~/org/otfrom-cal.org"
+                      "~/org/ldnclj-cal.org"
                       "~/org/work/world-domination.org")))
       #+END_SRC
 
