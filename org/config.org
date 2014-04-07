@@ -746,14 +746,14 @@
       
       #+BEGIN_SRC emacs-lisp
         (setq org-agenda-files
-              (quote ("~/org/refile.org"
-                      "~/org/personal.org"
-                      "~/org/work.org"
-                      "~/org/community.org"
-                      "~/org/mc-cal.org"
-                      "~/org/otfrom-cal.org"
-                      "~/org/ldnclj-cal.org"
-                      "~/org/work/world-domination.org")))
+              '("~/org/refile.org"
+                "~/org/work/world-domination.org"
+                "~/org/work.org"
+                "~/org/community.org"
+                "~/org/personal.org"
+                "~/org/mc-cal.org"
+                "~/org/otfrom-cal.org"
+                "~/org/ldnclj-cal.org"))
       #+END_SRC
 
 ***** Agenda Sorting
@@ -770,16 +770,13 @@
       #+BEGIN_SRC emacs-lisp
         (setq org-agenda-sorting-strategy
               '((agenda time-up
-                        deadline-up
-                        scheduled-up
+                        timestamp-up
                         priority-down
                         habit-down
                         category-keep)
-                (todo deadline-up
-                      scheduled-up
-                      priority-down
-                      time-up
-                      todo-state-down
+                (todo priority-down
+                      category-keep
+                      todo-state-up
                       tag-up
                       effort-down)
                 (tags priority-down
