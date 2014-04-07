@@ -1543,7 +1543,7 @@
              '(("mastodonc" ("to" ".*@mastodonc.com" both) "mastodonc")))
      #+END_SRC
 
-*** email with mu4e
+*** email with mu and mu4e
 
     [[http://www.djcbsoftware.nl/code/mu/][mu4e]] is a maildir based email indexer with an emacs client. It
     does a good job of moving files around to the right directories so
