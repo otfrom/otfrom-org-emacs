@@ -832,7 +832,7 @@
                '(("Cm" "My Current Cake Countdown"
                   ((agenda "My Current Cake Countdown"
                            ((org-agenda-span 'week)
-                            (org-agenda-start-on-weekday 3)
+                            (org-agenda-start-on-weekday 4)
                             (org-agenda-skip-deadline-if-done t)
                             (org-agenda-skip-scheduled-if-done t)))
                    (tags-todo "TODO={^[DCWB].+[^E]$}+Owner=\"Bruce\""
@@ -860,7 +860,7 @@
           '("Ct" "Team Current Cake Countdown"
             ((agenda "Current Cake Countdown" ((org-agenda-files '("~/org/work/world-domination.org"))
                                                (org-agenda-span 'week)
-                                               (org-agenda-start-on-weekday 3)
+                                               (org-agenda-start-on-weekday 4)
                                                (org-agenda-skip-deadline-if-done t)
                                                (org-agenda-skip-scheduled-if-done t)))
              (tags-todo "+CATEGORY=\"MC\"+TODO={^[DCWB].+}"
