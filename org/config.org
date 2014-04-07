@@ -1559,6 +1559,21 @@
       (setq mu4e-user-mail-address-list (list "bld@otfrom.com" "bruce@mastodonc.com"))
     #+END_SRC
 
+**** Don't hog my minibuffer
+
+     I actually consider the default behaviour of the mu4e indexer to
+     be quite rude. It overwrites the minibuffer while I'm trying to
+     do things and basically makes emacs unusable for the minutes when
+     it is re-indexing everything.
+
+     I know I need to divide my email into years or months and add a
+     .noindex into some directories, but it really is just a bit
+     much even with that.
+
+     #+BEGIN_SRC emacs-lisp
+       (setq mu4e-hide-index-messages 1)
+     #+END_SRC
+     
 **** Fetching mail
 
      We use offlineimap to get our mail and want to get it every 13
