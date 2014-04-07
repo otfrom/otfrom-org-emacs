@@ -697,7 +697,7 @@
              '((sequence "TODO(t)" "CCC(c!)" "DOING(g!)" "|" "DONE(d!)")
                (sequence "WAITING(w@/!)" "BLOCKED(b@/!)" "|")
                (sequence "PROJECT(p!)" "|" "COMPLETE(m!)")
-               (sequence "|"  "CANCELLED(n@/!)" "PHONE" "MEETING" "DECISION" "NOTE")))
+               (sequence "|"  "CANCELLED(n@/!)" "PHONE" "MEETING" "DECISION" "NOTE" "EMAIL")))
      #+END_SRC
 
 **** Log when things are done
