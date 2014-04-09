@@ -41,9 +41,12 @@
   - Using color themes and custom fonts
   - removing chrome from the windows
   - very basic helm mode setup
+  - a basic ido setup for somethings
   - magit & git gutter mode
   - using Emacs as a twitter client
+  - using Emacs as a gtalk/jabber client
+  - using Emacs as an irc client
   - paredit and rainbow delimiters
   - using add-hook
-  - deft and org-mode
-  - emacs on Mac OS X fixes
+  - org-mode with some custom agendas and sorting
+  - emacs on Mac OS X fixes (vestigial now)
