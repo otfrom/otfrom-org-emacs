@@ -29,4 +29,4 @@
   (package-install 'org-plus-contrib))
 (require 'org)
 
-(org-babel-load-file (concat (getenv "HOME") "/.emacs.d/org/config.org"))
+(org-babel-load-file (concat user-emacs-directory "org/config.org"))
