@@ -1096,7 +1096,17 @@
     #+BEGIN_SRC emacs-lisp
       (maybe-install-and-require 'org-pomodoro)
     #+END_SRC
-    
+
+**** A hotkey in Org Agenda
+
+     I can clock in and out in Org Agendas, I'd like to be able to
+     start Pomodoros as well.
+
+     #+BEGIN_SRC emacs-lisp
+       (add-hook 'org-agenda-mode-hook
+                 (lambda () (local-set-key (kbd "P") 'org-pomodoro)))
+     #+END_SRC
+     
 *** Activate Appointment Mode
 
     And now that we have our ical stuff in our diary we'll want
