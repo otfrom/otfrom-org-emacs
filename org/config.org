@@ -460,6 +460,15 @@
      (global-set-key (kbd "C-c k") 'ace-jump-mode-pop-mark)
    #+END_SRC
 
+** Mouse Avoidance
+
+   I don't want that pesky mouse hanging around in the middle of the
+   screen while I'm typing.
+   
+   #+BEGIN_SRC emacs-lisp
+     (mouse-avoidance-mode 'banish)
+   #+END_SRC
+   
 ** window and buffer tweaking
    
 *** window movement
