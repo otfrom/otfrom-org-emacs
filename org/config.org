@@ -2358,7 +2358,7 @@
      (require 'emms-setup)
      (emms-standard)
      (emms-default-players)
-     (setq emms-source-file-default-directory "/Users/bld/Music/")
+     (setq emms-source-file-default-directory (concat (getenv "HOME") "/Music/"))
    #+END_SRC
 
 *** emms keybindings
