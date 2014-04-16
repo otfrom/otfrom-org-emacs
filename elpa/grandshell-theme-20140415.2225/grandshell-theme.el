@@ -1,6 +1,6 @@
 ;;; grandshell-theme.el --- Grand Shell color theme for Emacs > 24
 
-;; Copyright 2013, Steckerhalter
+;; Copyright 2014, Steckerhalter
 
 ;; Author: steckerhalter
 ;; Keywords: color theme grand shell faces
@@ -384,7 +384,7 @@
    `(helm-buffer-directory ((t (:foreground ,magenta))))
 
    ;; highlight-symbol
-   `(highlight-symbol-face ((,class (:background ,very-dark))))
+   `(highlight-symbol-face ((,class (:background ,magenta-dark))))
 
    ;; icomplete
    `(icomplete-first-match ((,class (:foreground "white" :bold t))))

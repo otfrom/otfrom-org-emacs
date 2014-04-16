@@ -5,7 +5,7 @@
 ;; Author: Bozhidar Batsov <bozhidar@batsov.com>
 ;; URL: https://github.com/bbatsov/projectile
 ;; Keywords: project, convenience
-;; Version: 20140412.2146
+;; Version: 20140415.2248
 ;; X-Original-Version: 0.10.0
 ;; Package-Requires: ((s "1.6.0") (dash "1.5.0") (pkg-info "0.4"))
 
@@ -92,14 +92,14 @@ using the native indexing method."
   :type 'boolean)
 
 (defcustom projectile-file-exists-local-cache-expire nil
-    "Number of seconds before file existence cache expires for a
+  "Number of seconds before file existence cache expires for a
 file on a local file system.
 
  A value of nil disables this cache."
-  
+
   :group 'projectile
   :type '(choice (const :tag "Disabled" nil)
-                 (integer :tag "Seconds"))) 
+                 (integer :tag "Seconds")))
 
 (defcustom projectile-file-exists-remote-cache-expire (* 5 60)
   "Number of seconds before file existence cache expires for a
@@ -361,7 +361,7 @@ timer if no more items are in the cache."
              projectile-file-exists-cache)
     (setq projectile-file-exists-cache-timer
           (if (> (hash-table-count projectile-file-exists-cache) 0)
-                    (run-with-timer 10 nil 'projectile-file-exists-cache-cleanup)))))
+              (run-with-timer 10 nil 'projectile-file-exists-cache-cleanup)))))
 
 (defun projectile-file-exists-p (filename)
   "Return t if file FILENAME exist.
@@ -1086,6 +1086,15 @@ With a prefix ARG invalidates the cache first."
 (defvar projectile-make '("Makefile"))
 (defvar projectile-grunt '("Gruntfile.js"))
 
+(defun projectile-go ()
+  (-any? (lambda (file)
+           (string= (file-name-extension file) "go")) (projectile-current-project-files)))
+
+(defcustom projectile-go-function 'projectile-go
+  "Function to determine if project's type is go."
+  :group 'projectile
+  :type 'function)
+
 (defun projectile-project-type ()
   "Determine the project's type based on its structure."
   (cond
@@ -1103,6 +1112,7 @@ With a prefix ARG invalidates the cache first."
    ((projectile-verify-files projectile-sbt) 'sbt)
    ((projectile-verify-files projectile-make) 'make)
    ((projectile-verify-files projectile-grunt) 'grunt)
+   ((funcall projectile-go-function) 'go)
    (t 'generic)))
 
 (defun projectile-verify-files (files)
@@ -1183,7 +1193,7 @@ With a prefix ARG invalidates the cache first."
   "Find default test files suffix based on PROJECT-TYPE."
   (cond
    ((member project-type '(rails-rspec ruby-rspec)) "_spec")
-   ((member project-type '(rails-test ruby-test lein)) "_test")
+   ((member project-type '(rails-test ruby-test lein go)) "_test")
    ((member project-type '(maven symfony)) "Test")))
 
 (defun projectile-find-matching-test (file)
@@ -1466,6 +1476,8 @@ For git projects `magit-status' is used if available."
 (defvar projectile-make-test-cmd "make test")
 (defvar projectile-grunt-compile-cmd "grunt")
 (defvar projectile-grunt-test-cmd "grunt test")
+(defvar projectile-go-compile-cmd "go build ./...")
+(defvar projectile-go-test-cmd "go test ./...")
 
 (defvar projectile-compilation-cmd-map
   (make-hash-table :test 'equal)
@@ -1488,6 +1500,7 @@ For git projects `magit-status' is used if available."
    ((eq project-type 'maven) projectile-maven-compile-cmd)
    ((eq project-type 'sbt) projectile-sbt-compile-cmd)
    ((eq project-type 'grunt) projectile-grunt-compile-cmd)
+   ((eq project-type 'go) projectile-go-compile-cmd)
    (t projectile-make-compile-cmd)))
 
 (defun projectile-default-test-command (project-type)
@@ -1504,6 +1517,7 @@ For git projects `magit-status' is used if available."
    ((eq project-type 'maven) projectile-maven-test-cmd)
    ((eq project-type 'sbt) projectile-sbt-test-cmd)
    ((eq project-type 'grunt) projectile-grunt-test-cmd)
+   ((eq project-type 'go) projectile-go-test-cmd)
    (t projectile-make-test-cmd)))
 
 (defun projectile-compilation-command (project)

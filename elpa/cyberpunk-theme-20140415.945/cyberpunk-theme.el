@@ -1,11 +1,11 @@
 ;;; cyberpunk-theme.el --- Cyberpunk Color Theme
 
-;; Copyright 2012-2013, Nicholas M. Van Horn
+;; Copyright 2012-2014, Nicholas M. Van Horn
 
 ;; Author: Nicholas M. Van Horn <vanhorn.nm@gmail.com>
 ;; Keywords: color theme cyberpunk
-;; Version: 20140319.1853
-;; X-Original-Version: 1.6
+;; Version: 20140415.945
+;; X-Original-Version: 1.7
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -140,6 +140,10 @@
    `(grep-hit-face ((,class (:foreground ,cyberpunk-black :background ,cyberpunk-red))))
    `(grep-match-face ((,class (:foreground ,cyberpunk-black :background ,cyberpunk-pink-1))))
    `(match ((,class (:background ,cyberpunk-black :foreground ,cyberpunk-pink-1))))
+
+
+   ;;; multiple-cursors
+   `(mc/cursor-face ((,class (:inverse-video nil, :background ,cyberpunk-pink :foreground ,cyberpunk-black))))
 
    ;; faces used by isearch
    `(isearch ((,class (:foreground ,cyberpunk-black :background ,cyberpunk-pink-1))))
