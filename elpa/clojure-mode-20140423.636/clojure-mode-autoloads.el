@@ -4,20 +4,24 @@
 
 
 ;;;### (autoloads (clojure-mode) "clojure-mode" "clojure-mode.el"
-;;;;;;  (21312 15792 838206 371000))
+;;;;;;  (21338 29987 808745 138000))
 ;;; Generated autoloads from clojure-mode.el
 
 (autoload 'clojure-mode "clojure-mode" "\
-Major mode for editing Clojure code - similar to Lisp mode.
+Major mode for editing Clojure code.
+
 Commands:
 Delete converts tabs to spaces as it moves back.
-Blank lines separate paragraphs.  Semicolons start comments.
-\\{clojure-mode-map}
-Note that `run-lisp' may be used either to start an inferior Lisp job
-or to switch back to an existing one.
+Blank lines separate paragraphs.
+Semicolons start comments.
 
-Entry to this mode calls the value of `clojure-mode-hook'
-if that value is non-nil.
+\\{clojure-mode-map}
+
+Note that `run-lisp' may be used either to start an inferior Lisp
+job or to switch back to an existing one.
+
+Entry to this mode calls the value of `clojure-mode-hook' if that
+value is non-nil.
 
 \(fn)" t nil)
 
@@ -33,8 +37,8 @@ if that value is non-nil.
 
 ;;;***
 
-;;;### (autoloads nil nil ("clojure-mode-pkg.el") (21312 15792 849451
-;;;;;;  62000))
+;;;### (autoloads nil nil ("clojure-mode-pkg.el") (21338 29987 847135
+;;;;;;  551000))
 
 ;;;***
 
