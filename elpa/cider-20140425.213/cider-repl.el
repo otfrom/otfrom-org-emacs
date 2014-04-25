@@ -33,10 +33,10 @@
 (require 'cider-client)
 (require 'cider-interaction)
 (require 'cider-eldoc) ; for cider-turn-on-eldoc-mode
+(require 'cider-util)
 
 (require 'clojure-mode)
 (require 'easymenu)
-(require 'pkg-info)
 
 (eval-when-compile
   (defvar paredit-version)
@@ -224,9 +224,7 @@ positions before and after executing BODY."
 (defun cider-repl--banner ()
   "Generate the welcome REPL buffer banner."
   (format "; CIDER %s (Java %s, Clojure %s, nREPL %s)"
-          (condition-case nil
-              (pkg-info-version-info 'cider)
-            (error cider-version))
+          (cider--version)
           (cider--java-version)
           (cider--clojure-version)
           (cider--nrepl-version)))
@@ -558,7 +556,7 @@ If NEWLINE is true then add a newline at the end of the input."
       (add-text-properties cider-repl-input-start-mark
                            (point)
                            `(cider-old-input
-                             ,(incf cider-repl-old-input-counter))))
+                             ,(cl-incf cider-repl-old-input-counter))))
     (if cider-repl-use-clojure-font-lock
         (let ((input-string (buffer-substring cider-repl-input-start-mark end)))
           (save-excursion
@@ -743,7 +741,7 @@ Empty strings and duplicates are ignored."
   (unless (or (equal string "")
               (equal string (car cider-repl-input-history)))
     (push string cider-repl-input-history)
-    (incf cider-repl-input-history-items-added)))
+    (cl-incf cider-repl-input-history-items-added)))
 
 (defun cider-repl-delete-current-input ()
   "Delete all text after the prompt."

@@ -9,8 +9,8 @@
 ;;         Hugo Duncan <hugo@hugoduncan.org>
 ;;         Steve Purcell <steve@sanityinc.com>
 ;; URL: http://www.github.com/clojure-emacs/cider
-;; Version: 0.6.0-cvs
-;; Package-Requires: ((clojure-mode "2.0.0") (cl-lib "0.3") (dash "2.4.1") (pkg-info "0.4"))
+;; Version: 0.7.0-cvs
+;; Package-Requires: ((clojure-mode "2.0.0") (cl-lib "0.3") (dash "2.4.1") (pkg-info "0.4") (emacs "24"))
 ;; Keywords: languages, clojure, cider
 
 ;; This program is free software: you can redistribute it and/or modify
@@ -59,15 +59,14 @@
   :link '(url-link :tag "Github" "https://github.com/clojure-emacs/cider")
   :link '(emacs-commentary-link :tag "Commentary" "cider"))
 
-(require 'pkg-info)
-
 (require 'cider-client)
 (require 'cider-interaction)
 (require 'cider-eldoc)
 (require 'cider-repl)
 (require 'cider-mode)
+(require 'cider-util)
 
-(defvar cider-version "0.6-snapshot"
+(defvar cider-version "0.7.0-snapshot"
   "Fallback version used when it cannot be extracted automatically.
 Normally it won't be used, unless `pkg-info' fails to extract the
 version from the CIDER package or library.")
@@ -84,8 +83,7 @@ This variable is used by the CIDER command."
 (defun cider-version ()
   "Display CIDER's version."
   (interactive)
-  (let ((version (pkg-info-version-info 'cider)))
-    (message "CIDER %s" version)))
+  (message "CIDER %s" (cider--version)))
 
 ;;;###autoload
 (defun cider-jack-in (&optional prompt-project)
