@@ -76,15 +76,13 @@ buffer-local wherever it is set."
   (format "(let [x %s] (clojure.pprint/pprint x) x)" form))
 
 (autoload 'pkg-info-version-info "pkg-info.el")
+
 (defun cider--version ()
+  "Retrieve CIDER's version."
   (condition-case nil
       (pkg-info-version-info 'cider)
     (error cider-version)))
 
 (provide 'cider-util)
-
-;; Local Variables:
-;; indent-tabs-mode: nil
-;; End:
 
 ;;; cider-util.el ends here

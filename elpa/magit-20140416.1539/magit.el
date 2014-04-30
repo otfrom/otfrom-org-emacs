@@ -3726,7 +3726,7 @@ of the Windows \"Powershell\"."
   (if magit-process-quote-curly-braces
       (mapcar (apply-partially 'replace-regexp-in-string
                                "{\\([0-9]+\\)}" "\\\\{\\1\\\\}")
-              args)
+              (magit-flatten-onelevel args))
     args))
 
 ;;;; Mode Api
@@ -4062,7 +4062,8 @@ the current repository."
                    (not (string-prefix-p gitdir file))
                    (member (file-relative-name file topdir) tracked)
                    (let ((auto-revert-mode t))
-                     (auto-revert-handler))))))))))
+                     (auto-revert-handler)
+                     (run-hooks 'magit-revert-buffer-hook))))))))))
 
 ;;; (misplaced)
 ;;;; Diff Options
