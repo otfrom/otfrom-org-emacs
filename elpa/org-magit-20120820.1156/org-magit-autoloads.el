@@ -4,7 +4,7 @@
 
 
 ;;;### (autoloads (org-magit-store-link org-magit-export org-magit-open)
-;;;;;;  "org-magit" "org-magit.el" (21312 19576 478374 266000))
+;;;;;;  "org-magit" "org-magit.el" (21348 61929 603159 883000))
 ;;; Generated autoloads from org-magit.el
 
 (autoload 'org-magit-open "org-magit" "\
@@ -26,8 +26,8 @@
 
 ;;;***
 
-;;;### (autoloads nil nil ("org-magit-pkg.el") (21312 19576 496341
-;;;;;;  198000))
+;;;### (autoloads nil nil ("org-magit-pkg.el") (21348 61929 610162
+;;;;;;  649000))
 
 ;;;***
 

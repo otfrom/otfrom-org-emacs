@@ -5,7 +5,7 @@
 
 ;;;### (autoloads (helm-css-scss helm-css-scss-move-and-echo-previous-selector
 ;;;;;;  helm-css-scss-move-and-echo-next-selector helm-css-scss-insert-close-comment)
-;;;;;;  "helm-css-scss" "helm-css-scss.el" (21312 19580 62374 423000))
+;;;;;;  "helm-css-scss" "helm-css-scss.el" (21348 61935 743174 738000))
 ;;; Generated autoloads from helm-css-scss.el
 
 (autoload 'helm-css-scss-insert-close-comment "helm-css-scss" "\
@@ -30,8 +30,8 @@
 
 ;;;***
 
-;;;### (autoloads nil nil ("helm-css-scss-pkg.el") (21312 19580 86333
-;;;;;;  612000))
+;;;### (autoloads nil nil ("helm-css-scss-pkg.el") (21348 61935 754167
+;;;;;;  172000))
 
 ;;;***
 

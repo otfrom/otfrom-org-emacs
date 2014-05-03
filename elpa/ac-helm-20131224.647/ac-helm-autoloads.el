@@ -4,7 +4,7 @@
 
 
 ;;;### (autoloads (ac-complete-with-helm) "ac-helm" "ac-helm.el"
-;;;;;;  (21312 19581 706374 496000))
+;;;;;;  (21348 61937 483178 949000))
 ;;; Generated autoloads from ac-helm.el
 
 (autoload 'ac-complete-with-helm "ac-helm" "\
@@ -15,8 +15,8 @@ It is useful to narrow candidates.
 
 ;;;***
 
-;;;### (autoloads nil nil ("ac-helm-pkg.el") (21312 19581 717946
-;;;;;;  701000))
+;;;### (autoloads nil nil ("ac-helm-pkg.el") (21348 61937 500046
+;;;;;;  508000))
 
 ;;;***
 

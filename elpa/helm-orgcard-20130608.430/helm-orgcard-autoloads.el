@@ -4,7 +4,7 @@
 
 
 ;;;### (autoloads (helm-orgcard) "helm-orgcard" "helm-orgcard.el"
-;;;;;;  (21312 19552 106373 184000))
+;;;;;;  (21348 62171 171744 346000))
 ;;; Generated autoloads from helm-orgcard.el
 
 (autoload 'helm-orgcard "helm-orgcard" "\
@@ -14,8 +14,8 @@ Anything command for orgcard.
 
 ;;;***
 
-;;;### (autoloads nil nil ("helm-orgcard-pkg.el") (21312 19552 122267
-;;;;;;  677000))
+;;;### (autoloads nil nil ("helm-orgcard-pkg.el") (21348 62171 192776
+;;;;;;  311000))
 
 ;;;***
 
