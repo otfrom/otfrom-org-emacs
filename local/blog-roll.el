@@ -1,5 +1,11 @@
 (setq org-feed-alist
-      '(("2D Goggles"
+      '(("us-west-2 ELB"
+         "http://status.aws.amazon.com/rss/elb-us-west-2.rss"
+         "~/org/feeds/aws.org" "us-west-2 ELB")
+        ("us-west-2 EC2"
+         "http://status.aws.amazon.com/rss/ec2-us-west-2.rss"
+         "~/org/feeds/aws.org" "us-west-2 EC2")
+        ("2D Goggles"
          "http://feeds.feedburner.com/sydneypadua/yBZX"
          "~/org/feeds/comics.org" "2D Goggles"
          :template "\n* %h\n  %U\n  %a\n")
