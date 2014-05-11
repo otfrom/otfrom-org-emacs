@@ -1444,7 +1444,7 @@
     like #ukodi and ##cleanweb. And ones for Mastodon C like #kixi.
     
     #+BEGIN_SRC emacs-lisp
-      (setq erc-autojoin-channels-alist '(("freenode.net" "##cleanweb" "#kixi" "#theodi" "#ldnclj")))
+      (setq erc-autojoin-channels-alist '(("freenode.net" "##cleanweb" "#kixi" "#theodi" "#ldnclj" "#clojure-emacs")))
     #+END_SRC
 
 *** Credentials
