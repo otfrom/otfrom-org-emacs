@@ -2150,7 +2150,7 @@
       be gold there.
 
       #+BEGIN_SRC emacs-lisp
-        (setq cider-history-file (concat user-emacs-directory "cider-history"))
+        (setq cider-repl-history-file (concat user-emacs-directory "cider-history"))
       #+END_SRC
 
 ***** subword-mode
