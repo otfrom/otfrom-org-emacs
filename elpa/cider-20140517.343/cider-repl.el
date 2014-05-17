@@ -130,24 +130,6 @@ you'd like to use the default Emacs behavior use
   :type 'symbol
   :group 'cider-repl)
 
-(defcustom cider-lein-command
-  "lein"
-  "The command used to execute leiningen 2.x."
-  :type 'string
-  :group 'cider-repl)
-
-(defcustom cider-server-command
-  (if (or (locate-file cider-lein-command exec-path)
-          (locate-file (format "%s.bat" cider-lein-command) exec-path))
-      (format "%s repl :headless" cider-lein-command)
-    (format "echo \"%s repl :headless\" | eval $SHELL -l" cider-lein-command))
-  "The command used to start the nREPL via command `cider-jack-in'.
-For a remote nREPL server lein must be in your PATH.  The remote
-proc is launched via sh rather than bash, so it might be necessary
-to specific the full path to it.  Localhost is assumed."
-  :type 'string
-  :group 'cider-repl)
-
 ;;;; REPL buffer local variables
 (defvar-local cider-repl-input-start-mark nil)
 
@@ -1026,7 +1008,6 @@ ENDP) DELIM."
     (define-key map (kbd "C-<return>") 'cider-repl-closing-return)
     (define-key map (kbd "C-j") 'cider-repl-newline-and-indent)
     (define-key map (kbd "C-c C-d") 'cider-doc)
-    (define-key map (kbd "C-c C-s") 'cider-src)
     (define-key map (kbd "C-c C-o") 'cider-repl-clear-output)
     (define-key map (kbd "C-c M-o") 'cider-repl-clear-buffer)
     (define-key map (kbd "C-c M-n") 'cider-repl-set-ns)
@@ -1085,13 +1066,12 @@ ENDP) DELIM."
 (easy-menu-define cider-repl-mode-menu cider-repl-mode-map
   "Menu for CIDER's REPL mode"
   '("REPL"
-    ["Jump" cider-jump]
-    ["Jump back" cider-jump-back]
-    "--"
     ["Complete symbol" complete-symbol]
     "--"
+    ["Jump to source" cider-jump]
+    ["Jump back" cider-jump-back]
+    "--"
     ["Display documentation" cider-doc]
-    ["Display source" cider-src]
     ["Display JavaDoc" cider-javadoc]
     ["Inspect" cider-inspect]
     "--"

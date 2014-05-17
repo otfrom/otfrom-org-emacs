@@ -27,6 +27,7 @@
 
 (require 'button)
 (require 'dash)
+(require 'easymenu)
 
 ;; Variables
 
@@ -94,21 +95,33 @@ If nil, messages will not be wrapped.  If truthy but non-numeric,
 (defvar cider-stacktrace-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "M-.") 'cider-stacktrace-jump)
+    (define-key map "q" 'cider-popup-buffer-quit-function)
     (define-key map "j" 'cider-stacktrace-toggle-java)
     (define-key map "c" 'cider-stacktrace-toggle-clj)
     (define-key map "r" 'cider-stacktrace-toggle-repl)
     (define-key map "t" 'cider-stacktrace-toggle-tooling)
     (define-key map "d" 'cider-stacktrace-toggle-duplicates)
-    (define-key map "a" 'cider-stacktrace-show-all)
+    (define-key map "a" 'cider-stacktrace-toggle-all)
     map))
 
-(define-minor-mode cider-stacktrace-mode
-  "CIDER Stacktrace Buffer Mode."
-  nil
-  (" CIDER Stacktrace")
-  cider-stacktrace-mode-map
+(easy-menu-define cider-stacktrace-mode-menu cider-stacktrace-mode-map
+  "Menu for CIDER's stacktrace mode"
+  '("Stacktrace"
+    ["Show/hide Java frames" cider-stacktrace-toggle-java]
+    ["Show/hide Clojure frames" cider-stacktrace-toggle-clj]
+    ["Show/hide REPL frames" cider-stacktrace-toggle-repl]
+    ["Show/hide tooling frames" cider-stacktrace-toggle-tooling]
+    ["Show/hide duplicate frames" cider-stacktrace-toggle-duplicates]
+    ["Show/hide all frames" cider-stacktrace-toggle-all]))
+
+(define-derived-mode cider-stacktrace-mode fundamental-mode "Stacktrace"
+  "Major mode for filtering and navigating CIDER stacktraces
+
+\\{cider-stacktrace-mode-map}"
   (setq buffer-read-only t)
   (setq-local truncate-lines t)
+  (setq-local electric-indent-functions (list (lambda (x) 'no-indent)))
+  (setq-local cider-stacktrace-prior-filters nil)
   (setq-local cider-stacktrace-hidden-frame-count 0)
   (setq-local cider-stacktrace-filters cider-stacktrace-default-filters))
 
@@ -165,11 +178,16 @@ Update `cider-stacktrace-hidden-frame-count' and indicate filters applied."
 
 ;; Interactive functions
 
-(defun cider-stacktrace-show-all ()
-  "Reset `cider-stacktrace-filters', and apply filters."
+(defun cider-stacktrace-toggle-all ()
+  "Reset `cider-stacktrace-filters' if present; otherwise restore prior filters."
   (interactive)
+  (when cider-stacktrace-filters
+    (setq-local cider-stacktrace-prior-filters
+                cider-stacktrace-filters))
   (cider-stacktrace-apply-filters
-   (setq cider-stacktrace-filters nil)))
+   (setq cider-stacktrace-filters
+         (unless cider-stacktrace-filters      ; when current filters are nil,
+           cider-stacktrace-prior-filters))))  ;  reenable prior filter set
 
 (defun cider-stacktrace-toggle (flag)
   "Update `cider-stacktrace-filters' to add or remove FLAG, and apply filters."
@@ -213,7 +231,7 @@ Update `cider-stacktrace-hidden-frame-count' and indicate filters applied."
     (let ((flag (button-get button 'filter)))
       (if flag
           (cider-stacktrace-toggle flag)
-        (cider-stacktrace-show-all)))
+        (cider-stacktrace-toggle-all)))
     (sit-for 5)))
 
 (defun cider-stacktrace-navigate (button)
@@ -299,6 +317,7 @@ This associates text properties to enable filtering and source navigation."
 (defun cider-stacktrace-render (buffer causes frames)
   "Emit into BUFFER useful stacktrace information for the CAUSES and FRAMES."
   (with-current-buffer buffer
+    (cider-stacktrace-mode)
     (let ((inhibit-read-only t))
       ;; Exceptions
       (cider-stacktrace-render-cause buffer (first causes) "Unhandled")
@@ -320,8 +339,7 @@ This associates text properties to enable filtering and source navigation."
       ;; Stacktrace frames
       (dolist (frame frames)
         (cider-stacktrace-render-frame buffer frame)))
-    ;; Set mode, apply filters, move point to first stacktrace frame.
-    (cider-stacktrace-mode 1)
+    ;; Apply filters, move point to first stacktrace frame, and fontify.
     (cider-stacktrace-apply-filters cider-stacktrace-filters)
     (goto-char (next-single-property-change (point-min) 'flags))
     (font-lock-refresh-defaults)))

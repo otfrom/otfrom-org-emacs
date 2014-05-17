@@ -55,7 +55,6 @@
     (define-key map (kbd "C-c M-i") 'cider-inspect)
     (define-key map (kbd "C-c M-t") 'cider-toggle-trace)
     (define-key map (kbd "C-c C-d") 'cider-doc)
-    (define-key map (kbd "C-c C-s") 'cider-src)
     (define-key map (kbd "C-c C-z") 'cider-switch-to-repl-buffer)
     (define-key map (kbd "C-c M-o") 'cider-find-and-clear-repl-buffer)
     (define-key map (kbd "C-c C-k") 'cider-load-current-buffer)
@@ -83,9 +82,6 @@
 (easy-menu-define cider-mode-menu cider-mode-map
   "Menu for CIDER mode"
   '("CIDER"
-    ["Jump" cider-jump]
-    ["Jump back" cider-jump-back]
-    "--"
     ["Complete symbol" complete-symbol]
     "--"
     ["Eval top-level sexp at point" cider-eval-defun-at-point]
@@ -103,8 +99,10 @@
     ["Macroexpand-1 last expression" cider-macroexpand-1]
     ["Macroexpand-all last expression" cider-macroexpand-all]
     "--"
+    ["Jump to source" cider-jump]
+    ["Jump back" cider-jump-back]
+    "--"
     ["Display documentation" cider-doc]
-    ["Display source" cider-src]
     ["Display JavaDoc" cider-javadoc]
     ["Inspect" cider-inspect]
     "--"
