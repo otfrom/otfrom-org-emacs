@@ -2115,7 +2115,17 @@
       #+BEGIN_SRC emacs-lisp
         (maybe-install-and-require 'cider)
       #+END_SRC
-      
+
+***** Popup compilation messages
+
+      Don't pop them up if I'm not in the repl buffer otherwise I
+      might go all Bruce Banner on you.      
+
+      #+BEGIN_SRC emacs-lisp
+        (setq cider-popup-stacktraces t)
+      #+END_SRC
+
+
 ***** clojure-test-mode
       
       Adding clojure-test-mode is a good idea too. Lots of things out
