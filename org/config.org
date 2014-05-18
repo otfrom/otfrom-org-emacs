@@ -2302,15 +2302,6 @@
      
 ** python
    
-*** GNU Emacs IPython Notebook
-
-    The [[http://ipython.org/][IPython Notebook]] is *almost* as cool as org-mode literate
-    programming. There is an Emacs mode you can use with it.
-    
-    #+BEGIN_SRC emacs-lisp
-      (maybe-install-and-require 'ein)
-    #+END_SRC
-
 ** javascript
 
    According to [[http://twitter.com/sw1nn][Neale Swinnerton]] js2-mode is the way to go.
