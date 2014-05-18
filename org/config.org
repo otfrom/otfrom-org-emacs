@@ -17,7 +17,7 @@
            (progn
              (load file)
              (message (format "Loading file: %s" file)))
-         (message (format "No %s file. So not loading one." file))))   
+         (message (format "No %s file. So not loading one." file))))
    #+END_SRC
 
 * Globals
@@ -345,6 +345,16 @@
 
    #+BEGIN_SRC emacs-lisp
      (setq ediff-window-setup-function 'ediff-setup-windows-plain)
+   #+END_SRC
+   
+** company
+
+   Complete Anything or [[http://company-mode.github.io/][company-mode]] seems to be the way to complete
+   things in emacs now.
+   
+   #+BEGIN_SRC emacs-lisp
+     (maybe-install-and-require 'company)
+     (add-hook 'after-init-hook 'global-company-mode)
    #+END_SRC
    
 * directories, navigation, searching, movement
@@ -1950,26 +1960,6 @@
       (global-color-identifiers-mode t)
     #+END_SRC
 
-*** autocomplete
-
-    Let's setup the basics of autocomplete for everything.
-
-    #+BEGIN_SRC emacs-lisp
-      (require 'auto-complete-config)
-      (ac-config-default)
-    #+END_SRC
-
-**** ac-helm
-
-     As we are using helm everywhere else, we might as well use it for
-     auto-complete. 
-     
-     #+BEGIN_SRC emacs-lisp
-       (maybe-install-and-require 'ac-helm)
-       (global-set-key (kbd "C-;") 'ac-complete-with-helm)
-       (define-key ac-complete-mode-map (kbd "C-;") 'ac-complete-with-helm)
-     #+END_SRC
-     
 *** yasnippet
 
     I had some lovely things in skeleton mode ages ago to write out
@@ -2125,7 +2115,6 @@
         (setq cider-popup-stacktraces t)
       #+END_SRC
 
-
 ***** clojure-test-mode
       
       Adding clojure-test-mode is a good idea too. Lots of things out
@@ -2175,20 +2164,8 @@
 
       Popup autocomplete always looks cool and it helps sometimes too.
 
-      #+BEGIN_SRC emacs-lisp
-        (maybe-install-and-require 'ac-nrepl)
-        (add-hook 'cider-repl-mode-hook 'ac-nrepl-setup)
-        (add-hook 'cider-mode-hook 'ac-nrepl-setup)
-        (eval-after-load "auto-complete"
-          '(add-to-list 'ac-modes 'cider-repl-mode))
-        
-        (defun set-auto-complete-as-completion-at-point-function ()
-          (setq completion-at-point-functions '(auto-complete)))
-        (add-hook 'auto-complete-mode-hook 'set-auto-complete-as-completion-at-point-function)
-        
-        (add-hook 'cider-repl-mode-hook 'set-auto-complete-as-completion-at-point-function)
-        (add-hook 'cider-mode-hook 'set-auto-complete-as-completion-at-point-function)
-      #+END_SRC
+      We used to have ac-nrepl here, but company is the supported
+      thing in cider now and we've loaded that above.
       
 ***** Pop up Documentation
 
