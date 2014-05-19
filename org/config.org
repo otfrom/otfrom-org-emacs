@@ -355,6 +355,7 @@
    #+BEGIN_SRC emacs-lisp
      (maybe-install-and-require 'company)
      (add-hook 'after-init-hook 'global-company-mode)
+     (diminish 'company-mode "CA")
    #+END_SRC
    
 * directories, navigation, searching, movement
@@ -1958,6 +1959,7 @@
     #+BEGIN_SRC emacs-lisp
       (maybe-install-and-require 'color-identifiers-mode)
       (global-color-identifiers-mode t)
+      (diminish 'color-identifiers-mode)
     #+END_SRC
 
 *** yasnippet
@@ -2104,6 +2106,7 @@
 
       #+BEGIN_SRC emacs-lisp
         (maybe-install-and-require 'cider)
+        (diminish 'cider-mode "CDR")
       #+END_SRC
 
 ***** Popup compilation messages
