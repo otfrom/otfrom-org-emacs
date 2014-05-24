@@ -406,7 +406,7 @@
     I like having ffap be a default.
 
     #+BEGIN_SRC emacs-lisp
-      (setq ido-use-filename-at-point 1)    
+      (setq ido-use-filename-at-point 'guess)
     #+END_SRC
 
 ** git
