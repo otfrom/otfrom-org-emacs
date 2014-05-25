@@ -4,8 +4,8 @@
 
 
 ;;;### (autoloads (global-color-identifiers-mode color-identifiers-mode)
-;;;;;;  "color-identifiers-mode" "color-identifiers-mode.el" (21374
-;;;;;;  9354 948569 186000))
+;;;;;;  "color-identifiers-mode" "color-identifiers-mode.el" (21377
+;;;;;;  48249 294921 675000))
 ;;; Generated autoloads from color-identifiers-mode.el
 
 (autoload 'color-identifiers-mode "color-identifiers-mode" "\
@@ -36,8 +36,8 @@ See `color-identifiers-mode' for more information on Color-Identifiers mode.
 
 ;;;***
 
-;;;### (autoloads nil nil ("color-identifiers-mode-pkg.el") (21374
-;;;;;;  9354 958170 645000))
+;;;### (autoloads nil nil ("color-identifiers-mode-pkg.el") (21377
+;;;;;;  48249 306925 78000))
 
 ;;;***
 

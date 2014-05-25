@@ -5,7 +5,7 @@
 ;; Author: Bozhidar Batsov <bozhidar@batsov.com>
 ;; URL: https://github.com/bbatsov/projectile
 ;; Keywords: project, convenience
-;; Version: 20140523.250
+;; Version: 20140523.1405
 ;; X-Original-Version: 0.10.0
 ;; Package-Requires: ((s "1.6.0") (dash "1.5.0") (pkg-info "0.4"))
 
@@ -144,7 +144,7 @@ Otherwise consider the current directory the project root."
   "The sort order used for a project's files."
   :group 'projectile
   :type 'symbol
-  :options '(default recentf access-time modification-time))
+  :options '(default recentf recently-active access-time modification-time))
 
 (defcustom projectile-buffers-filter-function nil
   "A function used to filter the buffers in `projectile-project-buffers'.
@@ -798,6 +798,13 @@ Operates on filenames relative to the project root."
         (funcall projectile-buffers-filter-function all-buffers)
       all-buffers)))
 
+(defun projectile-project-buffer-files ()
+  "Get a list of project buffer files."
+  (let ((project-root (projectile-project-root)))
+    (->> (projectile-buffers-with-file (projectile-project-buffers))
+      (-map (lambda (buffer)
+              (file-relative-name (buffer-file-name buffer) project-root))))))
+
 (defun projectile-project-buffer-p (buffer project-root)
   "Check if BUFFER is under PROJECT-ROOT."
   (with-current-buffer buffer
@@ -811,6 +818,16 @@ Operates on filenames relative to the project root."
     (--any-p (s-matches? (concat "^" it "$")
                          (symbol-name major-mode))
              projectile-globally-ignored-modes)))
+
+(defun projectile-recently-active-files ()
+  "Get list of recently active files.
+
+Files are ordered by recently active buffers, and then recently
+opened through use of recentf."
+  (let ((project-buffer-files (projectile-project-buffer-files)))
+    (append project-buffer-files
+            (-difference (projectile-recentf-files)
+                         project-buffer-files))))
 
 (defun projectile-project-buffer-names ()
   "Get a list of project buffer names."
@@ -1051,6 +1068,7 @@ With a prefix ARG invalidates the cache first."
   (pcase projectile-sort-order
     (`default files)
     (`recentf (projectile-sort-by-recentf-first files))
+    (`recently-active (projectile-sort-by-recently-active-first files))
     (`modification-time (projectile-sort-by-modification-time files))
     (`access-time (projectile-sort-by-access-time files))))
 
@@ -1059,6 +1077,12 @@ With a prefix ARG invalidates the cache first."
   (let ((project-recentf-files (projectile-recentf-files)))
     (append project-recentf-files
             (-difference files project-recentf-files))))
+
+(defun projectile-sort-by-recently-active-first (files)
+  "Sort FILES by most recently active buffers or opened files."
+  (let ((project-recently-active-files (projectile-recently-active-files)))
+    (append project-recently-active-files
+            (-difference files project-recently-active-files))))
 
 (defun projectile-sort-by-modification-time (files)
   "Sort FILES by modification time."

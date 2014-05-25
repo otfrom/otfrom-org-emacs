@@ -5,7 +5,7 @@
 ;; Author: Ankur Dave <ankurdave@gmail.com>
 ;; Url: https://github.com/ankurdave/color-identifiers-mode
 ;; Created: 24 Jan 2014
-;; Version: 20140522.845
+;; Version: 20140523.2358
 ;; X-Original-Version: 1.1
 ;; Keywords: faces, languages
 ;; Package-Requires: ((dash "2.5.0") (emacs "24"))
@@ -99,10 +99,10 @@ or nil.")
 of the default face.")
 
 (defvar color-identifiers:min-color-saturation 0.0
-    "The minimum saturation that identifier colors will be generated with.")
+  "The minimum saturation that identifier colors will be generated with.")
 
 (defvar color-identifiers:max-color-saturation 1.0
-    "The maxumum saturation that identifier colors will be generated with.")
+  "The maximum saturation that identifier colors will be generated with.")
 
 (defvar color-identifiers:mode-to-scan-fn-alist nil
   "Alist from major modes to their declaration scan functions, for internal use.
@@ -170,14 +170,14 @@ For cc-mode support within color-identifiers-mode."
 (add-to-list
  'color-identifiers:modes-alist
  `(js2-mode . ("[^.][[:space:]]*"
-              "\\_<\\([a-zA-Z_$]\\(?:\\s_\\|\\sw\\)*\\)"
-              (nil font-lock-variable-name-face js2-function-param))))
+               "\\_<\\([a-zA-Z_$]\\(?:\\s_\\|\\sw\\)*\\)"
+               (nil font-lock-variable-name-face js2-function-param))))
 
 (add-to-list
  'color-identifiers:modes-alist
  `(js3-mode . ("[^.][[:space:]]*"
-              "\\_<\\([a-zA-Z_$]\\(?:\\s_\\|\\sw\\)*\\)"
-              (nil font-lock-variable-name-face js3-function-param-face))))
+               "\\_<\\([a-zA-Z_$]\\(?:\\s_\\|\\sw\\)*\\)"
+               (nil font-lock-variable-name-face js3-function-param-face))))
 
 ;; CoffeeScript
 ;; May need to add the @ to the symbol syntax
@@ -188,16 +188,23 @@ For cc-mode support within color-identifiers-mode."
 
 ;; Sgml mode and the like
 (dolist (maj-mode '(sgml-mode html-mode jinja2-mode))
-(add-to-list
- 'color-identifiers:modes-alist
- `(,maj-mode . ("</?!?"
-              "\\_</?!?\\([a-zA-Z_$]\\(?:\\s_\\|\\sw\\)*\\)"
-              (nil font-lock-function-name-face)))))
+  (add-to-list
+   'color-identifiers:modes-alist
+   `(,maj-mode . ("</?!?"
+                  "\\_</?!?\\([a-zA-Z_$]\\(?:\\s_\\|\\sw\\)*\\)"
+                  (nil font-lock-function-name-face)))))
 
 ;; Ruby
 (add-to-list
  'color-identifiers:modes-alist
  `(ruby-mode . ("[^.][[:space:]]*" "\\_<\\([a-zA-Z_$]\\(?:\\s_\\|\\sw\\)*\\)" (nil))))
+
+;; Groovy
+(add-to-list
+ 'color-identifiers:modes-alist
+ `(groovy-mode . ("[^.][[:space:]]*"
+                  "\\_<\\([a-zA-Z_$]\\(?:\\s_\\|\\sw\\)*\\)"
+                  (nil font-lock-variable-name-face))))
 
 ;; Objective-C
 (add-to-list
@@ -450,7 +457,7 @@ incompatible with Emacs Lisp syntax, such as reader macros (#)."
 Colors are output to `color-identifiers:colors'."
   (interactive)
   (let* ((luminance (or color-identifiers:color-luminance
-                       (max 0.35 (min 0.8 (color-identifiers:attribute-luminance :foreground)))))
+                        (max 0.35 (min 0.8 (color-identifiers:attribute-luminance :foreground)))))
          (min-saturation (float color-identifiers:min-color-saturation))
          (saturation-range (- (float color-identifiers:max-color-saturation) min-saturation))
          (bgcolor (color-identifiers:attribute-lab :background))
@@ -502,7 +509,7 @@ The index refers to `color-identifiers:colors'.")
   "Find the HSL luminance of the specified ATTRIBUTE on the default face."
   (let ((rgb (color-name-to-rgb (face-attribute 'default attribute))))
     (if rgb
-	(nth 2 (apply 'color-rgb-to-hsl rgb))
+        (nth 2 (apply 'color-rgb-to-hsl rgb))
       0.5)))
 
 (defun color-identifiers:attribute-lab (attribute)

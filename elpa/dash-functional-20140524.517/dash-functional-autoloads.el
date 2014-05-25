@@ -4,7 +4,7 @@
 
 
 ;;;### (autoloads nil nil ("dash-functional-pkg.el" "dash-functional.el")
-;;;;;;  (21240 47435 28817 927000))
+;;;;;;  (21377 48247 571142 858000))
 
 ;;;***
 
