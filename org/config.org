@@ -2379,6 +2379,17 @@
       (emms-mode-line 0)
     #+END_SRC
     
+*** A bit of white noise
+
+    Sometimes I just need a thunderstorm to keep out the noise. I
+    find them restful.
+
+    #+BEGIN_SRC emacs-lisp
+      (defun make-it-rain ()
+        (interactive)
+        (emms-play-file (concat user-emacs-directory "resources/16480__martin-lightning__severe-thunderstorm.mp3")))
+    #+END_SRC
+    
 * Notification Systems
   
 ** The great eye of Sauron
