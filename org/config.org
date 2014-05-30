@@ -2118,15 +2118,6 @@
         (setq cider-popup-stacktraces t)
       #+END_SRC
 
-***** clojure-test-mode
-      
-      Adding clojure-test-mode is a good idea too. Lots of things out
-      there using the built in clojure.test.
-
-      #+BEGIN_SRC emacs-lisp
-        (maybe-install-and-require 'clojure-test-mode)     
-      #+END_SRC
-
 ***** clojure-mode-hook
       
       We'll also want to get our lisp-hooks into our clojurey

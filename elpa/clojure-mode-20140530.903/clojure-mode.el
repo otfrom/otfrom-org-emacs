@@ -8,7 +8,7 @@
 ;;       Phil Hagelberg <technomancy@gmail.com>
 ;;       Bozhidar Batsov <bozhidar@batsov.com>
 ;; URL: http://github.com/clojure-emacs/clojure-mode
-;; Version: 20140514.810
+;; Version: 20140530.903
 ;; X-Original-Version: 2.1.1
 ;; Keywords: languages, lisp
 
@@ -115,13 +115,6 @@
                 "\\(\\sw+\\)?")
        (1 font-lock-keyword-face)
        (2 font-lock-function-name-face nil t))
-      ;; Deprecated functions
-      (,(concat
-         "(\\(?:clojure.core/\\)?"
-         (regexp-opt
-          '("add-watcher" "remove-watcher" "add-classpath") t)
-         "\\>")
-       1 font-lock-warning-face)
       ;; Control structures
       (,(concat
          "(\\(?:clojure.core/\\)?"
@@ -334,13 +327,15 @@
       ;; .foo .barBaz .qux01 .-flibble .-flibbleWobble
       ("\\<\\.-?[a-z][a-zA-Z0-9]*\\>" 0 font-lock-preprocessor-face)
       ;; Foo Bar$Baz Qux_ World_OpenUDP
-      ("\\<[A-Z][a-zA-Z0-9_]*[a-zA-Z0-9/$_]+\\>" 0 font-lock-preprocessor-face)
-      ;; Foo/Bar foo.bar.Baz foo.Bar/baz
-      ("\\<[a-zA-Z]+\\.[a-zA-Z0-9._]*[A-Z]+[a-zA-Z0-9/.$]*\\>" 0 font-lock-preprocessor-face)
+      ("\\<\\.?[A-Z][a-zA-Z0-9_]*[a-zA-Z0-9$_]+\\>" 0 font-lock-type-face)
+      ;; foo.bar.baz
+      ("\\<[a-z][a-z0-9_-]+\\.\\([a-z][a-z0-9_-]+\\.?\\)+" 0 font-lock-type-face)
+      ;; foo/ Foo/
+      ("\\<\\([a-zA-Z][a-z0-9_-]+\\)/" 1 font-lock-type-face)
       ;; fooBar
-      ("[a-z]*[A-Z]+[a-z][a-zA-Z0-9$]*\\>" 0 font-lock-preprocessor-face)
+      ("[a-z]+[A-Z]+[a-z][a-zA-Z0-9$]*\\>" 0 font-lock-preprocessor-face)
       ;; Foo. BarBaz. Qux$Quux. Corge9.
-      ("\\<[A-Z][a-zA-Z0-9$]*\\.\\>" 0 font-lock-type-face)
+      ("\\<\\.[A-Z][a-zA-Z0-9$]*\\.\\>" 0 font-lock-type-face)
       ;; Highlight grouping constructs in regular expressions
       (clojure-mode-font-lock-regexp-groups
        (1 'font-lock-regexp-grouping-construct prepend))))
@@ -534,18 +529,7 @@ ENDP and DELIMITER."
 (define-derived-mode clojure-mode clojure-parent-mode "Clojure"
   "Major mode for editing Clojure code.
 
-Commands:
-Delete converts tabs to spaces as it moves back.
-Blank lines separate paragraphs.
-Semicolons start comments.
-
-\\{clojure-mode-map}
-
-Note that `run-lisp' may be used either to start an inferior Lisp
-job or to switch back to an existing one.
-
-Entry to this mode calls the value of `clojure-mode-hook' if that
-value is non-nil."
+\\{clojure-mode-map}"
   (setq-local imenu-create-index-function
               (lambda ()
                 (imenu--generic-function '((nil clojure-match-next-def 0)))))
@@ -575,7 +559,7 @@ value is non-nil."
                              'clojure-no-space-after-tag)))))
 
 (defsubst clojure-in-docstring-p ()
-  "Is point in a docstring?"
+  "Check whether point is in a docstring."
   (eq (get-text-property (1- (point-at-eol)) 'face)
       'font-lock-doc-face))
 
