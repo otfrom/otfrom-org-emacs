@@ -2161,15 +2161,6 @@
       We used to have ac-nrepl here, but company is the supported
       thing in cider now and we've loaded that above.
       
-***** Pop up Documentation
-
-      Now that we have popups, let's make the docs go in a popup
-      rather than another window.
-
-      #+BEGIN_SRC emacs-lisp
-        (define-key cider-mode-map (kbd "C-c C-d") 'ac-nrepl-popup-doc)
-      #+END_SRC
- 
 **** Alignment Changes
 
      There are very few bits of alignment that I would *ever* do
