@@ -2022,13 +2022,14 @@
     modes.
 
     #+BEGIN_SRC emacs-lisp
-            (setq lisp-hooks (lambda ()
-                               (eldoc-mode +1)
-                               (diminish 'eldoc-mode)
-                               (define-key paredit-mode-map
-                                 (kbd "{") 'paredit-open-curly)
-                               (define-key paredit-mode-map
-                                 (kbd "}") 'paredit-close-curly)))
+      (setq lisp-hooks (lambda ()
+                         (eldoc-mode +1)
+                         (diminish 'eldoc-mode)
+                         (define-key paredit-mode-map
+                           (kbd "{") 'paredit-open-curly)
+                         (define-key paredit-mode-map
+                           (kbd "}") 'paredit-close-curly)
+                         (local-set-key (kbd "C-;") 'comment-dwim)))
     #+END_SRC
 
 *** emacs-lisp
