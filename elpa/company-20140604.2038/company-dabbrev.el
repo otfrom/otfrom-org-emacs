@@ -1,6 +1,6 @@
-;;; company-dabbrev.el --- dabbrev-like company-mode completion back-end
+;;; company-dabbrev.el --- dabbrev-like company-mode completion back-end  -*- lexical-binding: t -*-
 
-;; Copyright (C) 2009, 2011  Free Software Foundation, Inc.
+;; Copyright (C) 2009, 2011, 2014  Free Software Foundation, Inc.
 
 ;; Author: Nikolaj Schumacher
 
@@ -64,7 +64,8 @@ If you set this value to nil, you may also want to set
 `company-dabbrev-ignore-case' to any value other than `keep-prefix'.")
 
 (defcustom company-dabbrev-minimum-length (1+ company-minimum-prefix-length)
-  "The minimum length for the string to be included.")
+  "The minimum length for the string to be included."
+  :type 'integer)
 
 (defmacro company-dabrev--time-limit-while (test start limit &rest body)
   (declare (indent 3) (debug t))
@@ -108,19 +109,19 @@ If you set this value to nil, you may also want to set
             (push match symbols))))
       symbols)))
 
-(defun company-dabbrev--search (regexp &optional limit other-buffers
+(defun company-dabbrev--search (regexp &optional limit other-buffer-modes
                                 ignore-comments)
   (let* ((start (current-time))
          (symbols (company-dabbrev--search-buffer regexp (point) nil start limit
                                                   ignore-comments)))
-    (when other-buffers
+    (when other-buffer-modes
       (cl-dolist (buffer (delq (current-buffer) (buffer-list)))
-        (and (or (eq other-buffers 'all)
-                 (eq (buffer-local-value 'major-mode buffer) major-mode))
-             (with-current-buffer buffer
-               (setq symbols
-                     (company-dabbrev--search-buffer regexp nil symbols start
-                                                     limit ignore-comments))))
+        (with-current-buffer buffer
+          (when (or (eq other-buffer-modes 'all)
+                    (apply #'derived-mode-p other-buffer-modes))
+            (setq symbols
+                  (company-dabbrev--search-buffer regexp nil symbols start
+                                                  limit ignore-comments))))
         (and limit
              (> (float-time (time-since start)) limit)
              (cl-return))))
@@ -135,8 +136,10 @@ If you set this value to nil, you may also want to set
     (prefix (company-grab-word))
     (candidates
      (let ((words (company-dabbrev--search (company-dabbrev--make-regexp arg)
-                                         company-dabbrev-time-limit
-                                         company-dabbrev-other-buffers))
+                                           company-dabbrev-time-limit
+                                           (pcase company-dabbrev-other-buffers
+                                             (`t (list major-mode))
+                                             (`all `all))))
            (downcase-p (if (eq company-dabbrev-downcase 'case-replace)
                            case-replace
                          company-dabbrev-downcase)))

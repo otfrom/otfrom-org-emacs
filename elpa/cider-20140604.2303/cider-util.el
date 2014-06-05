@@ -34,7 +34,7 @@
 
 ;;; Compatibility
 (eval-and-compile
-  ;; `setq-local' for Emacs 24.2 and below
+  ;; `defvar-local' for Emacs 24.2 and below
   (unless (fboundp 'defvar-local)
     (defmacro defvar-local (var val &optional docstring)
       "Define VAR as a buffer-local variable with default value VAL.
@@ -68,11 +68,15 @@ buffer-local wherever it is set."
   (with-temp-buffer
     (insert string)
     (funcall mode)
+    ;; prevent whitespace mode from obscuring the output
+    (whitespace-mode -1)
     (font-lock-fontify-buffer)
     (buffer-string)))
 
 (defun cider-font-lock-region-as (mode beg end &optional buffer)
-  "Use MODE to font-lock text between BEG and END."
+  "Use MODE to font-lock text between BEG and END.
+
+Unless you specify a BUFFER it will default to the current one."
   (with-current-buffer (or buffer (current-buffer))
     (let ((text (buffer-substring beg end)))
       (delete-region beg end)

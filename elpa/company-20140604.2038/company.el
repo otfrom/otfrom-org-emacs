@@ -5,7 +5,7 @@
 ;; Author: Nikolaj Schumacher
 ;; Maintainer: Dmitry Gutov <dgutov@yandex.ru>
 ;; URL: http://company-mode.github.io/
-;; Version: 0.8.0
+;; Version: 0.8.1-cvs
 ;; Keywords: abbrev, convenience, matching
 ;; Package-Requires: ((emacs "24.1") (cl-lib "0.5"))
 
@@ -80,6 +80,19 @@
 (add-to-list 'debug-ignored-errors "^No candidate number ")
 (add-to-list 'debug-ignored-errors "^Cannot complete at point$")
 (add-to-list 'debug-ignored-errors "^No other back-end$")
+
+;;; Compatibility
+(eval-and-compile
+  ;; `defvar-local' for Emacs 24.2 and below
+  (unless (fboundp 'defvar-local)
+    (defmacro defvar-local (var val &optional docstring)
+      "Define VAR as a buffer-local variable with default value VAL.
+Like `defvar' but additionally marks the variable as being automatically
+buffer-local wherever it is set."
+      (declare (debug defvar) (doc-string 3))
+      `(progn
+         (defvar ,var ,val ,docstring)
+         (make-variable-buffer-local ',var)))))
 
 (defgroup company nil
   "Extensible inline text completion mechanism"
@@ -236,7 +249,7 @@ The visualized data is stored in `company-prefix', `company-candidates',
                          (function :tag "custom function" nil))))
 
 (defcustom company-tooltip-limit 10
-  "The maximum number of candidates in the tooltip"
+  "The maximum number of candidates in the tooltip."
   :type 'integer)
 
 (defcustom company-tooltip-minimum 6
@@ -247,7 +260,8 @@ If this many lines are not available, prefer to display the tooltip above."
 (defcustom company-tooltip-minimum-width 0
   "The minimum width of the tooltip's inner area.
 This doesn't include the margins and the scroll bar."
-  :type 'integer)
+  :type 'integer
+  :package-version '(company . "0.8.0"))
 
 (defcustom company-tooltip-margin 1
   "Width of margin columns to show around the toolip."
@@ -262,11 +276,13 @@ This doesn't include the margins and the scroll bar."
 
 (defcustom company-tooltip-align-annotations nil
   "When non-nil, align annotations to the right tooltip border."
-  :type 'boolean)
+  :type 'boolean
+  :package-version '(company . "0.7.1"))
 
 (defcustom company-tooltip-flip-when-above nil
   "Whether to flip the tooltip when it's above the current line."
-  :type 'boolean)
+  :type 'boolean
+  :package-version '(company . "0.8.1"))
 
 (defvar company-safe-backends
   '((company-abbrev . "Abbrev")
@@ -466,7 +482,8 @@ back-end, consider using the `post-completion' command instead."
   "If enabled, cancel a manually started completion when the prefix gets
 shorter than both `company-minimum-prefix-length' and the length of the
 prefix it was started from."
-  :type 'boolean)
+  :type 'boolean
+  :package-version '(company . "0.8.0"))
 
 (defcustom company-require-match 'company-explicit-action-p
   "If enabled, disallow non-matching input.
@@ -598,6 +615,7 @@ asynchronous call into synchronous.")
     (define-key keymap [tab] 'company-complete-common)
     (define-key keymap (kbd "TAB") 'company-complete-common)
     (define-key keymap (kbd "<f1>") 'company-show-doc-buffer)
+    (define-key keymap (kbd "C-h") 'company-show-doc-buffer)
     (define-key keymap "\C-w" 'company-show-location)
     (define-key keymap "\C-s" 'company-search-candidates)
     (define-key keymap "\C-\M-s" 'company-filter-candidates)
@@ -638,8 +656,7 @@ asynchronous call into synchronous.")
 
 (defvar company-default-lighter " company")
 
-(defvar company-lighter company-default-lighter)
-(make-variable-buffer-local 'company-lighter)
+(defvar-local company-lighter company-default-lighter)
 
 ;;;###autoload
 (define-minor-mode company-mode
@@ -713,8 +730,7 @@ means that `company-mode' is always turned on except in `message-mode' buffers."
 
 ;;; keymaps ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar company-my-keymap nil)
-(make-variable-buffer-local 'company-my-keymap)
+(defvar-local company-my-keymap nil)
 
 (defvar company-emulation-alist '((t . nil)))
 
@@ -768,8 +784,7 @@ means that `company-mode' is always turned on except in `message-mode' buffers."
 
 ;;; backends ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar company-backend nil)
-(make-variable-buffer-local 'company-backend)
+(defvar-local company-backend nil)
 
 (defun company-grab (regexp &optional expression limit)
   (when (looking-back regexp limit)
@@ -918,51 +933,38 @@ means that `company-mode' is always turned on except in `message-mode' buffers."
 
 ;;; completion mechanism ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar company-prefix nil)
-(make-variable-buffer-local 'company-prefix)
+(defvar-local company-prefix nil)
 
-(defvar company-candidates nil)
-(make-variable-buffer-local 'company-candidates)
+(defvar-local company-candidates nil)
 
-(defvar company-candidates-length nil)
-(make-variable-buffer-local 'company-candidates-length)
+(defvar-local company-candidates-length nil)
 
-(defvar company-candidates-cache nil)
-(make-variable-buffer-local 'company-candidates-cache)
+(defvar-local company-candidates-cache nil)
 
-(defvar company-candidates-predicate nil)
-(make-variable-buffer-local 'company-candidates-predicate)
+(defvar-local company-candidates-predicate nil)
 
-(defvar company-common nil)
-(make-variable-buffer-local 'company-common)
+(defvar-local company-common nil)
 
-(defvar company-selection 0)
-(make-variable-buffer-local 'company-selection)
+(defvar-local company-selection 0)
 
-(defvar company-selection-changed nil)
-(make-variable-buffer-local 'company-selection-changed)
+(defvar-local company-selection-changed nil)
 
-(defvar company--manual-action nil
+(defvar-local company--manual-action nil
   "Non-nil, if manual completion took place.")
-(make-variable-buffer-local 'company--manual-action)
 
-(defvar company--manual-prefix nil)
-(make-variable-buffer-local 'company--manual-prefix)
+(defvar-local company--manual-prefix nil)
 
 (defvar company--auto-completion nil
   "Non-nil when current candidate is being inserted automatically.
 Controlled by `company-auto-complete'.")
 
-(defvar company--point-max nil)
-(make-variable-buffer-local 'company--point-max)
+(defvar-local company--point-max nil)
 
-(defvar company-point nil)
-(make-variable-buffer-local 'company-point)
+(defvar-local company-point nil)
 
 (defvar company-timer nil)
 
-(defvar company-added-newline nil)
-(make-variable-buffer-local 'company-added-newline)
+(defvar-local company-added-newline nil)
 
 (defsubst company-strip-prefix (str)
   (substring str (length company-prefix)))
@@ -1489,17 +1491,13 @@ Keywords and function definition names are ignored."
 
 ;;; search ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar company-search-string nil)
-(make-variable-buffer-local 'company-search-string)
+(defvar-local company-search-string nil)
 
-(defvar company-search-lighter " Search: \"\"")
-(make-variable-buffer-local 'company-search-lighter)
+(defvar-local company-search-lighter " Search: \"\"")
 
-(defvar company-search-old-map nil)
-(make-variable-buffer-local 'company-search-old-map)
+(defvar-local company-search-old-map nil)
 
-(defvar company-search-old-selection 0)
-(make-variable-buffer-local 'company-search-old-selection)
+(defvar-local company-search-old-selection 0)
 
 (defun company-search (text lines)
   (let ((quoted (regexp-quote text))
@@ -1515,9 +1513,9 @@ Keywords and function definition names are ignored."
   (setq company-search-string
         (concat (or company-search-string "") (string last-command-event))
         company-search-lighter (concat " Search: \"" company-search-string
-                                        "\""))
+                                       "\""))
   (let ((pos (company-search company-search-string
-                              (nthcdr company-selection company-candidates))))
+                             (nthcdr company-selection company-candidates))))
     (if (null pos)
         (ding)
       (company-set-selection (+ company-selection pos) t))))
@@ -1527,8 +1525,8 @@ Keywords and function definition names are ignored."
   (interactive)
   (company-search-assert-enabled)
   (let ((pos (company-search company-search-string
-                              (cdr (nthcdr company-selection
-                                           company-candidates)))))
+                             (cdr (nthcdr company-selection
+                                          company-candidates)))))
     (if (null pos)
         (ding)
       (company-set-selection (+ company-selection pos 1) t))))
@@ -1538,9 +1536,9 @@ Keywords and function definition names are ignored."
   (interactive)
   (company-search-assert-enabled)
   (let ((pos (company-search company-search-string
-                              (nthcdr (- company-candidates-length
-                                         company-selection)
-                                      (reverse company-candidates)))))
+                             (nthcdr (- company-candidates-length
+                                        company-selection)
+                                     (reverse company-candidates)))))
     (if (null pos)
         (ding)
       (company-set-selection (- company-selection pos 1) t))))
@@ -1840,8 +1838,7 @@ To show the number next to the candidates in some back-ends, enable
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar company-last-metadata nil)
-(make-variable-buffer-local 'company-last-metadata)
+(defvar-local company-last-metadata nil)
 
 (defun company-fetch-metadata ()
   (let ((selected (nth company-selection company-candidates)))
@@ -1916,8 +1913,7 @@ To show the number next to the candidates in some back-ends, enable
 
 ;;; package functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar company-callback nil)
-(make-variable-buffer-local 'company-callback)
+(defvar-local company-callback nil)
 
 (defun company-remove-callback (&optional ignored)
   (remove-hook 'company-completion-finished-hook company-callback t)
@@ -1955,13 +1951,13 @@ Example: \(company-begin-with '\(\"foo\" \"foobar\" \"foobarbaz\"\)\)"
     (company-begin-backend
      (lambda (command &optional arg &rest ignored)
        (pcase command
-        (`prefix
-         (when (equal (point) (marker-position begin-marker))
-           (buffer-substring (- (point) (or prefix-length 0)) (point))))
-        (`candidates
-         (all-completions arg candidates))
-        (`require-match
-         require-match)))
+         (`prefix
+          (when (equal (point) (marker-position begin-marker))
+            (buffer-substring (- (point) (or prefix-length 0)) (point))))
+         (`candidates
+          (all-completions arg candidates))
+         (`require-match
+          require-match)))
      callback)))
 
 (defun company-version (&optional show-version)
@@ -1978,11 +1974,9 @@ If SHOW-VERSION is non-nil, show the version in the echo area."
 
 ;;; pseudo-tooltip ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar company-pseudo-tooltip-overlay nil)
-(make-variable-buffer-local 'company-pseudo-tooltip-overlay)
+(defvar-local company-pseudo-tooltip-overlay nil)
 
-(defvar company-tooltip-offset 0)
-(make-variable-buffer-local 'company-tooltip-offset)
+(defvar-local company-tooltip-offset 0)
 
 (defun company-tooltip--lines-update-offset (selection num-lines limit)
   (cl-decf limit 2)
@@ -2275,7 +2269,7 @@ If SHOW-VERSION is non-nil, show the version in the echo area."
   (propertize (concat (company-space-string company-tooltip-margin)
                       (company-safe-substring text 0 width)
                       (company-space-string company-tooltip-margin))
-   'face 'company-tooltip))
+              'face 'company-tooltip))
 
 ;; show
 
@@ -2413,8 +2407,7 @@ Returns a negative number if the tooltip should be displayed above point."
 
 ;;; overlay ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar company-preview-overlay nil)
-(make-variable-buffer-local 'company-preview-overlay)
+(defvar-local company-preview-overlay nil)
 
 (defun company-preview-show-at-point (pos)
   (company-preview-hide)
@@ -2471,8 +2464,7 @@ Returns a negative number if the tooltip should be displayed above point."
 
 ;;; echo ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar company-echo-last-msg nil)
-(make-variable-buffer-local 'company-echo-last-msg)
+(defvar-local company-echo-last-msg nil)
 
 (defvar company-echo-timer nil)
 

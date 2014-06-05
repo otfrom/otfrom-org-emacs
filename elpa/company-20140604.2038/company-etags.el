@@ -42,13 +42,13 @@ buffer automatically."
 
 (defcustom company-etags-ignore-case nil
   "Non-nil to ignore case in completion candidates."
-  :type 'boolean)
+  :type 'boolean
+  :package-version '(company . "0.7.3"))
 
 (defvar company-etags-modes '(prog-mode c-mode objc-mode c++-mode java-mode
                               jde-mode pascal-mode perl-mode python-mode))
 
-(defvar company-etags-buffer-table 'unknown)
-(make-variable-buffer-local 'company-etags-buffer-table)
+(defvar-local company-etags-buffer-table 'unknown)
 
 (defun company-etags-find-table ()
   (let ((file (locate-dominating-file (or buffer-file-name

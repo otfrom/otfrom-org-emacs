@@ -8,7 +8,7 @@
 ;;       Phil Hagelberg <technomancy@gmail.com>
 ;;       Bozhidar Batsov <bozhidar@batsov.com>
 ;; URL: http://github.com/clojure-emacs/clojure-mode
-;; Version: 20140530.903
+;; Version: 20140605.604
 ;; X-Original-Version: 2.1.1
 ;; Keywords: languages, lisp
 
@@ -104,7 +104,7 @@
                 "\\(t\\sw+\\)?" )
        (1 font-lock-keyword-face)
        (2 font-lock-function-name-face nil t))
-
+      ;; TODO: Merge this with the definitions sections
       (,(concat "(\\(\\(?:[a-z\.-]+/\\)?def\[a-z\-\]*-?\\)"
                 ;; Function declarations
                 "\\>"
@@ -115,7 +115,12 @@
                 "\\(\\sw+\\)?")
        (1 font-lock-keyword-face)
        (2 font-lock-function-name-face nil t))
-      ;; Control structures
+      ;; (ns namespace)
+      (,(concat "(\\(?:clojure.core/\\)?ns[ \t]+"
+                ;; namespace
+                "\\(\\sw+\\)" )
+       (1 font-lock-type-face nil t))
+      ;; Special forms & control structures
       (,(concat
          "(\\(?:clojure.core/\\)?"
          (regexp-opt
@@ -131,9 +136,15 @@
             "try" "catch" "finally" "throw"
             "with-open" "with-local-vars" "binding"
             "gen-class" "gen-and-load-class" "gen-and-save-class"
-            "handler-case" "handle") t)
+            "handler-case" "handle" "var") t)
          "\\>")
        1 font-lock-keyword-face)
+      ;; Global constants - nil, true, false
+      (,(concat
+         (regexp-opt
+          '("true" "false" "nil") t)
+         "\\>")
+       0 font-lock-constant-face)
       ;; Built-ins
       (,(concat
          "(\\(?:clojure.core/\\)?"
@@ -331,7 +342,7 @@
       ;; foo.bar.baz
       ("\\<[a-z][a-z0-9_-]+\\.\\([a-z][a-z0-9_-]+\\.?\\)+" 0 font-lock-type-face)
       ;; foo/ Foo/
-      ("\\<\\([a-zA-Z][a-z0-9_-]+\\)/" 1 font-lock-type-face)
+      ("\\<\\([a-zA-Z][a-z0-9_-]*\\)/" 1 font-lock-type-face)
       ;; fooBar
       ("[a-z]+[A-Z]+[a-z][a-zA-Z0-9$]*\\>" 0 font-lock-preprocessor-face)
       ;; Foo. BarBaz. Qux$Quux. Corge9.
@@ -1071,7 +1082,7 @@ nil."
         (let ((beg (match-beginning 2)))
           (when beg
             (if regex
-                (and (char-equal ?# (char-before beg)) (1- beg))
+                (and (char-before beg) (char-equal ?# (char-before beg)) (1- beg))
               (when (not (char-equal ?# (char-before beg)))
                 beg))))))))
 
