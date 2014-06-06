@@ -22,6 +22,14 @@
 
 * Globals
 
+** Which browser
+
+   Things in browse-url land seem a bit flaky atm. 
+   
+   #+BEGIN_SRC emacs-lisp
+     (setq browse-url-browser-function 'browse-url-firefox)
+   #+END_SRC
+   
 ** Hippie Expand
 
    I have a soft spot for hippie-expand. There might be better ways to
