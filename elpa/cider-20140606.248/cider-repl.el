@@ -205,16 +205,20 @@ positions before and after executing BODY."
 
 (defun cider-repl--banner ()
   "Generate the welcome REPL buffer banner."
-  (format "; CIDER %s (Java %s, Clojure %s, nREPL %s)"
+  (format "; CIDER %s (Java %s, Clojure %s, nREPL %s, cider-nrepl %s)"
           (cider--version)
           (cider--java-version)
           (cider--clojure-version)
-          (cider--nrepl-version)))
+          (cider--nrepl-version)
+          (cider--nrepl-middleware-version)))
 
 (defun cider-repl--insert-banner-and-prompt (ns)
   "Insert REPL banner and REPL prompt, taking into account NS."
   (when (zerop (buffer-size))
     (insert (propertize (cider-repl--banner) 'face 'font-lock-comment-face)))
+  (let ((middleware-version (cider--nrepl-middleware-version)))
+    (unless (equal cider-version middleware-version)
+      (insert (propertize (format "WARNING: CIDER's version (%s) does not match cider-nrepl's version (%s)" cider-version middleware-version) 'face 'font-lock-warning-face))))
   (goto-char (point-max))
   (cider-repl--mark-output-start)
   (cider-repl--mark-input-start)

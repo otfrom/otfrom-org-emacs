@@ -2162,6 +2162,16 @@
       We used to have ac-nrepl here, but company is the supported
       thing in cider now and we've loaded that above.
       
+***** compojure indentation rules
+
+      A number of things in compojure don't really indent
+      correctly. There are some instructions for fixing that [[https://github.com/weavejester/compojure/wiki/Emacs-indentation][here]].
+      
+      #+BEGIN_SRC emacs-lisp
+        (define-clojure-indent
+          (defroutes 'defun))
+      #+END_SRC
+      
 **** Alignment Changes
 
      There are very few bits of alignment that I would *ever* do

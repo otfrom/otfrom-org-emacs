@@ -119,11 +119,28 @@ which will use the default REPL connection."
   "Face used to highlight compilation warnings in Clojure buffers."
   :group 'cider)
 
+(defvar cider-required-nrepl-ops
+  '("classpath" "complete" "info"
+    "inspect-start" "inspect-refresh"
+    "inspect-pop" "inspect-push" "inspect-reset"
+    "stacktrace" "toggle-trace")
+  "A list of nREPL ops required by CIDER to function properly.
+
+All of them are provided by CIDER's nREPL middleware(cider-nrepl).")
+
 (defun cider-ensure-op-supported (op)
   "Check for support of middleware op OP.
 Signal an error if it is not supported."
   (unless (nrepl-op-supported-p op)
     (error "Can't find nREPL middleware providing op %s.  Please, install cider-nrepl and restart CIDER" op)))
+
+(defun cider-verify-required-nrepl-ops ()
+  "Check whether all required nREPL ops are present."
+  (let ((missing-ops (-remove 'nrepl-op-supported-p cider-required-nrepl-ops)))
+    (when missing-ops
+      (cider-repl-emit-interactive-output
+       (format "WARNING: The following required nREPL ops are not supported: \n%s\nPlease, install cider-nrepl and restart CIDER"
+               (mapconcat 'identity missing-ops " "))))))
 
 ;;; Connection info
 (defun cider--java-version ()
@@ -137,6 +154,10 @@ Signal an error if it is not supported."
 (defun cider--nrepl-version ()
   "Retrieve the underlying connection's nREPL version."
   (cider-eval-and-get-value "(:version-string clojure.tools.nrepl/version)"))
+
+(defun cider--nrepl-middleware-version ()
+  "Retrieve the underlying connection's CIDER nREPL version."
+  (cider-eval-and-get-value "(require 'cider.nrepl) (:version-string cider.nrepl/version)"))
 
 (defun cider--connection-info (connection-buffer)
   "Return info about CONNECTION-BUFFER.
