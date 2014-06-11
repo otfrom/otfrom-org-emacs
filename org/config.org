@@ -468,6 +468,26 @@
       (diminish 'magit-auto-revert-mode)
     #+END_SRC
     
+*** git-messenger
+
+    Get the commit information for the current line. A bit like a mini
+    git blame.
+
+    #+BEGIN_SRC emacs-lisp
+      (maybe-install-and-require 'git-messenger)
+    #+END_SRC
+
+*** github-browse-file
+
+    When working with others I often want to point out a line I'm
+    looking at in a file we already have in github. I'd like to be
+    able to get the link rather than doing some sort of
+    paste/gist/refheap.
+
+    #+BEGIN_SRC emacs-lisp
+      (maybe-install-and-require 'github-browse-file)
+    #+END_SRC
+    
 ** ace-jump-mode
 
    Move quickly anywhere in the buffer in 3 keystrokes. We can move
