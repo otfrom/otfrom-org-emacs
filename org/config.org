@@ -2200,6 +2200,20 @@
           (defroutes 'defun))
       #+END_SRC
       
+***** component
+
+      I keep typing (go) when I should be typing (reset). Maybe a
+      hotkey will keep me out of trouble.
+      
+      #+BEGIN_SRC emacs-lisp
+        (defun cider-system-reset ()
+          (interactive)
+          (cider-interactive-eval
+           "(user/reset)"))
+
+        (define-key clojure-mode-map (kbd "s-r") 'cider-system-reset)
+      #+END_SRC
+
 **** Alignment Changes
 
      There are very few bits of alignment that I would *ever* do
