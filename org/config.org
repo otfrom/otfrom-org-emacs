@@ -2231,6 +2231,16 @@
         (setq cider-repl-use-pretty-printing t)
       #+END_SRC
 
+***** A few repl tweaks
+
+      I want paredit, rainbow delimiters and clojure-mode highlighting
+      in my
+
+      #+BEGIN_SRC emacs-lisp
+        (setq cider-repl-use-clojure-font-lock t)
+        (add-hook 'cider-repl-mode-hook 'paredit-mode)
+        (add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode)
+      #+END_SRC
       
 **** Alignment Changes
 
