@@ -2214,6 +2214,16 @@
         (define-key clojure-mode-map (kbd "s-r") 'cider-system-reset)
       #+END_SRC
 
+***** Don't destroy that repl buffer
+
+      It can be very frustrating to be poking away at clojure data
+      structures in the repl and then accidentally print a big, or
+      worse and infinite sequence. This should stop that.
+      
+      #+BEGIN_SRC emacs-lisp
+        (setq cider-repl-print-length 100)
+      #+END_SRC
+      
 **** Alignment Changes
 
      There are very few bits of alignment that I would *ever* do
