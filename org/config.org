@@ -2234,7 +2234,7 @@
 ***** A few repl tweaks
 
       I want paredit, rainbow delimiters and clojure-mode highlighting
-      in my
+      in my repl buffer.
 
       #+BEGIN_SRC emacs-lisp
         (setq cider-repl-use-clojure-font-lock t)
