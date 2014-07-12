@@ -2104,16 +2104,6 @@ Returns nil if element is not found in the list."
            ,@body)
        (modify-syntax-entry ?_ ,old-syntax js2-mode-syntax-table)))))
 
-(defsubst js2-char-uppercase-p (c)
-  "Return t if C is an uppercase character.
-Handles unicode and latin chars properly."
-  (/= c (downcase c)))
-
-(defsubst js2-char-lowercase-p (c)
-  "Return t if C is an uppercase character.
-Handles unicode and latin chars properly."
-  (/= c (upcase c)))
-
 ;;; AST struct and function definitions
 
 ;; flags for ast node property 'member-type (used for e4x operators)
@@ -2980,7 +2970,7 @@ The `params' field is a Lisp list of nodes.  Each node is either a simple
   rp               ; position of arg-list close-paren, or nil if omitted
   ignore-dynamic   ; ignore value of the dynamic-scope flag (interpreter only)
   needs-activation ; t if we need an activation object for this frame
-  generator-type   ; STAR, LEGACY or nil
+  generator-type   ; STAR, LEGACY, COMPREHENSION or nil
   member-expr)     ; nonstandard Ecma extension from Rhino
 
 (put 'cl-struct-js2-function-node 'js2-visitor 'js2-visit-function-node)
@@ -3674,75 +3664,88 @@ as opposed to required parens such as those enclosing an if-conditional."
   (js2-print-ast (js2-paren-node-expr n) 0)
   (insert ")"))
 
-(defstruct (js2-array-comp-node
+(defstruct (js2-comp-node
             (:include js2-scope)
             (:constructor nil)
-            (:constructor make-js2-array-comp-node (&key (type js2-ARRAYCOMP)
-                                                         (pos js2-ts-cursor)
-                                                         len result
-                                                         loops filter
-                                                         if-pos lp rp)))
+            (:constructor make-js2-comp-node (&key (type js2-ARRAYCOMP)
+                                                   (pos js2-ts-cursor)
+                                                   len result
+                                                   loops filters
+                                                   form)))
   "AST node for an Array comprehension such as [[x,y] for (x in foo) for (y in bar)]."
   result  ; result expression (just after left-bracket)
-  loops   ; a Lisp list of `js2-array-comp-loop-node'
-  filter  ; guard/filter expression
-  if-pos  ; buffer pos of 'if' keyword, if present, else nil
-  lp      ; buffer position of if-guard left-paren, or nil if not present
-  rp)     ; buffer position of if-guard right-paren, or nil if not present
+  loops   ; a Lisp list of `js2-comp-loop-node'
+  filters ; a Lisp list of guard/filter expressions
+  form    ; ARRAY, LEGACY_ARRAY or STAR_GENERATOR
+          ; SpiderMonkey also supports "legacy generator expressions", but we dont.
+  )
 
-(put 'cl-struct-js2-array-comp-node 'js2-visitor 'js2-visit-array-comp-node)
-(put 'cl-struct-js2-array-comp-node 'js2-printer 'js2-print-array-comp-node)
+(put 'cl-struct-js2-comp-node 'js2-visitor 'js2-visit-comp-node)
+(put 'cl-struct-js2-comp-node 'js2-printer 'js2-print-comp-node)
 
-(defun js2-visit-array-comp-node (n v)
-  (js2-visit-ast (js2-array-comp-node-result n) v)
-  (dolist (l (js2-array-comp-node-loops n))
+(defun js2-visit-comp-node (n v)
+  (js2-visit-ast (js2-comp-node-result n) v)
+  (dolist (l (js2-comp-node-loops n))
     (js2-visit-ast l v))
-  (js2-visit-ast (js2-array-comp-node-filter n) v))
+  (dolist (f (js2-comp-node-filters n))
+    (js2-visit-ast f v)))
 
-(defun js2-print-array-comp-node (n i)
+(defun js2-print-comp-node (n i)
   (let ((pad (js2-make-pad i))
-        (result (js2-array-comp-node-result n))
-        (loops (js2-array-comp-node-loops n))
-        (filter (js2-array-comp-node-filter n)))
-    (insert pad "[")
-    (js2-print-ast result 0)
+        (result (js2-comp-node-result n))
+        (loops (js2-comp-node-loops n))
+        (filters (js2-comp-node-filters n))
+        (legacy-p (eq (js2-comp-node-form n) 'LEGACY_ARRAY))
+        (gen-p (eq (js2-comp-node-form n) 'STAR_GENERATOR)))
+    (insert pad (if gen-p "(" "["))
+    (when legacy-p
+      (js2-print-ast result 0))
     (dolist (l loops)
-      (insert " ")
-      (js2-print-ast l 0))
-    (when filter
-      (insert " if (")
-      (js2-print-ast filter 0)
-      (insert ")"))
-    (insert "]")))
+      (when legacy-p
+        (insert " "))
+      (js2-print-ast l 0)
+      (unless legacy-p
+        (insert " ")))
+    (dolist (f filters)
+      (when legacy-p
+        (insert " "))
+      (insert "if (")
+      (js2-print-ast f 0)
+      (insert ")")
+      (unless legacy-p
+        (insert " ")))
+    (unless legacy-p
+      (js2-print-ast result 0))
+    (insert (if gen-p ")" "]"))))
 
-(defstruct (js2-array-comp-loop-node
+(defstruct (js2-comp-loop-node
             (:include js2-for-in-node)
             (:constructor nil)
-            (:constructor make-js2-array-comp-loop-node (&key (type js2-FOR)
-                                                              (pos js2-ts-cursor)
-                                                              len iterator
-                                                              object in-pos
-                                                              foreach-p
-                                                              each-pos
-                                                              forof-p
-                                                              lp rp)))
+            (:constructor make-js2-comp-loop-node (&key (type js2-FOR)
+                                                        (pos js2-ts-cursor)
+                                                        len iterator
+                                                        object in-pos
+                                                        foreach-p
+                                                        each-pos
+                                                        forof-p
+                                                        lp rp)))
   "AST subtree for each 'for (foo in bar)' loop in an array comprehension.")
 
-(put 'cl-struct-js2-array-comp-loop-node 'js2-visitor 'js2-visit-array-comp-loop)
-(put 'cl-struct-js2-array-comp-loop-node 'js2-printer 'js2-print-array-comp-loop)
+(put 'cl-struct-js2-comp-loop-node 'js2-visitor 'js2-visit-comp-loop)
+(put 'cl-struct-js2-comp-loop-node 'js2-printer 'js2-print-comp-loop)
 
-(defun js2-visit-array-comp-loop (n v)
-  (js2-visit-ast (js2-array-comp-loop-node-iterator n) v)
-  (js2-visit-ast (js2-array-comp-loop-node-object n) v))
+(defun js2-visit-comp-loop (n v)
+  (js2-visit-ast (js2-comp-loop-node-iterator n) v)
+  (js2-visit-ast (js2-comp-loop-node-object n) v))
 
-(defun js2-print-array-comp-loop (n _i)
+(defun js2-print-comp-loop (n _i)
   (insert "for ")
-  (when (js2-array-comp-loop-node-foreach-p n) (insert "each "))
+  (when (js2-comp-loop-node-foreach-p n) (insert "each "))
   (insert "(")
-  (js2-print-ast (js2-array-comp-loop-node-iterator n) 0)
-  (insert (if (js2-array-comp-loop-node-forof-p n)
+  (js2-print-ast (js2-comp-loop-node-iterator n) 0)
+  (insert (if (js2-comp-loop-node-forof-p n)
               " of " " in "))
-  (js2-print-ast (js2-array-comp-loop-node-object n) 0)
+  (js2-print-ast (js2-comp-loop-node-object n) 0)
   (insert ")"))
 
 (defstruct (js2-empty-expr-node
@@ -4210,8 +4213,8 @@ Returns nil for zero-length child lists or unsupported nodes."
 
 ;; All because Common Lisp doesn't support multiple inheritance for defstructs.
 (defconst js2-paren-expr-nodes
-  '(cl-struct-js2-array-comp-loop-node
-    cl-struct-js2-array-comp-node
+  '(cl-struct-js2-comp-loop-node
+    cl-struct-js2-comp-node
     cl-struct-js2-call-node
     cl-struct-js2-catch-node
     cl-struct-js2-do-node
@@ -4263,8 +4266,8 @@ Note that the position may be nil in the case of a parse error."
     (js2-catch-node-lp node))
    ((js2-let-node-p node)
     (js2-let-node-lp node))
-   ((js2-array-comp-node-p node)
-    (js2-array-comp-node-lp node))
+   ((js2-comp-node-p node)
+    0)
    ((js2-with-node-p node)
     (js2-with-node-lp node))
    ((js2-xml-dot-query-node-p node)
@@ -4298,8 +4301,8 @@ Note that the position may be nil in the case of a parse error."
     (js2-catch-node-rp node))
    ((js2-let-node-p node)
     (js2-let-node-rp node))
-   ((js2-array-comp-node-p node)
-    (js2-array-comp-node-rp node))
+   ((js2-comp-node-p node)
+    (1- (js2-node-len node)))
    ((js2-with-node-p node)
     (js2-with-node-rp node))
    ((js2-xml-dot-query-node-p node)
@@ -5158,20 +5161,29 @@ Returns nil and consumes nothing if TEST is not the next character."
       (js2-get-char)
     (js2-unget-char)))
 
-(defun js2-java-identifier-start-p (c)
+(defun js2-identifier-start-p (c)
+  "Is C a valid start to an ES5 Identifier
+   http://es5.github.io/#x7.6"
   (or
    (memq c '(?$ ?_))
-   (js2-char-uppercase-p c)
-   (js2-char-lowercase-p c)))
+   (memq (get-char-code-property c 'general-category)
+         ;; Letters
+         '(Lu Ll Lt Lm Lo Nl))))
 
-(defun js2-java-identifier-part-p (c)
-  "Implementation of java.lang.Character.isJavaIdentifierPart()."
-  ;; TODO:  make me Unicode-friendly.  See comments above.
+(defun js2-identifier-part-p (c)
+  "Is C a valid part of an ES5 Identifier
+   http://es5.github.io/#x7.6"
   (or
-   (memq c '(?$ ?_))
-   (js2-char-uppercase-p c)
-   (js2-char-lowercase-p c)
-   (and (>= c ?0) (<= c ?9))))
+   (memq c '(?$ ?_ ?\u200c  ?\u200d))
+   (memq (get-char-code-property c 'general-category)
+         '(;; Letters
+           Lu Ll Lt Lm Lo Nl
+           ;; Combining Marks
+           Mn Mc
+           ;; Digits
+           Nd
+           ;; Connector Punctuation
+           Pc))))
 
 (defun js2-alpha-p (c)
   (cond ((and (<= ?A c) (<= c ?Z)) t)
@@ -5461,7 +5473,7 @@ its relevant fields and puts it into `js2-ti-tokens'."
             (js2-unget-char)
             (setq c ?\\)))
          (t
-          (when (setq identifier-start (js2-java-identifier-start-p c))
+          (when (setq identifier-start (js2-identifier-start-p c))
             (setq js2-ts-string-buffer nil)
             (js2-add-to-string c))))
         (when identifier-start
@@ -5497,7 +5509,7 @@ its relevant fields and puts it into `js2-ti-tokens'."
                     (js2-report-scan-error "msg.illegal.character" t)))
                  (t
                   (if (or (eq c js2-EOF_CHAR)
-                          (not (js2-java-identifier-part-p c)))
+                          (not (js2-identifier-part-p c)))
                       (throw 'break nil))
                   (js2-add-to-string c))))))
           (js2-unget-char)
@@ -8119,18 +8131,19 @@ but not BEFORE."
        (= (logand after mask) mask)))
 
 (defun js2-parse-return-or-yield (tt expr-context)
-  (let ((pos (js2-current-token-beg))
-        (end (js2-current-token-end))
-        (before js2-end-flags)
-        (inside-function (js2-inside-function))
-        e ret name yield-star-p)
+  (let* ((pos (js2-current-token-beg))
+         (end (js2-current-token-end))
+         (before js2-end-flags)
+         (inside-function (js2-inside-function))
+         (gen-type (and inside-function (js2-function-node-generator-type
+                                         js2-current-script-or-fn)))
+         e ret name yield-star-p)
     (unless inside-function
       (js2-report-error (if (eq tt js2-RETURN)
                             "msg.bad.return"
                           "msg.bad.yield")))
     (when (and inside-function
-               (eq (js2-function-node-generator-type js2-current-script-or-fn)
-                   'STAR)
+               (eq gen-type 'STAR)
                (js2-match-token js2-MUL))
       (setq yield-star-p t))
     ;; This is ugly, but we don't want to require a semicolon.
@@ -8158,6 +8171,10 @@ but not BEFORE."
                (js2-now-all-set before js2-end-flags
                                 (logior js2-end-returns js2-end-returns-value)))
           (js2-add-strict-warning "msg.return.inconsistent" nil pos end)))
+     ((eq gen-type 'COMPREHENSION)
+      ;; FIXME: We should probably switch to saving and using lastYieldOffset,
+      ;; like SpiderMonkey does.
+      (js2-report-error "msg.syntax" nil pos 5))
      (t
       (setq ret (make-js2-yield-node :pos pos
                                      :len (- end pos)
@@ -8474,6 +8491,20 @@ If NODE is non-nil, it is the AST node associated with the symbol."
           (js2-report-warning "msg.dup.parms" name))
       (js2-define-new-symbol decl-type name node))
      (t (js2-code-bug)))))
+
+(defun js2-parse-paren-expr-or-generator-comp ()
+  (let ((px-pos (js2-current-token-beg)))
+    (if (and (>= js2-language-version 200)
+             (js2-match-token js2-FOR))
+        (js2-parse-generator-comp px-pos)
+      (let* ((expr (js2-parse-expr))
+             (pn (make-js2-paren-node :pos px-pos
+                                      :expr expr
+                                      :len (- (js2-current-token-end)
+                                              px-pos))))
+        (js2-node-add-children pn (js2-paren-node-expr pn))
+        (js2-must-match js2-RP "msg.no.paren")
+        pn))))
 
 (defun js2-parse-expr (&optional oneshot)
   (let* ((pn (js2-parse-assign-expr))
@@ -9145,20 +9176,13 @@ array-literals, array comprehensions and regular expressions."
      ((= tt js2-FUNCTION)
       (js2-parse-function-expr))
      ((= tt js2-LB)
-      (js2-parse-array-literal))
+      (js2-parse-array-comp-or-literal))
      ((= tt js2-LC)
       (js2-parse-object-literal))
      ((= tt js2-LET)
       (js2-parse-let (js2-current-token-beg)))
      ((= tt js2-LP)
-      (setq px-pos (js2-current-token-beg)
-            expr (js2-parse-expr))
-      (js2-must-match js2-RP "msg.no.paren")
-      (setq pn (make-js2-paren-node :pos px-pos
-                                    :expr expr
-                                    :len (- (js2-current-token-end) px-pos)))
-      (js2-node-add-children pn (js2-paren-node-expr pn))
-      pn)
+      (js2-parse-paren-expr-or-generator-comp))
      ((= tt js2-XMLATTR)
       (js2-must-have-xml)
       (js2-parse-attribute-access))
@@ -9246,13 +9270,19 @@ array-literals, array comprehensions and regular expressions."
           (point)))
    comma-pos))
 
-(defun js2-parse-array-literal ()
-  (let ((pos (js2-current-token-beg))
-        (after-lb-or-comma t)
+(defun js2-parse-array-comp-or-literal ()
+  (let ((pos (js2-current-token-beg)))
+    (if (and (>= js2-language-version 200)
+             (js2-match-token js2-FOR))
+        (js2-parse-array-comp pos)
+      (js2-parse-array-literal pos))))
+
+(defun js2-parse-array-literal (pos)
+  (let ((after-lb-or-comma t)
         after-comma tt elems pn
         (continue t))
     (unless js2-is-in-destructuring
-        (js2-push-scope (make-js2-scope))) ; for array comp
+      (js2-push-scope (make-js2-scope))) ; for the legacy array comp
     (while continue
       (setq tt (js2-get-token))
       (cond
@@ -9296,7 +9326,7 @@ array-literals, array comprehensions and regular expressions."
              (not (cdr elems)))      ; but no 2nd element
         (js2-unget-token)
         (setf continue nil
-              pn (js2-parse-array-comprehension (car elems) pos)))
+              pn (js2-parse-legacy-array-comp (car elems) pos)))
        ;; another element
        (t
         (unless after-lb-or-comma
@@ -9314,97 +9344,133 @@ array-literals, array comprehensions and regular expressions."
       (js2-pop-scope))
     pn))
 
-(defun js2-parse-array-comprehension (expr pos)
-  "Parse a JavaScript 1.7 Array Comprehension.
+(defun js2-parse-legacy-array-comp (expr pos)
+  "Parse a legacy array comprehension (JavaScript 1.7).
 EXPR is the first expression after the opening left-bracket.
 POS is the beginning of the LB token preceding EXPR.
 We should have just parsed the 'for' keyword before calling this function."
-  (let (loops loop first filter if-pos result)
-    (while (= (js2-get-token) js2-FOR)
-      (let ((prev (car loops))) ; rearrange scope chain
-        (push (setq loop (js2-parse-array-comp-loop)) loops)
-        (if prev ; each loop is parent scope to the next one
-            (setf (js2-scope-parent-scope loop) prev)
-          ; first loop takes expr scope's parent
-          (setf (js2-scope-parent-scope (setq first loop))
-                (js2-scope-parent-scope js2-current-scope)))))
-    (js2-unget-token)
-    ;; set expr scope's parent to the last loop
-    (setf (js2-scope-parent-scope js2-current-scope) (car loops))
-    (if (/= (js2-get-token) js2-IF)
-        (js2-unget-token)
-      (setq if-pos (- (js2-current-token-beg) pos)  ; relative
-            filter (js2-parse-condition)))
-    (js2-must-match js2-RB "msg.no.bracket.arg" pos)
-    (setq result (make-js2-array-comp-node :pos pos
-                                           :len (- js2-ts-cursor pos)
-                                           :result expr
-                                           :loops (nreverse loops)
-                                           :filter (car filter)
-                                           :lp (js2-relpos (second filter) pos)
-                                           :rp (js2-relpos (third filter) pos)
-                                           :if-pos if-pos))
-    (apply #'js2-node-add-children result expr (car filter)
-           (js2-array-comp-node-loops result))
-    (setq js2-current-scope first) ; pop to the first loop
-    result))
-
-(defun js2-parse-array-comp-loop ()
-  "Parse a 'for [each] (foo [in|of] bar)' expression in an Array comprehension.
-Last token peeked should be the initial FOR."
-  (let ((pos (js2-current-token-beg))
-        (pn (make-js2-array-comp-loop-node))
-        tt iter obj foreach-p forof-p in-pos each-pos lp rp)
-    (assert (= (js2-current-token-type) js2-FOR))
-    (js2-push-scope pn)
+  (let ((current-scope js2-current-scope)
+        loops first filter result)
     (unwind-protect
         (progn
-          (when (js2-match-token js2-NAME)
-            (if (string= (js2-current-token-string) "each")
-                (progn
-                  (setq foreach-p t
-                        each-pos (- (js2-current-token-beg) pos)) ; relative
-                  (js2-record-face 'font-lock-keyword-face))
-              (js2-report-error "msg.no.paren.for")))
-          (if (js2-must-match js2-LP "msg.no.paren.for")
-              (setq lp (- (js2-current-token-beg) pos)))
-          (setq tt (js2-peek-token))
-          (cond
-           ((or (= tt js2-LB)
-                (= tt js2-LC))
-            (js2-get-token)
-            (setq iter (js2-parse-destruct-primary-expr))
-            (js2-define-destruct-symbols iter js2-LET
-                                         'font-lock-variable-name-face t))
-           ((js2-match-token js2-NAME)
-            (setq iter (js2-create-name-node)))
-           (t
-            (js2-report-error "msg.bad.var")))
-          ;; Define as a let since we want the scope of the variable to
-          ;; be restricted to the array comprehension
-          (if (js2-name-node-p iter)
-              (js2-define-symbol js2-LET (js2-name-node-name iter) pn t))
-          (if (or (js2-match-token js2-IN)
-                  (and (>= js2-language-version 200)
-                       (js2-match-contextual-kwd "of")
-                       (setq forof-p t)))
-              (setq in-pos (- (js2-current-token-beg) pos))
-            (js2-report-error "msg.in.after.for.name"))
-          (setq obj (js2-parse-expr))
-          (if (js2-must-match js2-RP "msg.no.paren.for.ctrl")
-              (setq rp (- (js2-current-token-beg) pos)))
-          (setf (js2-node-pos pn) pos
-                (js2-node-len pn) (- js2-ts-cursor pos)
-                (js2-array-comp-loop-node-iterator pn) iter
-                (js2-array-comp-loop-node-object pn) obj
-                (js2-array-comp-loop-node-in-pos pn) in-pos
-                (js2-array-comp-loop-node-each-pos pn) each-pos
-                (js2-array-comp-loop-node-foreach-p pn) foreach-p
-                (js2-array-comp-loop-node-forof-p pn) forof-p
-                (js2-array-comp-loop-node-lp pn) lp
-                (js2-array-comp-loop-node-rp pn) rp)
-          (js2-node-add-children pn iter obj))
-      (js2-pop-scope))
+          (while (js2-match-token js2-FOR)
+            (let ((loop (make-js2-comp-loop-node)))
+              (js2-push-scope loop)
+              (push loop loops)
+              (js2-parse-comp-loop loop)))
+          ;; First loop takes expr scope's parent.
+          (setf (js2-scope-parent-scope (setq first (car (last loops))))
+                (js2-scope-parent-scope current-scope))
+          ;; Set expr scope's parent to the last loop.
+          (setf (js2-scope-parent-scope current-scope) (car loops))
+          (if (/= (js2-get-token) js2-IF)
+              (js2-unget-token)
+            (setq filter (js2-parse-condition))))
+      (dotimes (_ (1- (length loops)))
+        (js2-pop-scope)))
+    (js2-must-match js2-RB "msg.no.bracket.arg" pos)
+    (setq result (make-js2-comp-node :pos pos
+                                     :len (- js2-ts-cursor pos)
+                                     :result expr
+                                     :loops (nreverse loops)
+                                     :filters (and filter (list (car filter)))
+                                     :form 'LEGACY_ARRAY))
+    (apply #'js2-node-add-children result expr (car filter)
+           (js2-comp-node-loops result))
+    result))
+
+(defun js2-parse-array-comp (pos)
+  "Parse an ES6 array comprehension.
+POS is the beginning of the LB token.
+We should have just parsed the 'for' keyword before calling this function."
+  (let ((pn (js2-parse-comprehension pos 'ARRAY)))
+    (js2-must-match js2-RB "msg.no.bracket.arg" pos)
+    pn))
+
+(defun js2-parse-generator-comp (pos)
+  (let* ((js2-nesting-of-function (1+ js2-nesting-of-function))
+         (js2-current-script-or-fn
+          (make-js2-function-node :generator-type 'COMPREHENSION))
+         (pn (js2-parse-comprehension pos 'STAR_GENERATOR)))
+    (js2-must-match js2-RP "msg.no.paren" pos)
+    pn))
+
+(defun js2-parse-comprehension (pos form)
+  (let (loops filters expr result)
+    (unwind-protect
+        (progn
+          (js2-unget-token)
+          (while (js2-match-token js2-FOR)
+            (let ((loop (make-js2-comp-loop-node)))
+              (js2-push-scope loop)
+              (push loop loops)
+              (js2-parse-comp-loop loop)))
+          (while (js2-match-token js2-IF)
+            (push (car (js2-parse-condition)) filters))
+          (setq expr (js2-parse-assign-expr)))
+      (dolist (_ loops)
+        (js2-pop-scope)))
+    (setq result (make-js2-comp-node :pos pos
+                                     :len (- js2-ts-cursor pos)
+                                     :result expr
+                                     :loops (nreverse loops)
+                                     :filters (nreverse filters)
+                                     :form form))
+    (apply #'js2-node-add-children result (js2-comp-node-loops result))
+    (apply #'js2-node-add-children result expr (js2-comp-node-filters result))
+    result))
+
+(defun js2-parse-comp-loop (pn &optional only-of-p)
+  "Parse a 'for [each] (foo [in|of] bar)' expression in an Array comprehension.
+The current token should be the initial FOR.
+If ONLY-OF-P is non-nil, only the 'for (foo of bar)' form is allowed."
+  (let ((pos (js2-comp-loop-node-pos pn))
+        tt iter obj foreach-p forof-p in-pos each-pos lp rp)
+    (when (and (not only-of-p) (js2-match-token js2-NAME))
+      (if (string= (js2-current-token-string) "each")
+          (progn
+            (setq foreach-p t
+                  each-pos (- (js2-current-token-beg) pos)) ; relative
+            (js2-record-face 'font-lock-keyword-face))
+        (js2-report-error "msg.no.paren.for")))
+    (if (js2-must-match js2-LP "msg.no.paren.for")
+        (setq lp (- (js2-current-token-beg) pos)))
+    (setq tt (js2-peek-token))
+    (cond
+     ((or (= tt js2-LB)
+          (= tt js2-LC))
+      (js2-get-token)
+      (setq iter (js2-parse-destruct-primary-expr))
+      (js2-define-destruct-symbols iter js2-LET
+                                   'font-lock-variable-name-face t))
+     ((js2-match-token js2-NAME)
+      (setq iter (js2-create-name-node)))
+     (t
+      (js2-report-error "msg.bad.var")))
+    ;; Define as a let since we want the scope of the variable to
+    ;; be restricted to the array comprehension
+    (if (js2-name-node-p iter)
+        (js2-define-symbol js2-LET (js2-name-node-name iter) pn t))
+    (if (or (and (not only-of-p) (js2-match-token js2-IN))
+            (and (>= js2-language-version 200)
+                 (js2-match-contextual-kwd "of")
+                 (setq forof-p t)))
+        (setq in-pos (- (js2-current-token-beg) pos))
+      (js2-report-error "msg.in.after.for.name"))
+    (setq obj (js2-parse-expr))
+    (if (js2-must-match js2-RP "msg.no.paren.for.ctrl")
+        (setq rp (- (js2-current-token-beg) pos)))
+    (setf (js2-node-pos pn) pos
+          (js2-node-len pn) (- js2-ts-cursor pos)
+          (js2-comp-loop-node-iterator pn) iter
+          (js2-comp-loop-node-object pn) obj
+          (js2-comp-loop-node-in-pos pn) in-pos
+          (js2-comp-loop-node-each-pos pn) each-pos
+          (js2-comp-loop-node-foreach-p pn) foreach-p
+          (js2-comp-loop-node-forof-p pn) forof-p
+          (js2-comp-loop-node-lp pn) lp
+          (js2-comp-loop-node-rp pn) rp)
+    (js2-node-add-children pn iter obj)
     pn))
 
 (defun js2-parse-object-literal ()
@@ -11154,7 +11220,7 @@ move backward across N balanced expressions."
   (cond
    ((or (js2-array-node-p node)
         (js2-object-node-p node)
-        (js2-array-comp-node-p node)
+        (js2-comp-node-p node)
         (memq (aref node 0) '(cl-struct-js2-block-node cl-struct-js2-scope)))
     (cons abs-pos (+ abs-pos (js2-node-len node) -1)))
    ((js2-paren-expr-node-p node)
