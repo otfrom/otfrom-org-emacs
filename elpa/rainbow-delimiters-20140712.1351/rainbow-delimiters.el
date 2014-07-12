@@ -4,7 +4,7 @@
 ;; Author: Jeremy Rayman <opensource@jeremyrayman.com>
 ;; Maintainer: Jeremy Rayman <opensource@jeremyrayman.com>
 ;; Created: 2010-09-02
-;; Version: 20140708.1501
+;; Version: 20140712.1351
 ;; X-Original-Version: 1.3.7
 ;; Keywords: faces, convenience, lisp, matching, tools, rainbow, rainbow parentheses, rainbow parens
 ;; EmacsWiki: http://www.emacswiki.org/emacs/RainbowDelimiters
@@ -169,7 +169,7 @@ When depth exceeds innermost defined face, colors cycle back through."
   :group 'rainbow-delimiters
   :link '(custom-group-link "rainbow-delimiters")
   :link '(custom-group-link :tag "Toggle Delimiters" "rainbow-delimiters-toggle-delimiter-highlighting")
-  :prefix 'rainbow-delimiters-faces-)
+  :prefix "rainbow-delimiters-")
 
 ;; Choose which delimiters you want to highlight in your preferred language:
 
@@ -215,6 +215,12 @@ Nil disables brace highlighting."
   '((((background light)) (:foreground "#88090B"))
     (((background dark)) (:foreground "#88090B")))
   "Face to highlight unmatched closing delimiters in."
+  :group 'rainbow-delimiters-faces)
+
+;; Mismatched delimiter face:
+(defface rainbow-delimiters-mismatched-face
+  '((t :inherit rainbow-delimiters-unmatched-face))
+  "Face to highlight mismatched closing delimiters in."
   :group 'rainbow-delimiters-faces)
 
 ;; Faces for highlighting delimiters by nested level:
@@ -281,10 +287,12 @@ Nil disables brace highlighting."
 
 Determines depth at which to cycle through faces again.")
 
-(defvar rainbow-delimiters-outermost-only-face-count 0
+(defcustom rainbow-delimiters-outermost-only-face-count 0
   "Number of faces to be used only for N outermost delimiter levels.
 
-This should be smaller than `rainbow-delimiters-max-face-count'.")
+This should be smaller than `rainbow-delimiters-max-face-count'."
+  :type 'integer
+  :group 'rainbow-delimiters-faces)
 
 ;;; Face utility functions
 
@@ -445,18 +453,23 @@ not really affect the buffer's content."
              (unless ,modified
                (restore-buffer-modified-p nil))))))))
 
-(defsubst rainbow-delimiters-propertize-delimiter (loc depth)
+(defsubst rainbow-delimiters-propertize-delimiter (loc depth match)
   "Highlight a single delimiter at LOC according to DEPTH.
 
 LOC is the location of the character to add text properties to.
 DEPTH is the nested depth at LOC, which determines the face to use.
+MATCH is nil iff it's a mismatched closing delimiter.
 
 Sets text properties:
 `font-lock-face' to the appropriate delimiter face.
 `rear-nonsticky' to prevent color from bleeding into subsequent characters typed by the user."
-  (let ((delim-face (if (<= depth 0)
-                        'rainbow-delimiters-unmatched-face
-                      (rainbow-delimiters-depth-face depth))))
+  (let ((delim-face (cond
+                     ((<= depth 0)
+                      'rainbow-delimiters-unmatched-face)
+                     ((not match)
+                      'rainbow-delimiters-mismatched-face)
+                     (t
+                      (rainbow-delimiters-depth-face depth)))))
     ;; (when (eq depth -1) (message "Unmatched delimiter at char %s." loc))
     (add-text-properties loc (1+ loc)
                          `(font-lock-face ,delim-face
@@ -493,33 +506,35 @@ Sets text properties:
   "Non-nil iff the character at LOC is escaped as per some generic Lisp rules."
   (eq (char-before loc) ?\\))
 
-(defsubst rainbow-delimiters-char-ineligible-p (loc)
+(defsubst rainbow-delimiters-char-ineligible-p (loc ppss)
   "Return t if char at LOC should be skipped, e.g. if inside a comment.
+PPSS should be the `parse-partial-sexp' state at LOC.
 
 Returns t if char at loc meets one of the following conditions:
 - Inside a string.
 - Inside a comment.
 - Is an escaped char, e.g. ?\)"
-  (let ((parse-state (rainbow-delimiters-syntax-ppss loc)))
-    (or
-     (nth 3 parse-state)                ; inside string?
-     (nth 4 parse-state)                ; inside comment?
-     (and rainbow-delimiters-escaped-char-predicate
-          (funcall rainbow-delimiters-escaped-char-predicate loc)))))
+  (or
+   (nth 3 ppss)                ; inside string?
+   (nth 4 ppss)                ; inside comment?
+   (and rainbow-delimiters-escaped-char-predicate
+        (funcall rainbow-delimiters-escaped-char-predicate loc))))
 
 
-(defsubst rainbow-delimiters-apply-color (delim depth loc)
+(defsubst rainbow-delimiters-apply-color (delim depth loc match)
   "Apply color for DEPTH to DELIM at LOC following user settings.
 
 DELIM is a string specifying delimiter type.
 DEPTH is the delimiter depth, or corresponding face # if colors are repeating.
-LOC is location of character (delimiter) to be colorized."
+LOC is location of character (delimiter) to be colorized.
+MATCH is nil iff it's a mismatched closing delimiter."
   (and
    ;; Ensure user has enabled highlighting of this delimiter type.
    (symbol-value (intern-soft
                   (concat "rainbow-delimiters-highlight-" delim "s-p")))
    (rainbow-delimiters-propertize-delimiter loc
-                                            depth)))
+                                            depth
+                                            match)))
 
 
 ;;; JIT-Lock functionality
@@ -527,6 +542,21 @@ LOC is location of character (delimiter) to be colorized."
 ;; Used to skip delimiter-by-delimiter `rainbow-delimiters-propertize-region'.
 (defconst rainbow-delimiters-delim-regex "\\(\(\\|\)\\|\\[\\|\\]\\|\{\\|\}\\)"
   "Regex matching all opening and closing delimiters the mode highlights.")
+
+(defconst rainbow-delimiters-opening-delim-info
+  '((?\( . "paren") (?\{ . "brace") (?\[ . "bracket"))
+  "Open delimiter information: list of (DELIMITER . TYPE).
+
+DELIMITER is the opening delimiter.
+TYPE is the delimiter type string for `rainbow-delimiters-apply-color'.")
+
+(defconst rainbow-delimiters-closing-delim-info
+  '((?\) ?\( . "paren") (?\} ?\{ . "brace") (?\] ?\[ . "bracket"))
+  "Closing delimiter information: list of (DELIMITER OPENING . TYPE).
+
+DELIMITER is the closing delimiter.
+OPENING is the corresponding opening delimiter.
+TYPE is the delimiter type string for `rainbow-delimiters-apply-color'.")
 
 ;; main function called by jit-lock:
 (defsubst rainbow-delimiters-propertize-region (start end)
@@ -538,47 +568,49 @@ Used by jit-lock for dynamic highlighting."
   (save-excursion
     (with-syntax-table rainbow-delimiters-syntax-table
       (with-silent-modifications
-        (goto-char start)
-        ;; START can be anywhere in buffer; determine the nesting depth at START loc
-        (let ((depth (rainbow-delimiters-depth start)))
-          (while (and (< (point) end)
-                      (re-search-forward rainbow-delimiters-delim-regex end t))
-            (backward-char) ; re-search-forward places point after delim; go back.
-            (unless (rainbow-delimiters-char-ineligible-p (point))
-              (let ((delim (char-after (point))))
-                (cond ((eq ?\( delim)       ; (
-                       (setq depth (1+ depth))
-                       (rainbow-delimiters-apply-color "paren" depth (point)))
-                      ((eq ?\) delim)       ; )
-                       (rainbow-delimiters-apply-color "paren" depth (point))
-                       (setq depth (or (and (<= depth 0) 0) ; unmatched paren
-                                       (1- depth))))
-                      ((eq ?\[ delim)       ; [
-                       (setq depth (1+ depth))
-                       (rainbow-delimiters-apply-color "bracket" depth (point)))
-                      ((eq ?\] delim)       ; ]
-                       (rainbow-delimiters-apply-color "bracket" depth (point))
-                       (setq depth (or (and (<= depth 0) 0) ; unmatched bracket
-                                       (1- depth))))
-                      ((eq ?\{ delim)       ; {
-                       (setq depth (1+ depth))
-                       (rainbow-delimiters-apply-color "brace" depth (point)))
-                      ((eq ?\} delim)       ; }
-                       (rainbow-delimiters-apply-color "brace" depth (point))
-                       (setq depth (or (and (<= depth 0) 0) ; unmatched brace
-                                       (1- depth)))))))
-            ;; move past delimiter so re-search-forward doesn't pick it up again
-            (forward-char)))))))
+        (let ((inhibit-point-motion-hooks t))
+          (goto-char start)
+          ;; START can be anywhere in buffer; determine the nesting depth at START loc
+          (let ((depth (rainbow-delimiters-depth start)))
+            (while (and (< (point) end)
+                        (re-search-forward rainbow-delimiters-delim-regex end t))
+              (backward-char) ; re-search-forward places point after delim; go back.
+              (let ((ppss (rainbow-delimiters-syntax-ppss (point))))
+                (unless (rainbow-delimiters-char-ineligible-p (point) ppss)
+                  (let* ((delim (char-after (point)))
+                         (opening-delim-info
+                          (assq delim rainbow-delimiters-opening-delim-info)))
+                    (if opening-delim-info
+                        (progn
+                          (setq depth (1+ depth))
+                          (rainbow-delimiters-apply-color (cdr opening-delim-info)
+                                                          depth
+                                                          (point)
+                                                          t))
+                      ;; Not an opening delimiters, so it's a closing delimiter.
+                      (let ((closing-delim-info
+                             (assq delim rainbow-delimiters-closing-delim-info))
+                            (matching-opening-delim (char-after (nth 1 ppss))))
+                        (rainbow-delimiters-apply-color (nthcdr 2 closing-delim-info)
+                                                        depth
+                                                        (point)
+                                                        (= (nth 1 closing-delim-info)
+                                                           matching-opening-delim))
+                        (setq depth (or (and (<= depth 0) 0) ; unmatched delim
+                                        (1- depth))))))))
+              ;; move past delimiter so re-search-forward doesn't pick it up again
+              (forward-char))))))))
 
 (defun rainbow-delimiters-unpropertize-region (start end)
   "Remove highlighting from delimiters between START and END."
   (save-excursion
     (with-silent-modifications
-      (goto-char start)
-      (while (and (< (point) end)
-                  (re-search-forward rainbow-delimiters-delim-regex end t))
-        ;; re-search-forward places point 1 further than the delim matched:
-        (rainbow-delimiters-unpropertize-delimiter (1- (point)))))))
+      (let ((inhibit-point-motion-hooks t))
+        (goto-char start)
+        (while (and (< (point) end)
+                    (re-search-forward rainbow-delimiters-delim-regex end t))
+          ;; re-search-forward places point 1 further than the delim matched:
+          (rainbow-delimiters-unpropertize-delimiter (1- (point))))))))
 
 
 ;;; Minor mode:

@@ -3,7 +3,7 @@
 ;; Copyright (C) 2012 Magnar Sveen
 
 ;; Author: Magnar Sveen <magnars@gmail.com>
-;; Version: 20140620.1657
+;; Version: 20140711.1532
 ;; X-Original-Version: 1.9.0
 ;; Keywords: strings
 
@@ -54,6 +54,32 @@ If OMIT-NULLS is non-nil, zero-length substrings are omitted.
 
 This is a simple wrapper around the built-in `split-string'."
   (split-string s separator omit-nulls))
+
+(defun s-split-up-to (separator s n &optional omit-nulls)
+  "Split S up to N times into substrings bounded by matches for regexp SEPARATOR.
+
+If OMIT-NULLS is non-nil, zero-length substrings are omitted.
+
+See also `s-split'."
+  (save-match-data
+    (let ((op 0)
+          (r nil))
+      (with-temp-buffer
+        (insert s)
+        (setq op (goto-char (point-min)))
+        (while (and (re-search-forward separator nil t)
+                    (< 0 n))
+          (let ((sub (buffer-substring-no-properties op (match-beginning 0))))
+            (unless (and omit-nulls
+                         (equal sub ""))
+              (push sub r)))
+          (setq op (goto-char (match-end 0)))
+          (setq n (1- n)))
+        (if (/= (point) (point-max))
+            (push (buffer-substring-no-properties op (point-max)) r)
+          (unless omit-nulls
+            (push "" r))))
+      (nreverse r))))
 
 (defun s-lines (s)
   "Splits S into a list of strings on newline characters."

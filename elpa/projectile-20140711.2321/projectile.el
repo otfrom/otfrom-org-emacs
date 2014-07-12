@@ -5,7 +5,7 @@
 ;; Author: Bozhidar Batsov <bozhidar@batsov.com>
 ;; URL: https://github.com/bbatsov/projectile
 ;; Keywords: project, convenience
-;; Version: 20140706.126
+;; Version: 20140711.2321
 ;; X-Original-Version: 0.11.0
 ;; Package-Requires: ((s "1.6.0") (dash "1.5.0") (pkg-info "0.4"))
 
@@ -823,6 +823,7 @@ Operates on filenames relative to the project root."
   (with-current-buffer buffer
     (and (not (s-starts-with? " " (buffer-name buffer)))
          (not (projectile-ignored-buffer-p buffer))
+         (s-equals? (file-remote-p default-directory) (file-remote-p project-root))
          (s-starts-with? project-root (file-truename default-directory)))))
 
 (defun projectile-ignored-buffer-p (buffer)
@@ -1461,8 +1462,16 @@ regular expression."
     (let* ((project-root (projectile-project-root))
            (tags-exclude (projectile-tags-exclude-patterns))
            (default-directory project-root)
-           (tags-file (expand-file-name projectile-tags-file-name)))
-      (shell-command (format projectile-tags-command tags-file tags-exclude))
+           (tags-file (expand-file-name projectile-tags-file-name))
+           (command (format projectile-tags-command tags-file tags-exclude))
+           shell-output exit-code)
+      (with-temp-buffer
+        (setq exit-code
+              (call-process-shell-command command nil (current-buffer))
+              shell-output
+              (s-trim (buffer-substring (point-min) (point-max)))))
+      (unless (zerop exit-code)
+        (error shell-output))
       (visit-tags-table tags-file))))
 
 (defun projectile-visit-project-tags-table ()
@@ -1470,7 +1479,9 @@ regular expression."
   (when (projectile-project-p)
     (let ((tags-file (projectile-expand-root projectile-tags-file-name)))
       (when (file-exists-p tags-file)
-        (visit-tags-table tags-file t)))))
+        (with-demoted-errors 
+          "Error loading tags-file: %s"
+          (visit-tags-table tags-file t))))))
 
 (defun projectile-find-tag ()
   "Find tag in project."
@@ -1777,25 +1788,24 @@ with a prefix ARG."
     (puthash project-root compilation-cmd projectile-compilation-cmd-map)
     (compilation-start compilation-cmd)))
 
-(defun projectile-compilation-find-file (oldfun &rest args)
+(defadvice compilation-find-file (around projectile-compilation-find-file)
   "Try to find a buffer for FILENAME, if we cannot find it,
-fallback to the original function, OLDFUN.
-
-\(advice-add 'compilation-find-file :around projectile-compilation-find-file)"
-  (cl-destructuring-bind (marker filename directory &rest formats) args
-    (or
-     (if (file-exists-p (expand-file-name filename))
-         (find-file-noselect filename))
-     ;; Try to find the filename using projectile
-     (and (projectile-project-p)
-          (loop with root = (projectile-project-root)
-                for dir in (cons "" (projectile-current-project-dirs))
-                for file = (expand-file-name filename
-                                             (expand-file-name dir root))
-                if (file-exists-p file)
-                return (find-file-noselect file)))
-     ;; Fall back to the old function `compilation-find-file'
-     (apply oldfun marker filename directory formats))))
+fallback to the original function."
+  (let ((filename (ad-get-arg 1)))
+    (setf ad-return-value
+          (or
+           (if (file-exists-p (expand-file-name filename))
+               (find-file-noselect filename))
+           ;; Try to find the filename using projectile
+           (and (projectile-project-p)
+                (loop with root = (projectile-project-root)
+                      for dir in (cons "" (projectile-current-project-dirs))
+                      for file = (expand-file-name filename
+                                                   (expand-file-name dir root))
+                      if (file-exists-p file)
+                      return (find-file-noselect file)))
+           ;; Fall back to the old function `compilation-find-file'
+           ad-do-it))))
 
 ;; TODO - factor this duplication out
 (defun projectile-test-project (arg)
@@ -2200,15 +2210,13 @@ Otherwise behave as if called interactively.
     (add-hook 'projectile-find-dir-hook 'projectile-cache-projects-find-file-hook)
     (add-hook 'find-file-hook 'projectile-update-mode-line t t)
     (add-hook 'find-file-hook 'projectile-visit-project-tags-table t t)
-    ;;(advice-add 'compilation-find-file :around 'projectile-compilation-find-file)
-    )
+    (ad-activate 'compilation-find-file))
    (t
     (remove-hook 'find-file-hook 'projectile-cache-files-find-file-hook t)
     (remove-hook 'find-file-hook 'projectile-cache-projects-find-file-hook t)
     (remove-hook 'find-file-hook 'projectile-update-mode-line t)
     (remove-hook 'find-file-hook 'projectile-visit-project-tags-table t)
-    ;;(advice-remove 'compilation-find-file 'projectile-compilation-find-file)
-    )))
+    (ad-deactivate 'compilation-find-file))))
 
 ;;;###autoload
 (define-globalized-minor-mode projectile-global-mode
