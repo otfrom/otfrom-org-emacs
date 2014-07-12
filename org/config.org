@@ -24,12 +24,12 @@
 
 ** Which browser
 
-   Things in browse-url land seem a bit flaky atm. 
-   
+   Things in browse-url land seem a bit flaky atm.
+
    #+BEGIN_SRC emacs-lisp
      (setq browse-url-browser-function 'browse-url-firefox)
    #+END_SRC
-   
+
 ** Hippie Expand
 
    I have a soft spot for hippie-expand. There might be better ways to
@@ -61,7 +61,7 @@
    #+BEGIN_SRC emacs-lisp
      (put 'narrow-to-region 'disabled nil)
    #+END_SRC
-   
+
 ** diminish
 
    As we add lots of useful minor-modes the mode line can get a bit
@@ -87,9 +87,9 @@
 
    #+BEGIN_SRC emacs-lisp
      (require 'uniquify)
-     (setq uniquify-buffer-name-style 'post-forward)   
+     (setq uniquify-buffer-name-style 'post-forward)
    #+END_SRC
- 
+
 ** Multiple Cursors
 
    This is a replacement for the iedit that I used to have. Neale
@@ -103,19 +103,19 @@
      (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
      (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
    #+END_SRC
-   
+
 ** Make emacs Discoverable
 
    I started following [[https://twitter.com/melpa_emacs][@melpa_emacs]] at the end of 2013. From that I
    discovered (see what I did there) discover.el, which has an
    explanatory blog post [[http://www.masteringemacs.org/articles/2013/12/21/discoverel-discover-emacs-context-menus/][here]].
-   
-   
+
+
    #+BEGIN_SRC emacs-lisp
      (maybe-install-and-require 'discover)
      (global-discover-mode 1)
    #+END_SRC
-   
+
 ** What do I use
 
    Profile your usage.
@@ -123,13 +123,13 @@
    by using keyfreq.
 
     - [[http://twitter.com/EmacsHaiku/status/443757260682956800][@EmacsHaiku]]
-   
+
    #+BEGIN_SRC emacs-lisp
      (maybe-install-and-require 'keyfreq)
      (keyfreq-mode 1)
      (keyfreq-autosave-mode 1)
    #+END_SRC
-   
+
 * non-elpa and work arounds
 
   At the moment we don't have any workarounds. It looked like we might
@@ -147,7 +147,7 @@
    #+BEGIN_SRC emacs-lisp
      (add-to-list 'load-path (concat user-emacs-directory "non-elpa/"))
    #+END_SRC
-   
+
 * Macintosh Specific Setup
 
 ** # is broken on UK Macs
@@ -157,7 +157,7 @@
    especially with things like window-number modes. We have a hacked
    window-number mode below that maps window 3 to s-3, which solves
    that problem. The # problem is solved with this bit of code below.
-   
+
    #+BEGIN_SRC emacs-lisp
      (when (memq window-system '(mac ns))
        (global-set-key (kbd "M-3") '(lambda () (interactive) (insert "#"))))
@@ -169,7 +169,7 @@
    #+BEGIN_SRC emacs-lisp
      (setq default-process-coding-system '(utf-8-unix . utf-8-unix))
    #+END_SRC
-   
+
 ** window-number-super mode
 
    On a mac we have M-3 mapped to be the #
@@ -179,14 +179,14 @@
          (progn
            (require 'window-number-super)
            (window-number-mode 1) ; for the window numbers
-           (window-number-super-mode 1) ; for the super key binding      
+           (window-number-super-mode 1) ; for the super key binding
            )
        (progn
          (maybe-install-and-require 'window-number)
          (window-number-mode 1)
          (window-number-meta-mode 1)))
    #+END_SRC
-   
+
 ** $PATH is broken
 
    If you don't run emacs in a terminal on Mac OS X then it can be
@@ -219,8 +219,8 @@
 
     This is the keybinding that is annoying me the most atm. I'd quite
     like it to work for headlines in helm in most programming modes
-    instead. 
-    
+    instead.
+
     #+BEGIN_SRC emacs-lisp
       (when (memq window-system '(mac ns))
         (global-unset-key (kbd "s-h")))
@@ -250,19 +250,19 @@
     #+BEGIN_SRC emacs-lisp
 ;;      (maybe-install-and-require 'noctilux-theme)
     #+END_SRC
-    
+
 *** grandshell
 
     I've been finding lots of interesting things from [[https://twitter.com/steckerhalter][steckerhalter]]
     and this [[https://github.com/steckerhalter/grandshell-theme][grandshell]] theme looks pretty good. I'm going to try it
     for a while.
-    
+
     #+BEGIN_SRC emacs-lisp
       (maybe-install-and-require 'grandshell-theme)
     #+END_SRC
 
 *** cyberpunk, I still love you
-    
+
     I really like the cyberpunk theme from [[https://github.com/overtone/emacs-live][emacs-live]] and [[https://twitter.com/samaaron][Sam Aaron]] is
     a lovely guy. I wanted to avoid needing the old color-theme
     mode. [[https://twitter.com/rikardglans][Rikard Glans]] was nice enought to port it over to the new
@@ -289,18 +289,18 @@
 
     The screen on my sputnik is amazing, but while I can see the font
     with the great resolution, it is a bit tricky to read when I'm
-    tired. 
-    
+    tired.
+
     #+BEGIN_SRC emacs-lisp
       (defun bigger-font ()
         (interactive)
         (set-default-font "Inconsolata-12"))
-      
+
       (defun smaller-font ()
         (interactive)
         (set-default-font "Inconsolata-10"))
     #+END_SRC
-    
+
 ** bars, menus and numbers
 
    I like no scroll bars, no toolbars and line and column numbers in
@@ -330,8 +330,8 @@
    only on my diddy 13" laptop I like to have a window tailing a file
    in the background while I'm writing something in the
    foreground. This let's us toggle transparency. Who wouldn't like
-   that? I'm pretty sure I got this from [[https://twitter.com/IORayne][Anthony Grimes]]. 
-   
+   that? I'm pretty sure I got this from [[https://twitter.com/IORayne][Anthony Grimes]].
+
    #+BEGIN_SRC emacs-lisp
      (defun toggle-transparency ()
        (interactive)
@@ -343,7 +343,7 @@
    #+END_SRC
 
 * Tool Configuration
-  
+
 ** ediff
 
    ediff is my favourite way of comparing files, directories, versions
@@ -354,18 +354,18 @@
    #+BEGIN_SRC emacs-lisp
      (setq ediff-window-setup-function 'ediff-setup-windows-plain)
    #+END_SRC
-   
+
 ** company
 
    Complete Anything or [[http://company-mode.github.io/][company-mode]] seems to be the way to complete
    things in emacs now.
-   
+
    #+BEGIN_SRC emacs-lisp
      (maybe-install-and-require 'company)
      (add-hook 'after-init-hook 'global-company-mode)
      (diminish 'company-mode "CA")
    #+END_SRC
-   
+
 * directories, navigation, searching, movement
 ** dired
 
@@ -384,7 +384,7 @@
    going on.
 
    My helm-mode guru is [[http://twitter.com/krisajenkins][Kris Jenkins]].
-   
+
    #+BEGIN_SRC emacs-lisp
      (maybe-install-and-require 'helm)
    #+END_SRC
@@ -422,11 +422,11 @@
 *** magit
 
     magit is a *fantastic* mode for dealing with git.
-    
+
     #+BEGIN_SRC emacs-lisp
        (maybe-install-and-require 'magit)
     #+END_SRC
-    
+
     I use magit-status a lot. So let's bind it to C-x g.
 
     #+BEGIN_SRC emacs-lisp
@@ -437,7 +437,7 @@
 
     It is really nice having +/= in the gutter. I like it more than
     having line numbers and thus I've dumped linum-mode.
-    
+
     #+BEGIN_SRC emacs-lisp
       (maybe-install-and-require 'git-gutter-fringe+)
       (global-git-gutter+-mode t)
@@ -457,7 +457,7 @@
     #+BEGIN_SRC emacs-lisp
       (diminish 'git-gutter+-mode)
     #+END_SRC
-    
+
 *** magit-auto-revert
 
     I like that I get an auto-revert when magit changes files based on
@@ -467,7 +467,7 @@
     #+BEGIN_SRC emacs-lisp
       (diminish 'magit-auto-revert-mode)
     #+END_SRC
-    
+
 *** git-messenger
 
     Get the commit information for the current line. A bit like a mini
@@ -487,12 +487,12 @@
     #+BEGIN_SRC emacs-lisp
       (maybe-install-and-require 'github-browse-file)
     #+END_SRC
-    
+
 ** ace-jump-mode
 
    Move quickly anywhere in the buffer in 3 keystrokes. We can move
    there with C-c j and back to where we started with C-c k.
-   
+
    #+BEGIN_SRC emacs-lisp
      (maybe-install-and-require 'ace-jump-mode)
      (global-set-key (kbd "C-c j") 'ace-jump-mode)
@@ -503,13 +503,13 @@
 
    I don't want that pesky mouse hanging around in the middle of the
    screen while I'm typing.
-   
+
    #+BEGIN_SRC emacs-lisp
      (mouse-avoidance-mode 'banish)
    #+END_SRC
-   
+
 ** window and buffer tweaking
-   
+
 *** window movement
 
     I need to remap the windmove keys so that they don't conflict with
@@ -546,7 +546,7 @@
       (global-set-key (kbd "s-=") 'shrink-window)
       (global-set-key (kbd "s-+") 'enlarge-window)
     #+END_SRC
-    
+
 ** backup directories
 
    I'm fed up of having to put *~ into my .gitignore everywhere and
@@ -573,7 +573,7 @@
    #+BEGIN_SRC emacs-lisp
      (global-set-key (kbd "C-x C-b") 'ibuffer)
    #+END_SRC
-   
+
 ** projectile
 
    [[https://github.com/bbatsov/projectile][projectile]] from [[http://twtitter.com/bbatsov][Bozhidar Batsov]] constrains and helps things like
@@ -591,7 +591,7 @@
    #+BEGIN_SRC emacs-lisp
      (diminish 'projectile-mode)
    #+END_SRC
-   
+
 *** projectile and helm
 
     Of course projectile and helm play along nicely. This is a
@@ -601,7 +601,7 @@
       (maybe-install-and-require 'helm-projectile)
       (global-set-key (kbd "s-t") 'helm-projectile)
     #+END_SRC
-    
+
 ** Ag, the silver searcher with helm
 
    This is basically:
@@ -614,8 +614,9 @@
    #+BEGIN_SRC emacs-lisp
      (maybe-install-and-require 'helm-ag)
    #+END_SRC
-   
+
 * Text Modes
+
 ** Text Mode Basics
 
    If we are in a text mode we want flyspell and auto-fill-mode.
@@ -670,7 +671,7 @@
 
     Just like in [[helm and clojure]] we'd like to be able to look at
     the headlines in org-mode too.
-    
+
     #+BEGIN_SRC emacs-lisp
       (add-hook 'org-mode-hook
                 (lambda () (local-set-key (kbd "s-h") 'helm-org-headlines)))
@@ -696,7 +697,7 @@
     #+BEGIN_SRC emacs-lisp
       (maybe-install-and-require 'org-magit)
     #+END_SRC
-    
+
 *** org-feed
 
     I really quite liked google as a blog reader. Before that I used
@@ -742,7 +743,7 @@
     #+BEGIN_SRC emacs-lisp
       (setq org-reveal-root "reveal.js-2.5.0/")
     #+END_SRC
-    
+
 *** Scheduling, Project Management, Time Keeping
 
 **** todo keywords
@@ -750,7 +751,7 @@
      I seem to have come to some conclusions about which todo keywords
      actually work for me. The config below doesn't quite work yet
      though, so I'm still using per file keywords.
-     
+
      #+BEGIN_SRC emacs-lisp
        (setq org-todo-keywords
              '((sequence "TODO(t)" "CCC(c!)" "DOING(g!)" "|" "DONE(d!)")
@@ -763,25 +764,25 @@
 
      I quite like to see in the agenda log when I've done things and
      I'd like to be prompted for a note as well.
-     
+
      #+BEGIN_SRC emacs-lisp
         (setq org-log-done 'note)
      #+END_SRC
-     
+
 **** Agenda
 
-***** org-mode and Google Calendar with org-gcal 
+***** org-mode and Google Calendar with org-gcal
 
       Instead of importing google calendar events using a shell script
       and diary mode can we get gcal events into org-mode?
 
       org-gcal-file-alist, org-gcal-client-id and
       org-gcal-client-secret are all set in [[../local/mellon.el.gpg][mellon.el.gpg]].
-      
+
       #+BEGIN_SRC emacs-lisp
         (maybe-install-and-require 'org-gcal)
       #+END_SRC
-            
+
 ***** Agenda Windows
 
       I'm not quite sure what possessed the org-mode people to
@@ -793,7 +794,7 @@
       #+BEGIN_SRC emacs-lisp
         (setq org-agenda-window-setup 'current-window)
       #+END_SRC
-      
+
 ***** Agenda Files
 
       There are things for me and mine. Things I do for money. Things
@@ -802,7 +803,7 @@
 
       And somethings we need in the agenda even though we don't know
       where to file it yet which is why refile is in here.
-      
+
       #+BEGIN_SRC emacs-lisp
         (setq org-agenda-files
               '("~/org/refile.org"
@@ -825,7 +826,7 @@
       schedule time in most agenda views.
 
       Tags and search are the same as the default values.
-      
+
       #+BEGIN_SRC emacs-lisp
         (setq org-agenda-sorting-strategy
               '((agenda time-up
@@ -842,13 +843,13 @@
                       category-keep)
                 (search category-keep)))
       #+END_SRC
-      
+
 ***** Custom Agendas
 
       The real power of org-agenda starts to kick in when you create
       your own custom agenda commands that get the things *you* want
       out of your org files.
-      
+
 ****** What am I doing in the Current Cake Countdown?
 
        My default view, as I mostly use org for keeping my working
@@ -859,7 +860,7 @@
 
        This is a composite agenda view that shows the agenda by date
        at the top and the todo list below that.
-       
+
        The agenda spans one week and starts on a Wednesday (weekday
        3).
 
@@ -882,7 +883,7 @@
 
        The todo items are also filtered to only show things that have
        the Owner property set to my name.
-       
+
        #+BEGIN_SRC emacs-lisp
          (setq org-agenda-custom-commands
                '(("Cm" "My Current Cake Countdown"
@@ -908,7 +909,7 @@
 
        The tags-todo filter also limits things that are in the MC
        category, as this is just a list for work and not personal
-       things. 
+       things.
 
        #+BEGIN_SRC emacs-lisp
          (add-to-list
@@ -944,7 +945,7 @@
        #+BEGIN_SRC emacs-lisp
          (global-set-key (kbd "C-c a") 'org-agenda)
        #+END_SRC
-       
+
 ***** Ops
 
       There are a few tricks and tweaks we need to do in order to make
@@ -959,7 +960,7 @@
           (org-agenda nil "Ct")
           (delete-other-windows))
       #+END_SRC
-      
+
 **** Time Tracking and Estimates
 
      org-mode is huge. It does so much, but my reason for using it
@@ -973,11 +974,11 @@
       It is true, emacs crashes, I forget to clock out, there is just
       life, ok? So, when we clock in to a new task we'll be prompted
       to complete the time for the old task. Just to keep things
-      straight.  
+      straight.
 
       There is more about measuring idle time in the org-mode docs
-      [[http://orgmode.org/manual/Resolving-idle-time.html][here]]. 
-      
+      [[http://orgmode.org/manual/Resolving-idle-time.html][here]].
+
       #+BEGIN_SRC emacs-lisp
         (setq org-clock-persist 'history)
         (org-clock-persistence-insinuate)
@@ -1029,21 +1030,21 @@
 
      What's going on, who are we talking to. What is the ship's
      status, where are we going.
-     
+
      #+BEGIN_SRC emacs-lisp
        (defun captains-chair ()
          (interactive)
          (delete-other-windows)
-         
+
          (if (< (frame-width) 240)
              ;; Small frame
              (progn
                ;; create our 2 columns
                (split-window-right)
-       
+
                ;; split 1st column vertically
                (split-window-below)
-               
+
                ;; move to the rightmost and split into 3 verticalally
                (window-number-select 3)
                (split-window-below)
@@ -1053,14 +1054,14 @@
              ;; create our 3 columns
              (split-window-right)
              (split-window-right)
-             
+
              ;; move to the rightmost and split
              (window-number-select 3)
              (split-window-below)
              (split-window-below)))
-         
+
          (balance-windows)
-         
+
          ;; set up the buffers as we want
          (window-number-select 1)
          (org-agenda nil "Cm")
@@ -1075,15 +1076,15 @@
          (if (get-buffer boss-chat)
            (switch-to-buffer boss-chat)
          (switch-to-buffer "*-jabber-roster-*"))
-       
+
          ;; And go to window 1
          (window-number-select 1))
-       
+
        (global-set-key [M-f12] 'captains-chair)
      #+END_SRC
 
 *** Capturing, Templates and Refiling
-     
+
 **** Default Notes File
 
      I don't want to think about things when I'm just capturing
@@ -1092,7 +1093,7 @@
      #+BEGIN_SRC emacs-lisp
        (setq org-default-notes-file (concat org-directory "/refile.org"))
      #+END_SRC
-     
+
 **** Capture Hot Key
 
      Let's capture things with a quick Vulcan Nerve Pinch on
@@ -1110,7 +1111,7 @@
 
      We also have a way of tracking things we are doing RFN as well
      as capturing things for the future.
-     
+
      #+BEGIN_SRC emacs-lisp
        (setq org-capture-templates
              '(("c" "Contacts" entry (file "~/org/contacts.org")
@@ -1133,18 +1134,18 @@
                ("p" "Phone call" entry (file+datetree org-default-notes-file)
                 "* PHONE %? :PHONE:\n%^{Owner}p\n%U" :clock-in t :clock-resume t :empty-lines-after 1)))
      #+END_SRC
-     
+
 **** Refiling rules
 
      We want to be able to refile things in the file we are currently
      in and in files that we create our agenda from.
-     
+
      #+BEGIN_SRC emacs-lisp
        (setq org-refile-targets
              '((nil :maxlevel . 9)
                (org-agenda-files :maxlevel . 9)))
      #+END_SRC
-     
+
 *** org and the pomodoro technique
 
     When I need to just grind through something or find a way to keep
@@ -1165,7 +1166,7 @@
        (add-hook 'org-agenda-mode-hook
                  (lambda () (local-set-key (kbd "P") 'org-pomodoro)))
      #+END_SRC
-     
+
 *** Activate Appointment Mode
 
     And now that we have our ical stuff in our diary we'll want
@@ -1186,7 +1187,7 @@
         (org-agenda nil "Cm"))
       (global-set-key [M-f11] 'default-agenda)
     #+END_SRC
-    
+
 ** html, sgml, xml
 
 *** tagedit
@@ -1208,30 +1209,30 @@
     #+BEGIN_SRC emacs-lisp
       (tagedit-add-experimental-features)
     #+END_SRC
-    
+
 *** css
 
     I should probably look at adding more sugar to this.
-    
+
 **** paredit
-     
+
      I *always* want my parens to match (except in text modes).
 
      #+BEGIN_SRC emacs-lisp
        (add-hook 'css-mode-hook 'paredit-mode)
      #+END_SRC
-     
+
 **** rainbow mode
 
      And I want to see the colours I'm using.
-     
+
      #+BEGIN_SRC emacs-lisp
-       (add-hook 'css-mode-hook 'rainbow-mode)     
+       (add-hook 'css-mode-hook 'rainbow-mode)
      #+END_SRC
 
 **** eldoc
 
-     And who doesn't want eldoc tips when they are editing things. 
+     And who doesn't want eldoc tips when they are editing things.
 
      #+BEGIN_SRC emacs-lisp
        (maybe-install-and-require 'css-eldoc)
@@ -1241,7 +1242,7 @@
 
      And to be able to navigate around our selectors using helm. And
      then we want to make it a headline key just like in our other
-     modes. 
+     modes.
 
      #+BEGIN_SRC emacs-lisp
        (maybe-install-and-require 'helm-css-scss)
@@ -1268,7 +1269,7 @@
     #+END_SRC
 
 **** Github Flavoured Preview
-     
+
      We also need to change the preview as the standard preview
      doesn't render github flavoured markdown correctly. I've
      installed markdown Preview+ as a Chrome Extension and associated
@@ -1281,13 +1282,13 @@
      #+BEGIN_SRC emacs-lisp
        (setq markdown-open-command "open")
      #+END_SRC
-     
+
 *** helm markdown headlines
 
     I want super-h to work and give me headlines just like in
     org-mode. I feel this could perhaps be a bit better, but this will
     do for now.
-    
+
     #+BEGIN_SRC emacs-lisp
       (defun helm-markdown-headlines ()
         "Display headlines for the current Clojure file."
@@ -1295,11 +1296,11 @@
         (helm :sources '(((name . "Markdown Headlines")
                           (volatile)
                           (headline "^[#]")))))
-      
+
       (add-hook 'markdown-mode-hook
                 (lambda () (local-set-key (kbd "s-h") 'helm-markdown-headlines)))
     #+END_SRC
-    
+
 * Communication Modes
 
 ** twittering-mode
@@ -1309,21 +1310,21 @@
    curious to see the revision history of this file and see if I
    change this description before I declare .emacs bankruptcy again.
 
-   The best twitter client I've found is twittering-mode. 
+   The best twitter client I've found is twittering-mode.
 
    #+BEGIN_SRC emacs-lisp
-     (maybe-install-and-require 'twittering-mode)    
+     (maybe-install-and-require 'twittering-mode)
    #+END_SRC
 
    I *don't* want to see the the status messages in the mini-buffer
    when twitter fetches things.
-   
+
    #+BEGIN_SRC emacs-lisp
      (setq twittering-url-show-status nil)
    #+END_SRC
 
    I like to have the icon pictures.
-      
+
    #+BEGIN_SRC emacs-lisp
      (setq twittering-icon-mode 1)
      (setq twittering-use-icon-storage t)
@@ -1352,7 +1353,7 @@
      (setq twittering-initial-timeline-spec-string
            '("otfrom/people-i-know"
              ":replies"
-             ":direct_messages"))  
+             ":direct_messages"))
    #+END_SRC
 
    I also want to slow it down. It updates way too often when I'm not
@@ -1361,7 +1362,7 @@
    #+BEGIN_SRC emacs-lisp
      (setq twittering-timer-interval (* 60 30))
    #+END_SRC
-   
+
 *** Tweet Button
 
     Sometimes I just want to scream. Twitter lets me do that.
@@ -1384,7 +1385,7 @@
           (if twoot
               (switch-to-buffer twoot)
             (twittering-visit-timeline p-i-k))))
-      
+
       (global-set-key [C-f11] 'tweeps-i-know)
     #+END_SRC
 
@@ -1405,7 +1406,7 @@
    encrypted mellon.el file.
 
    We also want to be able to store a local history of our chats.
-   
+
    #+BEGIN_SRC emacs-lisp
      (setq
        jabber-history-enabled t
@@ -1415,7 +1416,7 @@
    #+END_SRC
 
    And we want URLs to be clickable.
-   
+
    #+BEGIN_SRC emacs-lisp
      (add-hook 'jabber-chat-mode-hook 'goto-address)
    #+END_SRC
@@ -1425,7 +1426,7 @@
    #+BEGIN_SRC emacs-lisp
      (setq jabber-chat-buffer-show-avatar nil)
    #+END_SRC
-   
+
    And while we want to know when we receive messages having something
    flicker in the echo area every time someone's status changes is
    just waaaaay too chatty.
@@ -1440,7 +1441,7 @@
    #+BEGIN_SRC emacs-lisp
      (global-set-key [f6] 'jabber-connect-all)
    #+END_SRC
-   
+
 ** irc, currently with erc
 
    Internet Relay Chat is a great way of talking to lots of
@@ -1449,29 +1450,29 @@
 *** Connect to freenode
 
     According to the [[http://freenode.net/irc_servers.shtml][freenode]] site we should be connecting to
-    chat.freenode.net. 
-    
+    chat.freenode.net.
+
     #+BEGIN_SRC emacs-lisp
       (setq erc-server "chat.freenode.net")
     #+END_SRC
-    
+
 *** Tracking
-    
+
     We want to highlight pals and diminish fools, but leave out when
     people leave and join. The list of all valid message types can be found at
     https://www.alien.net.au/irc/irc2numerics.html
-    
+
     #+BEGIN_SRC emacs-lisp
       (erc-track-mode t)
       (setq erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE"
                                        "324" "329" "332" "333" "353" "477"))
-      
+
       ;; don't show any of this
       (setq erc-hide-list '("JOIN" "PART" "QUIT" "NICK"))
     #+END_SRC
 
 *** Scroll to Bottom
-    
+
     Typing happens at the bottom and we want as much history as
     possible to be visible.
 
@@ -1480,7 +1481,7 @@
     #+END_SRC
 
 *** Spell Checking
-    
+
     And spell checking is good.
 
     #+BEGIN_SRC emacs-lisp
@@ -1492,18 +1493,18 @@
     #liberator, #clojure, #clojurewerkz, #lndclj. Some devopsy ones
     like #jclouds and #pallet. Some communities that do good
     like #ukodi and ##cleanweb. And ones for Mastodon C like #kixi.
-    
+
     #+BEGIN_SRC emacs-lisp
       (setq erc-autojoin-channels-alist '(("freenode.net" "##cleanweb" "#kixi" "#theodi" "#ldnclj" "#clojure-emacs")))
     #+END_SRC
 
 *** Credentials
-    
+
     My credentials are in mellon.el of course. This is where I set
     erc-user-full-name, erc-email-user-id, erc-nick and erc-password. I
     also keep my erc-pals and erc-fools in here. Try to guess which
     list you might be in. :-D
-    
+
 *** Switch to irc
 
     What we want to do is switch to irc if we've got something
@@ -1523,7 +1524,7 @@
 
     Handy to save the irc logs so we have a way of finding interesting
     things again after hearing about them on irc.
-    
+
     #+BEGIN_SRC emacs-lisp
       (setq erc-log-channels-directory (concat user-emacs-directory "erc/logs/"))
       (setq erc-save-buffer-on-part t)
@@ -1533,12 +1534,12 @@
 
     irc is great fun, but I need something to ping me when they want
     me on a channel.
-    
+
     #+BEGIN_SRC emacs-lisp
       (add-to-list 'erc-modules 'notify)
       (add-to-list 'erc-modules 'notifications)
     #+END_SRC
-    
+
 ** email
 
 *** Sending Mail with msmtp
@@ -1555,10 +1556,10 @@
        sendmail-program "/usr/bin/msmtp"
        ;;sendmail-program "~/bin/msmtpq"
        mail-specify-envelope-from t
-       message-sendmail-f-is-evil nil                
+       message-sendmail-f-is-evil nil
        mail-envelope-from 'header
        message-sendmail-envelope-from 'header)
-       
+
       (setq message-kill-buffer-on-exit t)
     #+END_SRC
 
@@ -1566,12 +1567,12 @@
 
      Sometimes we want to send mail when we don't have any network. We
      can queueing email with the following.
-     
+
      #+BEGIN_SRC emacs-lisp
        (setq smtpmail-queue-mail  nil  ;; start in non-queuing mode
              smtpmail-queue-dir   "~/Maildir/queue/cur")
      #+END_SRC
-     
+
 **** Choosing the right email address with gnus-alias
 
      Our ~/.msmtprc file has a from field in addition to a user
@@ -1583,7 +1584,7 @@
 
      Remember when setting up the Fcc directory that it should point
      at a real maildir directory.
-     
+
      #+BEGIN_SRC emacs-lisp
        (maybe-install-and-require 'gnus-alias)
        ;; Define two identities, "home" and "work"
@@ -1615,10 +1616,10 @@
     does a good job of moving files around to the right directories so
     that syncing with imap and a local store actually works in
     addition to having good indexing with mu.
-    
+
     We installed mu4e from a source tarball. It put its configuration
-    files in /usr/local/share/emacs/site-lisp/mu4e/. 
-    
+    files in /usr/local/share/emacs/site-lisp/mu4e/.
+
     #+BEGIN_SRC emacs-lisp
       (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e/")
       (require 'mu4e)
@@ -1639,7 +1640,7 @@
      #+BEGIN_SRC emacs-lisp
        (setq mu4e-hide-index-messages 1)
      #+END_SRC
-     
+
 **** Fetching mail
 
      We use offlineimap to get our mail and want to get it every 13
@@ -1649,7 +1650,7 @@
        (setq mu4e-get-mail-command "offlineimap")
        (setq mu4e-update-interval (* 32 60))
      #+END_SRC
-     
+
 **** Shortcuts
 
      A few quick shortcuts to let us jump to the folders we are
@@ -1688,7 +1689,7 @@
       just to make it clear what I'm doing. Again, remember that we
       handle the smtp bit differently and the account switching there
       is done based on the From: field of the message.
-      
+
       #+BEGIN_QUOTE
         Then create a variable my-mu4e-account-alist, which should
         contain a list for each of your accounts. Each list should
@@ -1720,7 +1721,7 @@
       I think it is great that mu4e is this extensible, but I am a bit
       confused as to whey the following function isn't a part of mu4e
       that you can just turn on.
-      
+
       #+BEGIN_SRC emacs-lisp
          (defun my-mu4e-set-account ()
                "Set the account for composing a message."
@@ -1739,21 +1740,21 @@
                                (set (car var) (cadr var)))
                            account-vars)
                    (error "No email account found"))))
-        
+
         (add-hook 'mu4e-compose-pre-hook 'my-mu4e-set-account)
       #+END_SRC
-      
+
 **** Unicode
 
-    We want to be able to read non-ascii characters. 
-     
+    We want to be able to read non-ascii characters.
+
      #+BEGIN_SRC emacs-lisp
        ;; Use fancy chars
        (setq mu4e-use-fancy-chars t)
      #+END_SRC
 
 **** Gmail quirks and feature simulations
-     
+
 ***** Including related messages
 
       I want to be able to see everything that goes with the thread
@@ -1762,13 +1763,13 @@
       #+BEGIN_SRC emacs-lisp
         (setq mu4e-headers-include-related t)
       #+END_SRC
-      
+
 ***** Skip duplicates
 
       All mail contains duplicates of what is in INBOX, sent, trash
       and others. So if we want to include the related we'll also want
       to skip the duplicates.
-      
+
       #+BEGIN_SRC emacs-lisp
         (setq mu4e-headers-skip-duplicates t)
       #+END_SRC
@@ -1777,7 +1778,7 @@
 
      With this added we can view html only emails in the browser by
      hitting aV.
-     
+
      #+BEGIN_SRC emacs-lisp
        (add-to-list 'mu4e-view-actions
                     '("ViewInBrowser" . mu4e-action-view-in-browser) t)
@@ -1795,7 +1796,7 @@
 **** mu4e and org-contacts
 
      I want to use org-contacts rather than bbdb.
-     
+
      #+BEGIN_SRC emacs-lisp
        (require 'org-contacts)
        (setq org-contacts-files (quote ("~/org/contacts.org")))
@@ -1814,7 +1815,7 @@
      #+BEGIN_SRC emacs-lisp
        (global-set-key [f11] 'mu4e)
      #+END_SRC
-          
+
 ** Hailing Frequencies or comms
 
    It is good that jabber and erc die when I put the computer to
@@ -1827,33 +1828,33 @@
        (twittering-mode)
        (jabber-connect-all)
        (erc))
-     
+
      (defun comms ()
        (interactive)
        (delete-other-windows)
-     
+
        (if (< (frame-width) 240)
            (progn
              ;; create 2 columns
              (split-window-right)
-     
+
              ;; 2 rows on the left for twitter
              (split-window-below)
-     
+
              ;; 3 rows on the right for erc and jabber
              (window-number-select 3)
              (split-window-below)
              (split-window-below)
-     
+
              ;; Balance it all
              (balance-windows)
-     
+
              ;; twitter on the left
              (window-number-select 1)
              (switch-to-buffer "otfrom/people-i-know")
              (window-number-select 2)
              (switch-to-buffer ":replies")
-     
+
              ;; erc and jabber on the right
              (window-number-select 3)
              (switch-to-buffer "#kixi")
@@ -1863,7 +1864,7 @@
              (if (get-buffer boss-chat)
                  (switch-to-buffer boss-chat)
                (switch-to-buffer "*-jabber-roster-*"))
-     
+
              ;; go to and grow the top left window
              (window-number-select 1)
              (enlarge-window 9))
@@ -1871,32 +1872,32 @@
            ;; create our 3 columns
            (split-window-right)
            (split-window-right)
-           
+
            ;; create our 1st 2 rows
            (split-window-below)
            (split-window-below)
-           
+
            ;; move to the middle and split
            (window-number-select 4)
            (split-window-below)
            (split-window-below)
-           
+
            ;; move to the right and split
            (window-number-select 7)
            (split-window-below)
            (split-window-below)
-           
+
            ;; Balance it all
            (balance-windows)
-           
+
            ;; grow the top left window
            (window-number-select 1)
            (enlarge-window 16)
-           
+
            ;; shrink the bottom left window
            (window-number-select 3)
            (shrink-window 11)
-           
+
            ;; set up the buffers as we want
            (window-number-select 1)
            (switch-to-buffer "otfrom/people-i-know")
@@ -1916,27 +1917,27 @@
            (switch-to-buffer "#kixi")
            (window-number-select 9)
            (switch-to-buffer "#theodi")
-           
+
            ;; dump the middle window
            (window-number-select 5)
            (delete-window))))
-     
+
      (global-set-key [C-f6] 'comms-up)
      (global-set-key [C-f12] 'comms)
    #+END_SRC
-   
+
 * Programming Modes
 ** prog-mode
 
    prog-mode and the prog-mode-hook are at the basis of most of the
    programming modes in emacs. If we want something set up for
    everything we should do it here.
-   
+
 *** Parentheses
 **** Show Them
 
-     We really want to see those parentheses. 
-     
+     We really want to see those parentheses.
+
      #+BEGIN_SRC emacs-lisp
        (show-paren-mode +1)
      #+END_SRC
@@ -1990,11 +1991,11 @@
       (maybe-install-and-require 'highlight-symbol)
       (add-hook 'prog-mode-hook 'highlight-symbol-mode)
     #+END_SRC
-    
+
 *** color-identifiers-mode
 
     This is a suggestion from @sw1nn.
-    
+
     #+BEGIN_SRC emacs-lisp
       (maybe-install-and-require 'color-identifiers-mode)
       (global-color-identifiers-mode t)
@@ -2014,7 +2015,7 @@
     #+END_SRC
 
 **** Snippet Directory
-     
+
      We need a place to add our snippets for each mode as well. We'll
      put that in snippets.
 
@@ -2023,13 +2024,13 @@
      #+END_SRC
 
 **** Turn it on globally
-     
+
      And we want to add yasnippets to all modes where we have snippets.
 
      #+BEGIN_SRC emacs-lisp
        (yas-global-mode 1)
      #+END_SRC
-     
+
 **** Diminish it
 
      I don't need to see it everywhere though.
@@ -2043,13 +2044,13 @@
     A suggestion from [[http://www.masteringemacs.org/articles/2011/01/14/effective-editing-movement/][Effective Editing]] in [[http://www.masteringemacs.org/][Mastering Emacs]]. This
     allows you to go to the next identifier like the one you are
     currently on by using M-n and M-p.
-    
+
     #+BEGIN_SRC emacs-lisp
       (maybe-install-and-require 'smartscan)
       (add-hook 'prog-mode-hook
                 '(lambda () (smartscan-mode 1)))
     #+END_SRC
-    
+
 ** lisp modes
 
    emacs-lisp and clojure are the two that really go in here for now,
@@ -2088,11 +2089,11 @@
      stuff in clojure modes. Thanks to [[http://twitter.com/sanityinc][Steve Purcell]] we have an
      improved version that gets faces and vars in addition to
      functions, so in some ways it is even a bit better than what is
-     available in cider/clojure-mode (from my understanding anyway). 
+     available in cider/clojure-mode (from my understanding anyway).
 
      #+BEGIN_SRC emacs-lisp
        (require 'popup)
-       
+
        (defun describe-thing-in-popup ()
          (interactive)
          (let* ((thing (symbol-at-point))
@@ -2152,14 +2153,14 @@
 ***** Popup compilation messages
 
       Don't pop them up if I'm not in the repl buffer otherwise I
-      might go all Bruce Banner on you.      
+      might go all Bruce Banner on you.
 
       #+BEGIN_SRC emacs-lisp
         (setq cider-popup-stacktraces t)
       #+END_SRC
 
 ***** clojure-mode-hook
-      
+
       We'll also want to get our lisp-hooks into our clojurey
       goodness. It would be a shame to not have it here.
 
@@ -2168,7 +2169,7 @@
       #+END_SRC
 
 ***** cider-mode-hooks
-      
+
       There are more things that we'll want that are specific to cider
       mode and the cider interaction buffer.
 
@@ -2178,7 +2179,7 @@
       #+END_SRC
 
 ***** Save cider history
-      
+
       We also want to save the history of our interactions. There might
       be gold there.
 
@@ -2200,22 +2201,22 @@
 
       We used to have ac-nrepl here, but company is the supported
       thing in cider now and we've loaded that above.
-      
+
 ***** compojure indentation rules
 
       A number of things in compojure don't really indent
       correctly. There are some instructions for fixing that [[https://github.com/weavejester/compojure/wiki/Emacs-indentation][here]].
-      
+
       #+BEGIN_SRC emacs-lisp
         (define-clojure-indent
           (defroutes 'defun))
       #+END_SRC
-      
+
 ***** component
 
       I keep typing (go) when I should be typing (reset). Maybe a
       hotkey will keep me out of trouble.
-      
+
       #+BEGIN_SRC emacs-lisp
         (defun cider-system-reset ()
           (interactive)
@@ -2230,7 +2231,7 @@
       It can be very frustrating to be poking away at clojure data
       structures in the repl and then accidentally print a big, or
       worse and infinite sequence. This should stop that.
-      
+
       #+BEGIN_SRC emacs-lisp
         (setq cider-repl-print-length 100)
       #+END_SRC
@@ -2252,7 +2253,7 @@
 ;;        (add-hook 'cider-repl-mode-hook 'paredit-mode)
         (add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode)
       #+END_SRC
-      
+
 **** Alignment Changes
 
      There are very few bits of alignment that I would *ever* do
@@ -2263,18 +2264,18 @@
      All formatting, beyond remaining consistent it a file, is
      fundamentally arbitrary and arguments about it descend into
      [[http://c2.com/cgi/wiki?BikeShed][bikeshedding]] very quickly. Here are our rules
-     
+
 ***** align let forms
 
       Pretty alignment of let, when-let, if-let, binding, loop,
       with-open, literal hashes {}, defroute, cond, and condp
       (except :>> subforms). This is partly to keep things formatted
       the same way as Neale Swinnerton.
-      
+
       #+BEGIN_SRC emacs-lisp
         (maybe-install-and-require 'align-cljlet)
       #+END_SRC
-      
+
 ***** Indentation Override
 
       At the moment, indenting go loops like defn's is the only extra
@@ -2283,24 +2284,24 @@
       #+BEGIN_SRC emacs-lisp
         (put-clojure-indent 'go-loop 'defun)
       #+END_SRC
-      
+
 **** clj-refactor
 
      Lots of cool little time savers in here.
-     
+
      #+BEGIN_SRC emacs-lisp
        (maybe-install-and-require 'clj-refactor)
      #+END_SRC
-     
+
 **** clojurescript
 
      Get those cljs files building automatically and get the errors
      popping up in your emacs.
-     
+
      #+BEGIN_SRC emacs-lisp
        (maybe-install-and-require 'cljsbuild-mode)
      #+END_SRC
-     
+
 **** helm and clojure
 
      Kris Jenkins has a great helm-clojure-headlines that I'd like to
@@ -2313,7 +2314,7 @@
          (helm :sources '(((name . "Clojure Headlines")
                            (volatile)
                            (headline "^[;(]")))))
-       
+
        (add-hook 'clojure-mode-hook
                  (lambda () (local-set-key (kbd "s-h") 'helm-clojure-headlines)))
      #+END_SRC
@@ -2331,7 +2332,7 @@
        (add-hook 'clojure-mode-hook
                  (lambda () (local-set-key [s-f1] 'clojure-cheatsheet)))
      #+END_SRC
-     
+
 **** sw1nn-cider-perspective or Engineering
 
      I really like what Neale has done to set up a quick cider
@@ -2342,7 +2343,7 @@
          (let ((nrepl-server-buf (replace-regexp-in-string "connection" "server" (nrepl-current-connection-buffer))))
            (when nrepl-server-buf
              (get-buffer nrepl-server-buf))))
-       
+
        (defun sw1nn-cider-perspective ()
          (interactive)
          (delete-other-windows)
@@ -2353,9 +2354,9 @@
          (windmove-up)
          (pop-to-buffer (cider-find-or-create-repl-buffer)))
      #+END_SRC
-     
+
 ** python
-   
+
 ** javascript
 
    According to [[http://twitter.com/sw1nn][Neale Swinnerton]] js2-mode is the way to go.
@@ -2370,7 +2371,7 @@
    #+BEGIN_SRC emacs-lisp
      (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
    #+END_SRC
-   
+
 ** pastebins
 
    gist, pastebin, refheap. All good ways of sharing snippets of code
@@ -2384,7 +2385,7 @@
     #+BEGIN_SRC emacs-lisp
       (maybe-install-and-require 'gist)
     #+END_SRC
-    
+
 *** refheap
 
     I like [[http://refheap.com][refheap]] and Anthony Grimes seems like a nice guy. And it
@@ -2398,7 +2399,7 @@
 
   Some things aren't really text and aren't really source code
   files. We'll deal with them below.
-  
+
 ** csv-mode
 
    Lots of great things for sorting, unsorting, munging and editing
@@ -2407,7 +2408,7 @@
    #+BEGIN_SRC emacs-lisp
      (maybe-install-and-require 'csv-mode)
    #+END_SRC
-   
+
 * Multimedia
 
 ** emms to play music
@@ -2442,7 +2443,7 @@
 
       (global-set-key (kbd "<f10>") 'emms-next)
     #+END_SRC
-    
+
 *** Turn off emms-mode-line
 
     There really is enough in that modeline already. We don't need to
@@ -2452,7 +2453,7 @@
       (require 'emms-mode-line)
       (emms-mode-line 0)
     #+END_SRC
-    
+
 *** A bit of white noise
 
     Sometimes I just need a thunderstorm to keep out the noise. I
@@ -2463,16 +2464,16 @@
         (interactive)
         (emms-play-file (concat user-emacs-directory "resources/16480__martin-lightning__severe-thunderstorm.mp3")))
     #+END_SRC
-    
+
 * Notification Systems
-  
+
 ** The great eye of Sauron
 
    With all these various systems going on we probably want to be able
    to have a log of what has happened so we can step through
    it. Sauron should help us with this. I'm sure nothing can go
    wrong. I feel so powerful that it must be right.
-   
+
    #+BEGIN_SRC emacs-lisp
      (maybe-install-and-require 'sauron)
    #+END_SRC
@@ -2481,11 +2482,11 @@
 
     If we want new mail notifications with sauron as described [[http://www.djcbsoftware.nl/code/mu/mu4e/Getting-new-mail-notifications-with-Sauron.html][here]],
     then we apparently need to turn the dbus cookie on.
-    
+
     #+BEGIN_SRC emacs-lisp
       (setq sauron-dbus-cookie t)
     #+END_SRC
-    
+
 * Local Config
 
 ** custom.el
@@ -2502,15 +2503,15 @@
    #+END_SRC
 
 * Utilities and General Keybindings
-  
+
 ** join-line
 
    A quick way of getting lines back together.
-   
+
    #+BEGIN_SRC emacs-lisp
      (global-set-key (kbd "s-<return>") 'join-line)
    #+END_SRC
-   
+
 * Finishing
 
 ** General Cleanup
@@ -2524,7 +2525,7 @@
 
     With newer version of emacs new minor modes get turned on by
     default and clutter up my mode line. I'd like to turn them off.
-    
+
 **** auto-revert
 
      OK. I get it. auto-revert mode is on.
@@ -2532,7 +2533,7 @@
      #+BEGIN_SRC emacs-lisp
        (diminish 'auto-revert-mode)
      #+END_SRC
-     
+
 ** passwords and encrypted things
 
    It is good to store your passwords and things in an encrypted
@@ -2548,7 +2549,7 @@
    #+BEGIN_SRC emacs-lisp
      (load-if-exists (concat user-emacs-directory "local/mellon.el.gpg"))
    #+END_SRC
-   
+
 ** emacs-server
 
    Emacs startup time isn't nearly as much of a problem as it used to
