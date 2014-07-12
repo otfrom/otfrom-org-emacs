@@ -629,6 +629,17 @@
                        (diminish 'auto-fill-function)))
    #+END_SRC
 
+*** Delete that trailing whitespace
+
+    Trailing whitespace just causes trouble with diffs and version
+    control. So let's get rid of it.
+
+    #+BEGIN_SRC emacs-lisp
+      (add-hook 'before-save-hook
+                (lambda nil
+                  (delete-trailing-whitespace)))
+    #+END_SRC
+
 ** org-mode
 
    I also use org-mode on its own and would like to use it more. I
