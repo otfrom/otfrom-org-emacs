@@ -8,7 +8,7 @@
 ;;       Phil Hagelberg <technomancy@gmail.com>
 ;;       Bozhidar Batsov <bozhidar@batsov.com>
 ;; URL: http://github.com/clojure-emacs/clojure-mode
-;; Version: 20140624.723
+;; Version: 20140716.848
 ;; X-Original-Version: 3.0.0-cvs
 ;; Keywords: languages, lisp
 
@@ -450,6 +450,8 @@ Called by `imenu--generic-function'."
       ("\\(#?^\\)\\(\\(\\sw\\|\\s_\\)+\\)"
        (1 font-lock-preprocessor-face)
        (2 font-lock-type-face))
+      ;; cljx annotations (#+clj and #+cljs)
+      ("#\\+cljs?\\>" 0 font-lock-preprocessor-face)
       ;; Java interop highlighting
       ;; CONST SOME_CONST (optionally prefixed by /)
       ("\\(?:\\<\\|/\\)\\([A-Z]+\\|\\([A-Z]+_[A-Z1-9_]+\\)\\)\\>" 1 font-lock-constant-face)

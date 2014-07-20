@@ -824,18 +824,24 @@ This is controlled via `cider-interactive-eval-output-destination'."
   "Make a handler for evaluating and printing result in popup BUFFER."
   (nrepl-make-response-handler buffer
                                (lambda (buffer str)
-                                 (cider-emit-into-popup-buffer buffer str))
+                                 (cider-emit-into-popup-buffer
+                                  buffer
+                                  (cider-font-lock-as-clojure str)))
                                '()
                                (lambda (buffer str)
                                  (cider-emit-into-popup-buffer buffer str))
                                '()))
 
 (defun cider-popup-eval-out-handler (buffer)
-  "Make a handler for evaluating and printing stdout/stderr in popup BUFFER."
+  "Make a handler for evaluating and printing stdout/stderr in popup BUFFER.
+
+This is used by pretty-printing commands and intentionally discards their results."
   (nrepl-make-response-handler buffer
                                '()
                                (lambda (buffer str)
-                                 (cider-emit-into-popup-buffer buffer str))
+                                 (cider-emit-into-popup-buffer
+                                  buffer
+                                  (cider-font-lock-as-clojure str)))
                                (lambda (buffer str)
                                  (cider-emit-into-popup-buffer buffer str))
                                '()))
@@ -953,6 +959,14 @@ See `compilation-error-regexp-alist' for help on their format.")
              (or type 2))
        message))))
 
+(defun cider--find-expression-start ()
+  "Find the beginning a list, vector, map or set outside of a string.
+
+We do so by starting and the current position and proceeding backwards
+until we find a delimiters that's not inside a string."
+  (while (or (not (looking-at "[({[]")) (eq 'font-lock-string-face (get-text-property (point) 'face)))
+    (backward-char)))
+
 (defun cider-highlight-compilation-errors (buffer message)
   "Highlight compilation error line in BUFFER, using MESSAGE."
   (with-current-buffer buffer
@@ -972,8 +986,10 @@ See `compilation-error-regexp-alist' for help on their format.")
             (forward-line (1- line))
             ;; if have column, highlight sexp at that point otherwise whole line.
             (move-to-column (or col 0))
-            (let ((begin (progn (if col (backward-up-list) (back-to-indentation)) (point)))
-                  (end (progn (if col (forward-sexp) (move-end-of-line nil)) (point))))
+            ;; we need to select a region to which to apply the error overlay
+            ;; we try to select the encompassing list, vector, set or map literal
+            (let ((begin (progn (if col (cider--find-expression-start) (back-to-indentation)) (point)))
+                  (end (progn (if col (forward-list) (move-end-of-line nil)) (point))))
               (let ((overlay (make-overlay begin end)))
                 (overlay-put overlay 'cider-note-p t)
                 (overlay-put overlay 'face face)
@@ -1042,8 +1058,7 @@ If prefix argument KILL-BUFFER-P is non-nil, kill the buffer instead of burying 
     (let ((inhibit-read-only t)
           (buffer-undo-list t))
       (insert (format "%s" value))
-      (indent-sexp)
-      (font-lock-fontify-buffer))))
+      (indent-sexp))))
 
 (defun cider-emit-into-color-buffer (buffer value)
   "Emit into color BUFFER the provided VALUE."

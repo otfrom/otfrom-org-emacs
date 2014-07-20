@@ -3,7 +3,7 @@
 ;; Copyright (C) 2012 Magnar Sveen
 
 ;; Author: Magnar Sveen <magnars@gmail.com>
-;; Version: 20140711.1532
+;; Version: 20140713.409
 ;; X-Original-Version: 1.9.0
 ;; Keywords: strings
 
@@ -27,6 +27,8 @@
 ;; See documentation on https://github.com/magnars/s.el#functions
 
 ;;; Code:
+
+(require 'ucs-normalize)
 
 (defun s-trim-left (s)
   "Remove whitespace at the beginning of S."
@@ -383,9 +385,19 @@ attention to case differences."
   (let ((case-fold-search ignore-case))
     (string-match-p (regexp-quote needle) s)))
 
-(defun s-reverse (s) ;; from org-babel-reverse-string
+(defun s-reverse (s)
   "Return the reverse of S."
-  (apply 'string (nreverse (string-to-list s))))
+  (if (multibyte-string-p s)
+      (let ((input (string-to-list s))
+            (output ()))
+        (while input
+          ;; Handle entire grapheme cluster as a single unit
+          (let ((grapheme (list (pop input))))
+            (while (memql (car input) ucs-normalize-combining-chars)
+              (push (pop input) grapheme))
+            (setq output (nconc (nreverse grapheme) output))))
+        (concat output))
+    (concat (nreverse (string-to-list s)))))
 
 (defun s-match-strings-all (regex string)
   "Return a list of matches for REGEX in STRING.

@@ -4,7 +4,7 @@
 ;; Author: Jeremy Rayman <opensource@jeremyrayman.com>
 ;; Maintainer: Jeremy Rayman <opensource@jeremyrayman.com>
 ;; Created: 2010-09-02
-;; Version: 20140712.1351
+;; Version: 20140713.1131
 ;; X-Original-Version: 1.3.7
 ;; Keywords: faces, convenience, lisp, matching, tools, rainbow, rainbow parentheses, rainbow parens
 ;; EmacsWiki: http://www.emacswiki.org/emacs/RainbowDelimiters
@@ -487,6 +487,7 @@ Sets text properties:
 
 (defvar rainbow-delimiters-escaped-char-predicate-list
   '((emacs-lisp-mode . rainbow-delimiters-escaped-char-predicate-emacs-lisp)
+    (lisp-interaction-mode . rainbow-delimiters-escaped-char-predicate-emacs-lisp)
     (inferior-emacs-lisp-mode . rainbow-delimiters-escaped-char-predicate-emacs-lisp)
     (lisp-mode . rainbow-delimiters-escaped-char-predicate-lisp)
     (scheme-mode . rainbow-delimiters-escaped-char-predicate-lisp)
