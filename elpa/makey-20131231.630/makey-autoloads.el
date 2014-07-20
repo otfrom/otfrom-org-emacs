@@ -4,7 +4,7 @@
 
 
 ;;;### (autoloads (makey-initialize-key-groups) "makey" "makey.el"
-;;;;;;  (21188 961 0 0))
+;;;;;;  (21443 1046 381599 569000))
 ;;; Generated autoloads from makey.el
 
 (autoload 'makey-initialize-key-groups "makey" "\
@@ -14,7 +14,7 @@ Initializes KEY-GROUP and creates all the relevant interactive commands.
 
 ;;;***
 
-;;;### (autoloads nil nil ("makey-pkg.el") (21188 961 656227 0))
+;;;### (autoloads nil nil ("makey-pkg.el") (21443 1046 404807 992000))
 
 ;;;***
 

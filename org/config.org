@@ -112,6 +112,7 @@
 
 
    #+BEGIN_SRC emacs-lisp
+     (maybe-install-and-require 'makey)
      (maybe-install-and-require 'discover)
      (global-discover-mode 1)
    #+END_SRC
