@@ -5,7 +5,7 @@
 ;; Author: Bozhidar Batsov <bozhidar@batsov.com>
 ;; URL: https://github.com/bbatsov/projectile
 ;; Keywords: project, convenience
-;; Version: 20140711.2321
+;; Version: 20140716.416
 ;; X-Original-Version: 0.11.0
 ;; Package-Requires: ((s "1.6.0") (dash "1.5.0") (pkg-info "0.4"))
 
@@ -1479,7 +1479,7 @@ regular expression."
   (when (projectile-project-p)
     (let ((tags-file (projectile-expand-root projectile-tags-file-name)))
       (when (file-exists-p tags-file)
-        (with-demoted-errors 
+        (with-demoted-errors
           "Error loading tags-file: %s"
           (visit-tags-table tags-file t))))))
 
@@ -1882,10 +1882,11 @@ This command will first prompt for the directory the file is in."
         (all-files nil))
     (-each projectile-known-projects
       (lambda (project)
-        (let ((default-directory project))
-          (setq all-files (append all-files (-map (lambda (file)
-                                                    (expand-file-name file project))
-                                                  (projectile-current-project-files)))))))
+        (when (file-exists-p project)
+          (let ((default-directory project))
+            (setq all-files (append all-files (-map (lambda (file)
+                                                      (expand-file-name file project))
+                                                    (projectile-current-project-files))))))))
     (find-file (projectile-completing-read "Find file in projects: " all-files))))
 
 (defcustom projectile-switch-project-hook nil
@@ -2097,21 +2098,18 @@ is chosen."
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "4 b") 'projectile-switch-to-buffer-other-window)
     (define-key map (kbd "4 C-o") 'projectile-display-buffer)
+    (define-key map (kbd "4 d") 'projectile-find-dir-other-window)
     (define-key map (kbd "4 f") 'projectile-find-file-other-window)
     (define-key map (kbd "4 t") 'projectile-find-implementation-or-test-other-window)
     (define-key map (kbd "!") 'projectile-run-shell-command-in-root)
     (define-key map (kbd "&") 'projectile-run-async-shell-command-in-root)
-    (define-key map (kbd "a") 'projectile-ack)
-    (define-key map (kbd "A") 'projectile-ag)
     (define-key map (kbd "b") 'projectile-switch-to-buffer)
     (define-key map (kbd "c") 'projectile-compile-project)
     (define-key map (kbd "d") 'projectile-find-dir)
-    (define-key map (kbd "4 d") 'projectile-find-dir-other-window)
     (define-key map (kbd "D") 'projectile-dired)
     (define-key map (kbd "e") 'projectile-recentf)
     (define-key map (kbd "f") 'projectile-find-file)
     (define-key map (kbd "F") 'projectile-find-file-in-known-projects)
-    (define-key map (kbd "g") 'projectile-grep)
     (define-key map (kbd "i") 'projectile-invalidate-cache)
     (define-key map (kbd "I") 'projectile-ibuffer)
     (define-key map (kbd "j") 'projectile-find-tag)
@@ -2119,10 +2117,13 @@ is chosen."
     (define-key map (kbd "l") 'projectile-find-file-in-directory)
     (define-key map (kbd "m") 'projectile-commander)
     (define-key map (kbd "o") 'projectile-multi-occur)
-    (define-key map (kbd "p") 'projectile-test-project)
+    (define-key map (kbd "p") 'projectile-switch-project)
+    (define-key map (kbd "P") 'projectile-test-project)
     (define-key map (kbd "r") 'projectile-replace)
     (define-key map (kbd "R") 'projectile-regenerate-tags)
-    (define-key map (kbd "s") 'projectile-switch-project)
+    (define-key map (kbd "s a") 'projectile-ack)
+    (define-key map (kbd "s g") 'projectile-grep)
+    (define-key map (kbd "s s") 'projectile-ag)
     (define-key map (kbd "S") 'projectile-save-project-buffers)
     (define-key map (kbd "t") 'projectile-toggle-between-implementation-and-test)
     (define-key map (kbd "T") 'projectile-find-test-file)

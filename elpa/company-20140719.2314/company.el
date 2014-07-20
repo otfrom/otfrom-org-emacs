@@ -5,7 +5,7 @@
 ;; Author: Nikolaj Schumacher
 ;; Maintainer: Dmitry Gutov <dgutov@yandex.ru>
 ;; URL: http://company-mode.github.io/
-;; Version: 0.9.0-cvs
+;; Version: 0.8.2-cvs
 ;; Keywords: abbrev, convenience, matching
 ;; Package-Requires: ((emacs "24.1") (cl-lib "0.5"))
 
@@ -544,10 +544,10 @@ A character that is part of a valid candidate never triggers auto-completion."
 
 (defcustom company-idle-delay .5
   "The idle delay in seconds until completion starts automatically.
-A value of nil means no idle completion, t means show candidates
-immediately when a prefix of `company-minimum-prefix-length' is reached."
+The prefix still has to satisfy `company-minimum-prefix-length' before that
+happens.  The value of nil means no idle completion."
   :type '(choice (const :tag "never (nil)" nil)
-                 (const :tag "immediate (t)" t)
+                 (const :tag "immediate (0)" 0)
                  (number :tag "seconds")))
 
 (defcustom company-begin-commands '(self-insert-command org-self-insert-command)
@@ -692,6 +692,9 @@ keymap during active completions (`company-active-map'):
   nil company-lighter company-mode-map
   (if company-mode
       (progn
+        (when (eq company-idle-delay t)
+          (setq company-idle-delay 0)
+          (warn "Setting `company-idle-delay' to t is deprecated.  Set it to 0 instead."))
         (add-hook 'pre-command-hook 'company-pre-command nil t)
         (add-hook 'post-command-hook 'company-post-command nil t)
         (mapc 'company-init-backend company-backends))
@@ -1010,7 +1013,7 @@ can retrieve meta-data for them."
     candidate))
 
 (defun company--should-complete ()
-  (and (eq company-idle-delay t)
+  (and (eq company-idle-delay 'now)
        (not (or buffer-read-only overriding-terminal-local-map
                 overriding-local-map))
        ;; Check if in the middle of entering a key combination.
@@ -1188,42 +1191,71 @@ can retrieve meta-data for them."
       (setq c (funcall tr c)))
     c))
 
+(defcustom company-occurrence-weight-function
+  #'company-occurrence-prefer-closest-above
+  "Function to weigh matches in `company-sort-by-occurrence'.
+It's called with two arguments: the beginning and the end of the match."
+  :type '(choice
+          (const :tag "First above point, then below point"
+                 company-occurrence-prefer-closest-above)
+          (const :tag "Prefer closest in any direction"
+                 company-occurrence-prefer-any-closest)))
+
+(defun company-occurrence-prefer-closest-above (match-beg match-end)
+  "Give priority to the matches above point, then those below point."
+  (if (< match-beg (point))
+      (- (point) match-end)
+    (- match-beg (window-start))))
+
+(defun company-occurrence-prefer-any-closest (_match-beg match-end)
+  "Give priority to the matches closest to the point."
+  (abs (- (point) match-end)))
+
 (defun company-sort-by-occurrence (candidates)
   "Sort CANDIDATES according to their occurrences.
 Searches for each in the currently visible part of the current buffer and
-gives priority to the closest ones above point, then closest ones below
-point. The rest of the list is appended unchanged.
+prioritizes the matches according to `company-occurrence-weight-function'.
+The rest of the list is appended unchanged.
 Keywords and function definition names are ignored."
-  (let* (occurs
+  (let* ((w-start (window-start))
+         (w-end (window-end))
+         (start-point (point))
+         occurs
          (noccurs
-          (cl-delete-if
-           (lambda (candidate)
-             (when (or
-                    (save-excursion
-                      (progn (forward-char (- (length company-prefix)))
-                             (search-backward candidate (window-start) t)))
-                    (save-excursion
-                      (search-forward candidate (window-end) t)))
-               (let ((beg (match-beginning 0))
-                     (end (match-end 0)))
-                 (when (save-excursion
-                         (goto-char end)
-                         (and (not (memq (get-text-property (point) 'face)
-                                         '(font-lock-function-name-face
-                                           font-lock-keyword-face)))
-                              (let ((prefix (company--prefix-str
-                                             (company-call-backend 'prefix))))
-                                (and (stringp prefix)
-                                     (= (length prefix) (- end beg))))))
-                   (push (cons candidate (if (< beg (point))
-                                             (- (point) end)
-                                           (- beg (window-start))))
-                         occurs)
-                   t))))
-           candidates)))
+          (save-excursion
+            (cl-delete-if
+             (lambda (candidate)
+               (when (catch 'done
+                       (goto-char w-start)
+                       (while (search-forward candidate w-end t)
+                         (when (and (not (eq (point) start-point))
+                                    (save-match-data
+                                      (company--occurrence-predicate)))
+                           (throw 'done t))))
+                 (push
+                  (cons candidate
+                        (funcall company-occurrence-weight-function
+                                 (match-beginning 0)
+                                 (match-end 0)))
+                  occurs)
+                 t))
+             candidates))))
     (nconc
      (mapcar #'car (sort occurs (lambda (e1 e2) (<= (cdr e1) (cdr e2)))))
      noccurs)))
+
+(defun company--occurrence-predicate ()
+  (let ((beg (match-beginning 0))
+        (end (match-end 0)))
+    (save-excursion
+      (goto-char end)
+      (and (not (memq (get-text-property (1- (point)) 'face)
+                      '(font-lock-function-name-face
+                        font-lock-keyword-face)))
+           (let ((prefix (company--prefix-str
+                          (company-call-backend 'prefix))))
+             (and (stringp prefix)
+                  (= (length prefix) (- end beg))))))))
 
 (defun company-sort-by-backend-importance (candidates)
   "Sort CANDIDATES as two priority groups.
@@ -1256,7 +1288,7 @@ from the rest of the back-ends in the group, if any, will be left at the end."
 (defun company-auto-begin ()
   (and company-mode
        (not company-candidates)
-       (let ((company-idle-delay t))
+       (let ((company-idle-delay 'now))
          (condition-case-unless-debug err
              (company--perform)
            (error (message "Company: An error occurred in auto-begin")
@@ -1508,9 +1540,7 @@ from the rest of the back-ends in the group, if any, will be left at the end."
     (condition-case err
         (progn
           (unless (equal (point) company-point)
-            (let ((company-idle-delay (and (eq company-idle-delay t)
-                                           (company--should-begin)
-                                           t)))
+            (let (company-idle-delay) ; Against misbehavior while debugging.
               (company--perform)))
           (if company-candidates
               (company-call-frontends 'post-command)
@@ -2387,9 +2417,10 @@ Returns a negative number if the tooltip should be displayed above point."
         (overlay-put ov 'company-column column)
         (overlay-put ov 'company-height height)))))
 
-(defun company-pseudo-tooltip-show-at-point (pos)
+(defun company-pseudo-tooltip-show-at-point (pos column-offset)
   (let ((row (company--row pos))
-        (col (company--column pos)))
+        (col (- (company--column pos) column-offset)))
+    (when (< col 0) (setq col 0))
     (company-pseudo-tooltip-show (1+ row) col company-selection)))
 
 (defun company-pseudo-tooltip-edit (selection)
@@ -2426,29 +2457,30 @@ Returns a negative number if the tooltip should be displayed above point."
     (overlay-put company-pseudo-tooltip-overlay 'window (selected-window))))
 
 (defun company-pseudo-tooltip-guard ()
-  (buffer-substring-no-properties
-   (point) (overlay-start company-pseudo-tooltip-overlay)))
+  (list
+   (save-excursion (beginning-of-visual-line))
+   (let ((ov company-pseudo-tooltip-overlay))
+     (when (>= (overlay-get ov 'company-height) 0)
+       (buffer-substring-no-properties (point) (overlay-start ov))))))
 
 (defun company-pseudo-tooltip-frontend (command)
   "`company-mode' front-end similar to a tooltip but based on overlays."
   (cl-case command
     (pre-command (company-pseudo-tooltip-hide-temporarily))
     (post-command
-     (let ((old-height (if (overlayp company-pseudo-tooltip-overlay)
-                           (overlay-get company-pseudo-tooltip-overlay
-                                        'company-height)
-                         0))
-           (new-height (company--pseudo-tooltip-height)))
-       (unless (and (>= (* old-height new-height) 0)
-                    (>= (abs old-height) (abs new-height))
-                    (equal (company-pseudo-tooltip-guard)
-                           (overlay-get company-pseudo-tooltip-overlay
-                                        'company-guard)))
-         ;; Redraw needed.
-         (company-pseudo-tooltip-show-at-point (- (point)
-                                                  (length company-prefix)))
-         (overlay-put company-pseudo-tooltip-overlay
-                      'company-guard (company-pseudo-tooltip-guard))))
+     (unless (when (overlayp company-pseudo-tooltip-overlay)
+              (let* ((ov company-pseudo-tooltip-overlay)
+                     (old-height (overlay-get ov 'company-height))
+                     (new-height (company--pseudo-tooltip-height)))
+                (and
+                 (>= (* old-height new-height) 0)
+                 (>= (abs old-height) (abs new-height))
+                 (equal (company-pseudo-tooltip-guard)
+                        (overlay-get ov 'company-guard)))))
+       ;; Redraw needed.
+       (company-pseudo-tooltip-show-at-point (point) (length company-prefix))
+       (overlay-put company-pseudo-tooltip-overlay
+                    'company-guard (company-pseudo-tooltip-guard)))
      (company-pseudo-tooltip-unhide))
     (hide (company-pseudo-tooltip-hide)
           (setq company-tooltip-offset 0))

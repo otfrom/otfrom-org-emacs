@@ -5,7 +5,7 @@
 ;; Author: Steve Purcell <steve@sanityinc.com>
 ;; Keywords: environment
 ;; URL: https://github.com/purcell/exec-path-from-shell
-;; Version: 20140707.814
+;; Version: 20140719.1442
 ;; X-Original-Version: DEV
 
 ;; This file is not part of GNU Emacs.
@@ -116,8 +116,9 @@ shell-escaped, so they may contain $ etc."
       (apply #'call-process
              (getenv "SHELL") nil (current-buffer) nil shell-args)
       (goto-char (point-min))
-      (when (re-search-forward "__RESULT\0\\(.*\\)" nil t)
-        (match-string 1)))))
+      (if (re-search-forward "__RESULT\0\\(.*\\)" nil t)
+          (match-string 1)
+        (error "Expected printf output from shell, but got: %s" (buffer-string))))))
 
 (defun exec-path-from-shell-getenvs (names)
   "Get the environment variables with NAMES from the user's shell.
