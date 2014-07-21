@@ -1084,12 +1084,13 @@
 
          ;; set up the buffers as we want
          (window-number-select 1)
-         (org-agenda nil "Cm")
+         (org-agenda nil "Cn")
          (window-number-select 2)
          ;;(switch-to-buffer (find-file (concat org-directory "/work/world-domination.org")))
-         (mu4e)
-         (window-number-select 3)
          (switch-to-buffer "#kixi")
+         ;;(mu4e)
+         (window-number-select 3)
+         (switch-to-buffer "#clojure-emacs")
          (window-number-select 4)
          (switch-to-buffer "#ldnclj")
          (window-number-select 5)
@@ -1098,7 +1099,7 @@
          (switch-to-buffer "*-jabber-roster-*"))
 
          ;; And go to window 1
-         (window-number-select 1))
+         (window-number-select 2))
 
        (global-set-key [M-f12] 'captains-chair)
      #+END_SRC
