@@ -2508,6 +2508,15 @@
       (setq sauron-dbus-cookie t)
     #+END_SRC
 
+*** Mute twitter
+
+    I don't really want to know when I get new tweets. I might want to
+    know when I get @replies and DMs though.
+
+    #+BEGIN_SRC emacs-lisp
+      (setq sauron-prio-twittering-new-tweets 4)
+    #+END_SRC
+
 * Local Config
 
 ** custom.el
