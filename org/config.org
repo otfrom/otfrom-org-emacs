@@ -1547,6 +1547,8 @@
     things again after hearing about them on irc.
 
     #+BEGIN_SRC emacs-lisp
+      (require 'erc-log)
+      (erc-log-enable)
       (setq erc-log-channels-directory (concat user-emacs-directory "erc/logs/"))
       (setq erc-save-buffer-on-part t)
     #+END_SRC
