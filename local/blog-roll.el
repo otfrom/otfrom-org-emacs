@@ -17,6 +17,10 @@
          "http://www.girlgeniusonline.com/cgi-bin/rssmain.cgi"
          "~/org/feeds/comics.org" "Girl Genius"
          :template "\n* %h\n  %U\n  %a\n")
+        ("Stand Still. Stay Silent."
+         "http://sssscomic.com/ssss-feed.xml"
+         "~/org/feeds/comics.org" "Stand Still. Stay Silent."
+         :template "\n* %h\n  %U\n  %a\n")
         ("jl8"
          "http://limbero.org/jl8/rss/"
          "~/org/feeds/comics.org" "JL8"
