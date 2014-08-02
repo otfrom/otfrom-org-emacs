@@ -1205,7 +1205,7 @@
     #+BEGIN_SRC emacs-lisp
       (defun default-agenda ()
         (interactive)
-        (org-agenda nil "Cm"))
+        (org-agenda nil "Cn"))
       (global-set-key [M-f11] 'default-agenda)
     #+END_SRC
 
