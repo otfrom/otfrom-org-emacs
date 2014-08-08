@@ -2170,7 +2170,7 @@
 
       #+BEGIN_SRC emacs-lisp
         (maybe-install-and-require 'cider)
-        (diminish 'cider-mode "CDR")
+        (diminish 'cider-mode "Cλ")
       #+END_SRC
 
 ***** Popup compilation messages
@@ -2263,7 +2263,7 @@
       print by default.
 
       #+BEGIN_SRC emacs-lisp
-        (setq cider-repl-use-pretty-printing t)
+        ;; (setq cider-repl-use-pretty-printing t)
       #+END_SRC
 
 ***** A few repl tweaks
@@ -2374,6 +2374,7 @@
          (windmove-down)
          (shrink-window 25)
          (switch-to-buffer (sw1nn-nrepl-current-server-buffer))
+         (end-of-buffer)
          (windmove-up)
          (pop-to-buffer (cider-find-or-create-repl-buffer)))
      #+END_SRC
