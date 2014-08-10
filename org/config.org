@@ -2225,6 +2225,13 @@
       We used to have ac-nrepl here, but company is the supported
       thing in cider now and we've loaded that above.
 
+      #+BEGIN_SRC emacs-lisp
+        (setq company-idle-delay 0.5)
+        (setq company-tooltip-limit 10)
+        (setq company-minimum-prefix-length 2)
+        (setq company-tooltip-flip-when-above t)
+      #+END_SRC
+
 ***** compojure indentation rules
 
       A number of things in compojure don't really indent
