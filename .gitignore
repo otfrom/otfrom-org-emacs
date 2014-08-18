@@ -21,3 +21,4 @@ url/*
 /bbdb
 /eshell
 /org-gcal/
+/session.*
