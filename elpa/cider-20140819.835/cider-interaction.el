@@ -172,11 +172,19 @@ Signal an error if it is not supported."
 
 (defun cider--clojure-version ()
   "Retrieve the underlying connection's Clojure version."
-  (cider-eval-and-get-value "(clojure-version)"))
+  (with-current-buffer (nrepl-current-connection-buffer)
+    (when nrepl-versions
+      (let* ((version-dict (assoc "clojure" nrepl-versions))
+             (major (cdr (assoc "major" version-dict)))
+             (minor (cdr (assoc "minor" version-dict)))
+             (incremental (cdr (assoc "incremental" version-dict))))
+        (format "%s.%s.%s" major minor incremental)))))
 
 (defun cider--nrepl-version ()
   "Retrieve the underlying connection's nREPL version."
-  (cider-eval-and-get-value "(:version-string clojure.tools.nrepl/version)"))
+  (with-current-buffer (nrepl-current-connection-buffer)
+    (when nrepl-versions
+      (cdr (assoc "version-string" (assoc "nrepl" nrepl-versions))))))
 
 (defun cider--nrepl-middleware-version ()
   "Retrieve the underlying connection's CIDER nREPL version."
@@ -542,12 +550,21 @@ otherwise, nil."
         localname)
     name))
 
+(defvar cider-from-nrepl-filename-function
+  (if (eq system-type 'cygwin)
+      (lambda (resource) (let ((fixed-resource (replace-regexp-in-string "^/" "" resource)))
+                           (replace-regexp-in-string
+                            "\n" ""
+                            (shell-command-to-string (format "cygpath --unix '%s'" fixed-resource)))))
+    #'identity)
+  "Function to translate nREPL namestrings to Emacs filenames.")
+
 (defun cider--file-path (path)
   "Return PATH's local or tramp path using `cider-prefer-local-resources'.
 If no local or remote file exists, return nil."
-  (let ((local-path path)
-        (tramp-path (and path (cider--client-tramp-filename path))))
-    (cond ((equal path "") "")
+  (let* ((local-path (funcall cider-from-nrepl-filename-function path))
+         (tramp-path (and local-path (cider--client-tramp-filename local-path))))
+    (cond ((equal local-path "") "")
           ((and cider-prefer-local-resources (file-exists-p local-path))
            local-path)
           ((file-exists-p tramp-path)
@@ -1684,6 +1701,17 @@ strings, include private vars, and be case sensitive."
   (with-current-buffer (find-file-noselect file)
     (substring-no-properties (buffer-string))))
 
+(defvar cider-to-nrepl-filename-function
+  (if (eq system-type 'cygwin)
+      (lambda (filename)
+        (replace-regexp-in-string
+         "\\\\" "/"
+         (replace-regexp-in-string
+          "\n" ""
+          (shell-command-to-string  (format "cygpath.exe --windows '%s'" (expand-file-name filename))))))
+    #'identity)
+  "Function to translate Emacs filenames to nREPL namestrings.")
+
 (defun cider-load-file (filename)
   "Load the Clojure file FILENAME."
   (interactive (list
@@ -1693,7 +1721,7 @@ strings, include private vars, and be case sensitive."
                                          (buffer-file-name))))))
   (cider--clear-compilation-highlights)
   (cider-send-load-file (cider-file-string filename)
-                        (cider--server-filename filename)
+                        (funcall cider-to-nrepl-filename-function (cider--server-filename filename))
                         (file-name-nondirectory filename))
   (message "Loading %s..." filename))
 

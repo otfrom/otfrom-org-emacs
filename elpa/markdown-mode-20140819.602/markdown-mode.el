@@ -1,6 +1,6 @@
 ;;; markdown-mode.el --- Emacs Major mode for Markdown-formatted text files
 
-;; Copyright (C) 2007-2013 Jason R. Blevins <jrblevin@sdf.org>
+;; Copyright (C) 2007-2014 Jason R. Blevins <jrblevin@sdf.org>
 ;; Copyright (C) 2007, 2009 Edward O'Connor <ted@oconnor.cx>
 ;; Copyright (C) 2007 Conal Elliott <conal@conal.net>
 ;; Copyright (C) 2008 Greg Bognar <greg_bognar@hms.harvard.edu>
@@ -26,7 +26,7 @@
 ;; Author: Jason R. Blevins <jrblevin@sdf.org>
 ;; Maintainer: Jason R. Blevins <jrblevin@sdf.org>
 ;; Created: May 24, 2007
-;; Version: 20131210.700
+;; Version: 20140819.602
 ;; X-Original-Version: 2.0
 ;; Keywords: Markdown, GitHub Flavored Markdown, itex
 ;; URL: http://jblevins.org/projects/markdown-mode/
@@ -4555,7 +4555,7 @@ This is an exact copy of `line-number-at-pos' for use in emacs21."
            markdown-mode-font-lock-keywords-basic
            markdown-mode-font-lock-keywords-core))
     (setq font-lock-defaults '(markdown-mode-font-lock-keywords))
-    (font-lock-refresh-defaults)))
+    (when (fboundp 'font-lock-refresh-defaults) (font-lock-refresh-defaults))))
 
 (defun markdown-enable-math (&optional arg)
   "Toggle support for inline and display LaTeX math expressions.

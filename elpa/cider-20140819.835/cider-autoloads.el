@@ -4,7 +4,7 @@
 
 
 ;;;### (autoloads (cider-connect cider-jack-in cider-version) "cider"
-;;;;;;  "cider.el" (21489 53956 89466 965000))
+;;;;;;  "cider.el" (21492 24391 917685 341000))
 ;;; Generated autoloads from cider.el
 
 (autoload 'cider-version "cider" "\
@@ -29,7 +29,7 @@ Connect to an nREPL server identified by HOST and PORT.
 ;;;***
 
 ;;;### (autoloads (cider-inspect) "cider-inspector" "cider-inspector.el"
-;;;;;;  (21489 53956 57466 964000))
+;;;;;;  (21492 24391 897685 341000))
 ;;; Generated autoloads from cider-inspector.el
 
 (autoload 'cider-inspect "cider-inspector" "\
@@ -40,7 +40,7 @@ Eval the string EXPRESSION and inspect the result.
 ;;;***
 
 ;;;### (autoloads (cider-macroexpand-all cider-macroexpand-1) "cider-macroexpansion"
-;;;;;;  "cider-macroexpansion.el" (21489 53956 81466 966000))
+;;;;;;  "cider-macroexpansion.el" (21492 24391 909685 341000))
 ;;; Generated autoloads from cider-macroexpansion.el
 
 (autoload 'cider-macroexpand-1 "cider-macroexpansion" "\
@@ -58,7 +58,7 @@ Invoke 'clojure.walk/macroexpand-all' on the expression preceding point.
 ;;;***
 
 ;;;### (autoloads (cider-mode cider-mode-line) "cider-mode" "cider-mode.el"
-;;;;;;  (21489 53956 101466 967000))
+;;;;;;  (21492 24391 937685 342000))
 ;;; Generated autoloads from cider-mode.el
 
 (defvar cider-mode-line '(:eval (format " cider[%s]" (cider-current-ns))) "\
@@ -85,7 +85,7 @@ Minor mode for REPL interaction from a Clojure buffer.
 ;;;***
 
 ;;;### (autoloads (cider-scratch) "cider-scratch" "cider-scratch.el"
-;;;;;;  (21489 53956 61466 965000))
+;;;;;;  (21492 24391 897685 341000))
 ;;; Generated autoloads from cider-scratch.el
 
 (autoload 'cider-scratch "cider-scratch" "\
@@ -96,7 +96,7 @@ Create a scratch buffer.
 ;;;***
 
 ;;;### (autoloads (cider-selector) "cider-selector" "cider-selector.el"
-;;;;;;  (21489 53956 49466 965000))
+;;;;;;  (21492 24391 893685 341000))
 ;;; Generated autoloads from cider-selector.el
 
 (autoload 'cider-selector "cider-selector" "\
@@ -113,8 +113,8 @@ See `def-cider-selector-method' for defining new methods.
 
 ;;;### (autoloads nil nil ("cider-client.el" "cider-doc.el" "cider-eldoc.el"
 ;;;;;;  "cider-interaction.el" "cider-pkg.el" "cider-repl.el" "cider-stacktrace.el"
-;;;;;;  "cider-test.el" "cider-util.el" "nrepl-client.el") (21489
-;;;;;;  53956 129350 21000))
+;;;;;;  "cider-test.el" "cider-util.el" "nrepl-client.el") (21492
+;;;;;;  24391 993498 598000))
 
 ;;;***
 

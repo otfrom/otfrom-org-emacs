@@ -9,7 +9,7 @@
 ;;       Bozhidar Batsov <bozhidar@batsov.com>
 ;; URL: http://github.com/clojure-emacs/clojure-mode
 ;; Keywords: languages clojure clojurescript lisp
-;; Version: 20140817.14
+;; Version: 20140818.918
 ;; X-Original-Version: 3.0.0-cvs
 ;; Package-Requires: ((emacs "24.1"))
 
@@ -66,7 +66,6 @@
   (defvar paredit-mode))
 
 (require 'cl)
-(require 'tramp)
 (require 'inf-lisp)
 (require 'imenu)
 
@@ -1005,6 +1004,7 @@ returned."
 (defun clojure-insert-ns-form ()
   "Insert a namespace form at the beginning of the buffer."
   (interactive)
+  (widen)
   (goto-char (point-min))
   (clojure-insert-ns-form-at-point))
 
@@ -1014,18 +1014,18 @@ Useful if a file has been renamed."
   (interactive)
   (let ((nsname (clojure-expected-ns)))
     (when nsname
-      (save-restriction
-        (save-excursion
-          (save-match-data
-            (if (clojure-find-ns)
-                (replace-match nsname nil nil nil 4)
-              (error "Namespace not found"))))))))
+      (save-excursion
+        (save-match-data
+          (if (clojure-find-ns)
+              (replace-match nsname nil nil nil 4)
+            (error "Namespace not found")))))))
 
 (defun clojure-find-ns ()
   "Find the namespace of the current Clojure buffer."
   (let ((regexp clojure-namespace-name-regex))
-    (save-restriction
-      (save-excursion
+    (save-excursion
+      (save-restriction
+        (widen)
         (goto-char (point-min))
         (when (re-search-forward regexp nil t)
           (match-string-no-properties 4))))))
