@@ -1839,6 +1839,21 @@
        (global-set-key [f11] 'mu4e)
      #+END_SRC
 
+** Web Browsing
+
+*** w3m
+
+    I've really had it with bloated browsers gobbling all my memory
+    and not playing nicely with org-mode. So, let's try w3m for a
+    while shall we?
+
+    #+BEGIN_SRC emacs-lisp
+      (maybe-install-and-require 'w3m)
+      (setq browse-url-browser-function 'w3m-browse-url)
+      (global-set-key "\C-xm" 'browse-url-at-point)
+      (setq w3m-use-cookies t)
+    #+END_SRC
+
 ** Hailing Frequencies or comms
 
    It is good that jabber and erc die when I put the computer to
