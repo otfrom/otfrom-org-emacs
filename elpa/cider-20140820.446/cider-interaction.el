@@ -168,7 +168,9 @@ Signal an error if it is not supported."
 ;;; Connection info
 (defun cider--java-version ()
   "Retrieve the underlying connection's Java version."
-  (cider-eval-and-get-value "(System/getProperty \"java.version\")"))
+  (with-current-buffer (nrepl-current-connection-buffer)
+    (when nrepl-versions
+      (cdr (assoc "version-string" (assoc "java" nrepl-versions))))))
 
 (defun cider--clojure-version ()
   "Retrieve the underlying connection's Clojure version."
@@ -186,11 +188,24 @@ Signal an error if it is not supported."
     (when nrepl-versions
       (cdr (assoc "version-string" (assoc "nrepl" nrepl-versions))))))
 
-(defun cider--nrepl-middleware-version ()
+
+(defun cider--check-middleware-compatibility-callback (buffer)
+  "A callback to check if the middleware used is compatible with CIDER."
+  (nrepl-make-response-handler
+   buffer
+   (lambda (_buffer middleware-version)
+     (unless (and middleware-version (equal "1.0" middleware-version))
+       (cider-repl-emit-interactive-err-output (format "WARNING: CIDER's version (%s) does not match cider-nrepl's version (%s)" cider-version middleware-version))))
+   '()
+   '()
+   '()))
+
+(defun cider--check-middleware-compatibility ()
   "Retrieve the underlying connection's CIDER nREPL version."
-  (cider-eval-and-get-value "(try (require 'cider.nrepl)
+  (cider-eval "(try (require 'cider.nrepl)
                                   (:version-string @(resolve 'cider.nrepl/version))
-                               (catch Throwable _ \"not installed\"))"))
+                               (catch Throwable _ \"not installed\"))"
+              (cider--check-middleware-compatibility-callback (current-buffer))))
 
 (defun cider--connection-info (connection-buffer)
   "Return info about CONNECTION-BUFFER.
@@ -198,15 +213,14 @@ Signal an error if it is not supported."
 Info contains project name, current REPL namespace, host:port
 endpoint and Clojure version."
   (with-current-buffer (get-buffer connection-buffer)
-    (format "Active nREPL connection: %s:%s, %s:%s (Java %s, Clojure %s, nREPL %s, cider-nrepl %s)"
+    (format "Active nREPL connection: %s:%s, %s:%s (Java %s, Clojure %s, nREPL %s)"
             (or (nrepl--project-name nrepl-project-dir) "<no project>")
             nrepl-buffer-ns
             (car nrepl-endpoint)
             (cadr nrepl-endpoint)
             (cider--java-version)
             (cider--clojure-version)
-            (cider--nrepl-version)
-            (cider--nrepl-middleware-version))))
+            (cider--nrepl-version))))
 
 (defun cider-display-current-connection-info ()
   "Display information about the current connection."
@@ -1687,8 +1701,9 @@ strings, include private vars, and be case sensitive."
 (defun cider-refresh ()
   "Refresh loaded code."
   (interactive)
-  (cider-tooling-eval "(clojure.tools.namespace.repl/refresh)"
-                      (cider-interactive-eval-handler (current-buffer))))
+  (cider-tooling-eval
+   "(clojure.core/require 'clojure.tools.namespace.repl) (clojure.tools.namespace.repl/refresh)"
+   (cider-interactive-eval-handler (current-buffer))))
 
 ;; TODO: implement reloading ns
 (defun cider-eval-load-file (form)
