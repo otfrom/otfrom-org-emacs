@@ -2562,7 +2562,7 @@
    this file though and I like to do this.
 
    #+BEGIN_SRC emacs-lisp
-     (setq custom-file "~/.emacs.d/local/custom.el")
+     (setq custom-file (concat user-emacs-directory "local/custom.el"))
      (load-if-exists custom-file)
    #+END_SRC
 
