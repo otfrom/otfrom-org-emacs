@@ -20,6 +20,31 @@
          (message (format "No %s file. So not loading one." file))))
    #+END_SRC
 
+* Version Control with magit and Diffing with ediff
+
+  Once we have things up and running, really the most basic thing is
+  version control. This allows us to add everything else we need in an
+  organised manner. Once we have this we can bootstrap everything
+  else.
+
+  #+BEGIN_SRC emacs-lisp
+    (use-package magit
+      :ensure t
+      :bind (("C-c g" . magit-status)))
+  #+END_SRC
+
+  Once we do have version control and can do things with ediff, which
+  is a great mode for looking at diffs between versions, buffer, files
+  and directory trees, I want to fix how the windows work as the
+  default annoys me when it creates separate frames. I'd much rather
+  move around windows inside the one emacs frame.
+
+  #+BEGIN_SRC emacs-lisp
+    (use-package ediff
+      :config
+      (setq ediff-window-setup-function 'ediff-setup-windows-plain))
+  #+END_SRC
+
 * Finishing
 
 ** custom.el
