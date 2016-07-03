@@ -59,6 +59,30 @@
 
 * Finishing
 
+** Enabling the disabled
+
+*** upcase and downcase region
+
+    I like to be able to do this. I get lots of things that come in
+    SHOUTING or that need to SHOUT.
+
+    #+BEGIN_SRC emacs-lisp
+      (put 'downcase-region 'disabled nil)
+      (put 'upcase-region 'disabled nil)
+    #+END_SRC
+
+*** Narrowing the region to what I want to look at
+
+    This isn't needed quite so much now that searches, regexp and
+    otherwise operate, sometimes annoyingly to an old timer like me, on
+    the region rather than the whole buffer window. I still like to
+    narrow down to what I'm interested in though and not every handy
+    tool in emacs is quite so region oriented.
+
+    #+BEGIN_SRC emacs-lisp
+      (put 'narrow-to-region 'disabled nil)
+    #+END_SRC
+
 ** custom.el
 
    custom.el is great for configuring things through that "gui" in
