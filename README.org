@@ -8,6 +8,10 @@
   trying to do some other things and I figured I should fix it
   properly rather than just getting the basics back together.
 
+  I've since moved over to using use-package. That experiment was in
+  straight elisp though. Now I'm trying to merge this literate style
+  with that safer start up and package pinning.
+
   The real content is in [[./org/config.org][config.org]], which would probably be more
   interesting to read.
 
@@ -21,7 +25,7 @@
   - create a emacs-config directory in your $HOME dir.
   - clone this repo in that directory
   - do a symbolic link from the clone to your .emacs.d directory
-    
+
   This is what I normally do. This lets me clone or create lots of new
   emacs configurations without trashing any of the earlier ones and
   lets me try a lot of things out. It seems to be working for me so
@@ -31,22 +35,22 @@
 
   Here are the things this emacs config gives examples for:
 
+  - uses use-package for clean start up
+  - package pinning for safer upgrades
   - clojure support with cider
   - Separating custom.el from the rest of your files.
   - hippie expand
   - upcasing and downcasing
   - Using diminish to clean up a mode-line
-  - Adding non-elpa files
   - Using multiple elpa package archives
   - Using color themes and custom fonts
   - removing chrome from the windows
   - very basic helm mode setup
   - a basic ido setup for somethings
-  - magit & git gutter mode
+  - magit
   - using Emacs as a twitter client
   - using Emacs as a gtalk/jabber client
   - using Emacs as an irc client
   - paredit and rainbow delimiters
-  - using add-hook
   - org-mode with some custom agendas and sorting
   - emacs on Mac OS X fixes (vestigial now)
