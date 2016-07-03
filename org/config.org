@@ -45,6 +45,18 @@
       (setq ediff-window-setup-function 'ediff-setup-windows-plain))
   #+END_SRC
 
+* Make it pretty
+
+** Colours
+
+   It seems trivial, but it is one of the first things I do after I
+   get the basics up and running. I like to get my colours and other
+   basic window chrome and geegaws right.
+
+   #+BEGIN_SRC emacs-lisp
+     (load-theme 'wheatgrass)
+   #+END_SRC
+
 * Finishing
 
 ** custom.el
