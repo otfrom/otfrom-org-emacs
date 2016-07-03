@@ -79,6 +79,172 @@
      (load-theme 'wheatgrass)
    #+END_SRC
 
+* Programming
+
+  Configuring emacs is lisp coding. When I'm not coding in emacs-lisp,
+  I'm usually coding in clojure. I'd like to try to get get nice
+  environments for both as quickly as possible.
+
+** Helping in all modes
+
+   Some minor modes just help with programming everywhere.
+
+*** company
+
+    This is the best completion package available in emacs at the
+    moment. It works with most programming modes.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package company
+        :ensure t
+        :diminish company-mode
+        :config
+        (global-company-mode))
+    #+END_SRC
+
+*** projectile
+
+    Projectile allows you to treat gropus of files under git control
+    or other build tools as projects and navigate and search them in
+    easier ways.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package projectile
+        :ensure t
+        :diminish projectile-mode
+        :config
+        (setq projectile-enable-caching t)
+        (projectile-global-mode 1))
+    #+END_SRC
+
+** Lisps
+
+   I am a big fan of lisps. I like the syntax and some of the
+   communities now a days are very nice places to be in.
+
+   At the moment most of my lisp work is either in emacs-lisp or in
+   clojure.
+
+   Below are the ways I configure various lisp modes.
+
+*** Lisp Hooks
+
+    There are a number of related lisp modes and I'd like to make a
+    them behave the same (when that makes sense anyway).
+
+    #+BEGIN_SRC emacs-lisp
+      (defvar lisp-mode-hooks
+        '(emacs-lisp-mode-hook lisp-mode-hook clojure-mode-hook))
+
+      (defvar lisp-interaction-mode-hooks
+        '(lisp-interaction-modes-hook cider-mode-hook cider-repl-mode-hook))
+    #+END_SRC
+
+**** Indent all the things... aggressively
+
+     I love this mode when doing lisp stuff. It really makes it
+     obvious when you don't have things balanced up and keeps your
+     code tidy.
+
+     #+BEGIN_SRC emacs-lisp
+       (use-package aggressive-indent
+         :ensure t
+         :diminish aggressive-indent-mode
+         :config (bld/add-to-hooks #'aggressive-indent-mode lisp-mode-hooks))
+     #+END_SRC
+
+**** eldoc so you know what is going on
+
+     eldoc is another great little tip so that you can see what the
+     signature is for the functions you are using.
+
+     #+BEGIN_SRC emacs-lisp
+       (use-package eldoc
+         :diminish eldoc-mode
+         :config (bld/add-to-hooks #'eldoc-mode
+                                   (append lisp-mode-hooks lisp-interaction-mode-hooks)))
+     #+END_SRC
+
+**** paredit
+
+     I *always* want my parens to match (except in text modes).
+
+     #+BEGIN_SRC emacs-lisp
+       (use-package paredit
+         :ensure t
+         :diminish paredit-mode
+         :config (bld/add-to-hooks #'paredit-mode
+                                   (append lisp-mode-hooks lisp-interaction-mode-hooks)))
+     #+END_SRC
+
+**** rainbow delimiters
+
+     All of those delimeters should be pretty and give you a hint as
+     to where they match.
+
+     #+BEGIN_SRC emacs-lisp
+       (use-package rainbow-delimiters
+         :ensure t
+         :diminish rainbow-delimiters
+         :config (bld/add-to-hooks #'rainbow-delimiters-mode
+                                   (append lisp-mode-hooks lisp-interaction-mode-hooks)))
+     #+END_SRC
+
+**** Paren matching
+
+     Because you really need to see where those things match.
+
+     #+BEGIN_SRC emacs-lisp
+       (use-package paren
+         :config (bld/add-to-hooks #'show-paren-mode
+                                   (append lisp-mode-hooks lisp-interaction-mode-hooks)))
+     #+END_SRC
+
+*** clojure and CIDER
+
+    Clojure is certainly my favorite lisp on the JVM and is the one I
+    use most professionally, or at least the one I create code in that
+    I ship to other people.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package clojure-mode
+        :ensure t
+        :defer t
+        :mode (("\\.clj\\'" . clojure-mode)
+               ("\\.edn\\'" . clojure-mode)))
+    #+END_SRC
+
+    CIDER is the mode that lets us connect to a REPL and evaluate code
+    and do REPL Driven Development.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package cider
+        :ensure t
+        :defer t
+        :config
+        (setq cider-repl-history-file (concat user-emacs-directory "cider-history")
+              cider-repl-history-size 1000
+              cider-font-lock-dynamically '(macro core function var)
+              cider-overlays-use-font-lock t
+              cider-pprint-fn 'fipp
+              cider-cljs-lein-repl "(do (use 'figwheel-sidecar.repl-api) (start-figwheel!) (cljs-repl))"))
+    #+END_SRC
+
+    clj-refactor lets us move a lot of things around and get less
+    often used bits of syntax like ns declrations correct.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package clj-refactor
+        :ensure t
+        :defer t
+        :config
+        (defun my-clj-refactor-hook ()
+          (message "Running cljr hook.")
+          (clj-refactor-mode 1)
+          (cljr-add-keybindings-with-prefix "C-c r"))
+        (add-hook 'clojure-mode-hook 'my-clj-refactor-hook))
+    #+END_SRC
+
 * Finishing
 
 ** Enabling the disabled
