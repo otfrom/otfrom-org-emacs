@@ -56,6 +56,17 @@
       (setq ediff-window-setup-function 'ediff-setup-windows-plain))
   #+END_SRC
 
+** Delete that trailing whitespace
+
+   Trailing whitespace just causes trouble with diffs and version
+   control. So let's get rid of it.
+
+   #+BEGIN_SRC emacs-lisp
+     (add-hook 'before-save-hook
+               (lambda nil
+                 (delete-trailing-whitespace)))
+   #+END_SRC
+
 * Make it pretty
 
 ** Colours
