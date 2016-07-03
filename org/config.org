@@ -96,26 +96,6 @@
      (load-if-exists custom-file)
    #+END_SRC
 
-** General Cleanup
-
-   This is a bit pathetic, but sometimes things get set by various
-   modes above and to be honest, I'm just too lazy at the moment to
-   figure out which ones. So, we'll do some final bits of clean up
-   down here and maybe some day, I'll get around to it.
-
-*** Random Default on Minor Modes
-
-    With newer version of emacs new minor modes get turned on by
-    default and clutter up my mode line. I'd like to turn them off.
-
-**** auto-revert
-
-     OK. I get it. auto-revert mode is on.
-
-     #+BEGIN_SRC emacs-lisp
-       (diminish 'auto-revert-mode)
-     #+END_SRC
-
 ** passwords and encrypted things
 
    It is good to store your passwords and things in an encrypted
