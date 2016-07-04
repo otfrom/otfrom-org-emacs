@@ -284,6 +284,57 @@
         (add-hook 'clojure-mode-hook 'my-clj-refactor-hook))
     #+END_SRC
 
+* Other Modes
+
+** ido and smex
+
+   I just want to use this everywhere. I've tried using helm before
+   for a similar purpose and while it is really good I found it a bit
+   too intrusive. This might be because I am interface damaged from
+   years of using emacs, but this is my config if you want to go wild
+   with helm, then create your own. ;-)
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package smex
+       :ensure t
+       :bind (("M-x" . smex))
+       :config (smex-initialize))  ; smart meta-x (use IDO in minibuffer)
+
+     (use-package ido
+       :ensure t
+       :demand t
+       :bind (("C-x b" . ido-switch-buffer))
+       :config (ido-mode 1)
+       (setq ido-create-new-buffer 'always  ; don't confirm when creating new buffers
+             ido-enable-flex-matching t     ; fuzzy matching
+             ido-everywhere t  ; tbd
+             ido-case-fold t)) ; ignore case
+
+     (use-package ido-ubiquitous
+       :ensure t
+       :config (ido-ubiquitous-mode 1))
+
+     (use-package flx-ido
+       :ensure t
+       :config (flx-ido-mode 1))
+
+     (use-package ido-vertical-mode
+       :ensure t
+       :config (ido-vertical-mode 1))
+   #+END_SRC
+
+** yasnippet
+
+   Yet another snippet package, but this one is pretty good so we'll
+   use it.
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package yasnippet
+       :ensure t
+       :defer t
+       :config (yas-global-mode 1))
+   #+END_SRC
+
 * Finishing
 
 ** Backups
