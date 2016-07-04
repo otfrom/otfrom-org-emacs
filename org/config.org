@@ -79,6 +79,36 @@
      (load-theme 'wheatgrass)
    #+END_SRC
 
+** Bars, columns and lines
+
+   I don't want a tool bar or a scroll bar ever and I don't want a
+   menu when I'm in a terminal window.  I do like the menu ot discover
+   new things and keybindings when I'm using emacs as an X
+   application.
+
+   #+BEGIN_SRC emacs-lisp
+     ;; no toolbar
+     (tool-bar-mode -1)
+
+     ;; no menu in a terminal
+     (unless window-system
+       (menu-bar-mode -1))
+
+     ;; no scroll bar
+     (scroll-bar-mode -1)
+
+     ;; no horizontal scroll bar
+     (when (boundp 'horizontal-scroll-bar-mode)
+       (horizontal-scroll-bar-mode -1))
+   #+END_SRC
+
+   I also like to have an idea of where I am in the file so I'd like
+   line and column numbers.
+
+   #+BEGIN_SRC emacs-lisp
+     (line-number-mode 1)
+     (column-number-mode 1)
+   #+END_SRC
 * Programming
 
   Configuring emacs is lisp coding. When I'm not coding in emacs-lisp,
