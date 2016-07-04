@@ -109,6 +109,15 @@
      (line-number-mode 1)
      (column-number-mode 1)
    #+END_SRC
+** Startup Screen
+
+   I'd also like to skip the startup screen and go straight to the
+   *scratch* buffer.
+
+   #+BEGIN_SRC emacs-lisp
+     (setq inhibit-startup-screen t)
+   #+END_SRC
+
 * Programming
 
   Configuring emacs is lisp coding. When I'm not coding in emacs-lisp,
