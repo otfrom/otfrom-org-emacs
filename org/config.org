@@ -286,6 +286,23 @@
 
 * Finishing
 
+** Backups
+
+   Backups are handy for those times where you run out of power
+   suddenly or you get a kernel panic, but it isn't fun having them
+   littered around the system.
+
+   #+BEGIN_SRC emacs-lisp
+     (setq
+      backup-by-copying t      ; don't clobber symlinks
+      backup-directory-alist
+      '(("." . "~/.saves"))    ; don't litter my fs tree
+      delete-old-versions t
+      kept-new-versions 6
+      kept-old-versions 2
+      version-control t)       ; use versioned backups
+   #+END_SRC
+
 ** Enabling the disabled
 
 *** upcase and downcase region
