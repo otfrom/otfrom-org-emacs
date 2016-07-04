@@ -147,6 +147,15 @@
         (projectile-global-mode 1))
     #+END_SRC
 
+*** tabs are evil
+
+    They are, they just are. I spent time putting those characters in
+    the right place. I don't want you to change that.
+
+    #+BEGIN_SRC emacs-lisp
+      (setq-default indent-tabs-mode nil)
+    #+END_SRC
+
 ** Lisps
 
    I am a big fan of lisps. I like the syntax and some of the
