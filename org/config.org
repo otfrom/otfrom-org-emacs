@@ -293,6 +293,30 @@
         (add-hook 'clojure-mode-hook 'my-clj-refactor-hook))
     #+END_SRC
 
+* Text Modes
+
+** Text Mode Basics
+
+   If we are in a text mode we want flyspell and auto-fill-mode.
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package flyspell
+       :diminish flyspell-mode
+       :config (add-hook 'text-mode-hook
+                         (lambda () (flyspell-mode 1))))
+   #+END_SRC
+
+   auto-fill-mode & text-mode is a bit weird and I've really not found
+   a way to make it play nicely with use-package they way I've done
+   the other minor modes. So I've just gone old school here.
+
+   #+BEGIN_SRC emacs-lisp
+     (add-hook 'text-mode-hook
+               (lambda ()
+                 (auto-fill-mode 1)
+                 (diminish auto-fill-function)))
+   #+END_SRC
+
 * Other Modes
 
 ** ido and smex
