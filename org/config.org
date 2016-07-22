@@ -368,6 +368,19 @@
        :config (yas-global-mode 1))
    #+END_SRC
 
+** password store
+
+   As said in the header of the mode:
+
+   "This package provides functions for working with pass ("the
+   standard Unix password manager")."
+
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package password-store
+       :ensure t)
+   #+END_SRC
+
 * Finishing
 
 ** Backups
