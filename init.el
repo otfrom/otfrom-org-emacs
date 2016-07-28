@@ -6,23 +6,69 @@
 ;;
 ;; http://orgmode.org/worg/org-contrib/babel/intro.html
 (require 'package)
-(setq package-archives '(;; ("gnu" . "http://elpa.gnu.org/packages/")
-			 ;; ("marmalade" . "http://marmalade-repo.org/packages/")
+(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                         ("elpa" . "http://elpa.gnu.org/packages/")
+                         ("marmalade" . "http://marmalade-repo.org/packages/")
                          ("org" . "http://orgmode.org/elpa/")
+                         ("melpa-stable" . "http://melpa-stable.milkbox.net/packages/")
                          ("melpa" . "http://melpa.milkbox.net/packages/")))
+
+;; Pin all the things
+(setq package-pinned-packages
+      '((aggressive-indent . "melpa-stable")
+        (bind-key . "melpa-stable")
+        (cider . "melpa-stable")
+        (cider-eval-sexp-fu . "melpa-stable")
+	(clj-refactor . "melpa-stable")
+        (clojure-mode . "melpa-stable")
+        (company . "melpa-stable")
+        ;; (dash . "melpa-stable")
+        (diminish . "melpa-stable")
+        (epl . "melpa-stable")
+        (exec-path-from-shell . "melpa-stable")
+        (flx . "melpa-stable")
+        (flx-ido . "melpa-stable")
+        (git-commit . "melpa-stable")
+        (hydra . "melpa-stable")
+        (ido . "melpa-stable")
+        (ido-completing-read+ . "melpa-stable")
+        (ido-ubiquitous . "melpa-stable")
+        (ido-vertical-mode . "melpa-stable")
+        (flycheck-pos-tip . "melpa-stable")
+        (flycheck . "melpa-stable")
+        (highlight . "melpa") ;; woo! from the wiki https://www.emacswiki.org/emacs/highlight.el
+        (highlight-symbol . "melpa-stable")
+        (inflections . "melpa-stable")
+        (magit . "melpa-stable")
+        (magit-popup . "melpa-stable")
+        (multiple-cursors . "melpa-stable")
+        (paredit . "melpa-stable")
+        (peg . "melpa-stable")
+        (pkg-info . "melpa-stable")
+        (pos-tip . "melpa-stable")
+        (projectile . "melpa-stable")
+        (rainbow-delimiters . "melpa-stable")
+        (s . "melpa-stable")
+        (seq . "elpa")
+        (smex . "melpa-stable")
+        (swiper . "melpa-stable")
+        (use-package . "melpa-stable")
+        (with-editor . "melpa-stable")
+        (yasnippet . "melpa-stable")))
 
 ;; This means we prefer things from ~/.emacs.d/elpa over the standard packages.
 (package-initialize)
 
-;; This bootstraps us if we don't have anything
-(when (not package-archive-contents)
-  (package-refresh-contents))
+(unless (package-installed-p 'use-package)
+  (message "Refreshing packages")
+  (package-refresh-contents)
+  (package-install 'use-package))
 
-;; This installs elpa packages if we haven't done that yet
-(defun maybe-install-and-require (p)
-  (when (not (package-installed-p p))
-    (package-install p))
-  (require p))
+(eval-when-compile
+  (require 'use-package))
+(defvar use-package-verbose t)
+(require 'bind-key)
+(require 'diminish)
 
 ;; org-mode always needs to be installed in an emacs where it isn't loaded.
 (when (not (package-installed-p 'org-plus-contrib))

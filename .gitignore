@@ -22,3 +22,6 @@ url/*
 /eshell
 /org-gcal/
 /session.*
+elpa/
+/ido.last
+/projectile.cache
