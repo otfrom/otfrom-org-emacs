@@ -317,6 +317,16 @@
                  (diminish auto-fill-function)))
    #+END_SRC
 
+** Markdown
+
+   Not everything is done in org-mode. Though perhaps it should be.
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package markdown-mode
+       :ensure t
+       :mode (".md$" . gfm-mode))
+   #+END_SRC
+
 * Other Modes
 
 ** ido and smex
