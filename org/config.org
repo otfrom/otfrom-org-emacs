@@ -404,6 +404,20 @@
        :config (erc-colorize-mode 1))
    #+END_SRC
 
+** pivotal tracker
+
+   I've tried managing the whole team using org-mode. Even when there
+   were only 4 of us and 3 of us were regular emacs users it didn't
+   work. It was a lovely idea and I'll give something similar another
+   crack.
+
+   For now, we've gone full hipster with [[http://pivotaltracker.com][Pivotal Tracker]].
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package pivotal-tracker
+       :ensure t)
+   #+END_SRC
+
 * Finishing
 
 ** Backups
