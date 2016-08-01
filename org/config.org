@@ -317,6 +317,16 @@
                  (diminish auto-fill-function)))
    #+END_SRC
 
+** Markdown
+
+   Not everything is done in org-mode. Though perhaps it should be.
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package markdown-mode
+       :ensure t
+       :mode (".md$" . gfm-mode))
+   #+END_SRC
+
 * Other Modes
 
 ** ido and smex
@@ -379,6 +389,72 @@
    #+BEGIN_SRC emacs-lisp
      (use-package password-store
        :ensure t)
+   #+END_SRC
+
+** irc/slack and erc stuff
+
+   erc can be used for irc and as a slack client. It needs a few
+   things to make it a bit nicer even though it is actually pretty
+   good out of the box.
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package erc-colorize
+       :ensure t
+       :defer t
+       :config (erc-colorize-mode 1))
+   #+END_SRC
+
+** pivotal tracker
+
+   I've tried managing the whole team using org-mode. Even when there
+   were only 4 of us and 3 of us were regular emacs users it didn't
+   work. It was a lovely idea and I'll give something similar another
+   crack.
+
+   For now, we've gone full hipster with [[http://pivotaltracker.com][Pivotal Tracker]].
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package pivotal-tracker
+       :ensure t)
+   #+END_SRC
+
+** twittering-mode
+
+   I have been accused by many ([[http://twitter.com/rrees][Robert Rees]] and [[http://twitter.com/cluttercup][Jane Dickson]] to name
+   but two) of being constantly on twitter. This is mostly fair. I'm
+   curious to see the revision history of this file and see if I
+   change this description before I declare .emacs bankruptcy again.
+
+   The best twitter client I've found is twittering-mode.
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package twittering-mode
+       :ensure t
+       :defer t
+       :bind (([M-f6] . twittering-update-status-interactive))
+       :config (setq twittering-url-show-status nil
+                     twittering-icon-mode 1
+                     twittering-use-icon-storage t
+                     twittering-use-master-password t
+                     twittering-initial-timeline-spec-string
+                     '("otfrom/people-i-know"
+                       ":replies"
+                       ":direct_messages")
+                     twittering-timer-interval (* 60 30))
+       (add-hook 'twittering-edit-mode-hook
+                 (lambda () (ispell-minor-mode) (flyspell-mode))))
+   #+END_SRC
+
+** Emojis
+
+   Just the unicode and github ones really. I like the ascii ones as
+   they are :-) .
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package emojify
+       :ensure t
+       :defer t
+       :config (add-hook 'after-init-hook #'global-emojify-mode))
    #+END_SRC
 
 * Finishing
