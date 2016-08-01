@@ -391,6 +391,19 @@
        :ensure t)
    #+END_SRC
 
+** irc/slack and erc stuff
+
+   erc can be used for irc and as a slack client. It needs a few
+   things to make it a bit nicer even though it is actually pretty
+   good out of the box.
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package erc-colorize
+       :ensure t
+       :defer t
+       :config (erc-colorize-mode 1))
+   #+END_SRC
+
 * Finishing
 
 ** Backups
