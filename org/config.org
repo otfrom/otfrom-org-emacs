@@ -457,6 +457,20 @@
        :config (add-hook 'after-init-hook #'global-emojify-mode))
    #+END_SRC
 
+** What is the weather?
+
+   This probably falls under "more stupid emacs tricks", but who
+   wouldn't want to to see the weather in emacs?
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package wttrin
+       :ensure t
+       :commands (wttrin)
+       :init
+       (setq wttrin-default-cities '("London"
+                                     "Belfast")))
+   #+END_SRC
+
 * Finishing
 
 ** Backups
