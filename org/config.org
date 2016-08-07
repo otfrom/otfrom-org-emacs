@@ -538,6 +538,24 @@
        :config (ido-vertical-mode 1))
    #+END_SRC
 
+** Moving windows and buffers
+
+   I like to be able to move windows and buffers around quickly and
+   for the keys to be quite similar.
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package buffer-move
+       :ensure t
+       :bind (([M-s-up] . windmove-up)
+              ([M-s-down] . windmove-down)
+              ([M-s-right] . windmove-right)
+              ([M-s-left] . windmove-left)
+              ([s-up] . buf-move-up)
+              ([s-down] . buf-move-down)
+              ([s-right] . buf-move-right)
+              ([s-left] . buf-move-left)))
+   #+END_SRC
+
 ** yasnippet
 
    Yet another snippet package, but this one is pretty good so we'll
