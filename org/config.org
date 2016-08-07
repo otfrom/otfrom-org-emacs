@@ -404,6 +404,101 @@
        :mode (".md$" . gfm-mode))
    #+END_SRC
 
+** org-mode
+
+   This mode is so powerful, I like to program in it. :-D
+
+
+*** org-gcal
+
+    I'd like to have my Google Calendar events in org-mode agenda
+    buffers. This isn't because I particularly like Google Calendar,
+    but it is a convenient way to share my schedule with my
+    colleagues, friends and customers.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package org-gcal
+        :ensure t)
+    #+END_SRC
+
+*** org agenda
+
+    These are the files that I currently need to keep an up to date
+    integrated agenda.
+
+    #+BEGIN_SRC emacs-lisp
+      (setq org-agenda-files
+            (append '("~/org/refile.org")
+                    (mapcar 'cdr org-gcal-file-alist)))
+      #+END_SRC
+
+*** org agenda clock editing
+
+    There are a lot of interesting things [[https://github.com/dfeich/org-clock-convenience][here]] about editing and
+    tracking time in org-agenda files.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package org-clock-convenience
+        :ensure t
+        :config
+        (defun dfeich/org-agenda-mode-fn ()
+          (define-key org-agenda-mode-map
+            (kbd "<S-up>") #'org-clock-convenience-timestamp-up)
+          (define-key org-agenda-mode-map
+            (kbd "<S-down>") #'org-clock-convenience-timestamp-down)
+          (define-key org-agenda-mode-map
+            (kbd "ø") #'org-clock-convenience-fill-gap)) ; AltGr-o
+        (add-hook 'org-agenda-mode-hook #'dfeich/org-agenda-mode-fn))
+    #+END_SRC
+
+*** mailbox like rescheduling.
+
+    mailbox is gone -- a victim of the M&A wars. We can still carry on
+    with the ideas though due to the power of Free Software.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package orgbox
+        :ensure t)
+    #+END_SRC
+
+*** org-journal
+
+    When I'm not trying to actually follow a procedure around using
+    org-mode for day to day stuff, I basically follow the pattern
+    [[https://github.com/bastibe/][bastibe]] talks about [[https://github.com/bastibe/org-journal][here]].
+
+    I've tried gtd things, deft, using org-capture and refile and I've
+    never really stuck with any of them. The one that did work very
+    well for me was the predecessor to org-mode [[https://www.emacswiki.org/emacs/PlannerMode][planner-mode]].
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package org-journal
+        :ensure t
+        :bind (("C-c j" . org-journal-new-entry))
+        :config
+        (setq org-journal-dir "~/org/journal/")
+        (add-to-list 'org-agenda-files "~/org/journal/")
+        (setq org-agenda-file-regexp "\\`[^.].*\\.org'\\|[0-9]+")
+        (add-to-list 'auto-mode-alist '("org/journal" . org-mode)))
+    #+END_SRC
+
+*** org-mode tweaks
+
+    There a soooo many things to configure in org-mode. Here are some
+    of the ones that are core to me.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package org-mode
+        :bind (("C-c a" . org-agenda))
+        :config
+        (setq org-log-done 'note) ; log when we finish things
+        (setq org-log-into-drawer t) ; put log into the drawer
+        (setq org-clock-persist 'history)
+        (org-clock-persistence-insinuate) ; keep the clock history
+        (appt-activate 1) ; shout when we have appts
+        )
+    #+END_SRC
+
 * Other Modes
 
 ** ido and smex
