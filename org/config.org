@@ -31,6 +31,83 @@
          (add-hook hook f)))
    #+END_SRC
 
+* Starting
+
+  There are some variables we'll really want to set up before
+  everything gets kicked off. Usually we'd want to do this by using
+  the :config key in use-package, but sometimes, I'm not smart enough
+  to know how to do it.
+
+** Backups
+
+   Backups are handy for those times where you run out of power
+   suddenly or you get a kernel panic, but it isn't fun having them
+   littered around the system.
+
+   #+BEGIN_SRC emacs-lisp
+     (setq
+      backup-by-copying t      ; don't clobber symlinks
+      backup-directory-alist
+      '(("." . "~/.saves"))    ; don't litter my fs tree
+      delete-old-versions t
+      kept-new-versions 6
+      kept-old-versions 2
+      version-control t)       ; use versioned backups
+   #+END_SRC
+
+** Enabling the disabled
+
+*** upcase and downcase region
+
+    I like to be able to do this. I get lots of things that come in
+    SHOUTING or that need to SHOUT.
+
+    #+BEGIN_SRC emacs-lisp
+      (put 'downcase-region 'disabled nil)
+      (put 'upcase-region 'disabled nil)
+    #+END_SRC
+
+*** Narrowing the region to what I want to look at
+
+    This isn't needed quite so much now that searches, regexp and
+    otherwise operate, sometimes annoyingly to an old timer like me, on
+    the region rather than the whole buffer window. I still like to
+    narrow down to what I'm interested in though and not every handy
+    tool in emacs is quite so region oriented.
+
+    #+BEGIN_SRC emacs-lisp
+      (put 'narrow-to-region 'disabled nil)
+    #+END_SRC
+
+** custom.el
+
+   custom.el is great for configuring things through that "gui" in
+   emacs, but it is a real pain when it drops junk in your [[../init.el][init.el]] and
+   messes up your pretty config and git history and is stuff that you
+   don't want to leak out on to github. You can change the location of
+   this file though and I like to do this.
+
+   #+BEGIN_SRC emacs-lisp
+     (setq custom-file (concat user-emacs-directory "local/custom.el"))
+     (load-if-exists custom-file)
+   #+END_SRC
+
+** passwords and encrypted things
+
+   It is good to store your passwords and things in an encrypted
+   file. I call mine mellon, because you can only read it if you are
+   my friend and have the passphrase.
+
+   This does mean that every time you use it you have to give the
+   passphrase, but it does mean that you can keep all your passwords
+   for things like erc and stuff in a file reasonably safely (though
+   it will be in memory when emacs is running, so it isn't completely
+   secure).
+
+   #+BEGIN_SRC emacs-lisp
+     (load-if-exists (concat user-emacs-directory "local/mellon.el.gpg"))
+   #+END_SRC
+
 * Version Control with magit and Diffing with ediff
 
   Once we have things up and running, really the most basic thing is
@@ -472,76 +549,6 @@
    #+END_SRC
 
 * Finishing
-
-** Backups
-
-   Backups are handy for those times where you run out of power
-   suddenly or you get a kernel panic, but it isn't fun having them
-   littered around the system.
-
-   #+BEGIN_SRC emacs-lisp
-     (setq
-      backup-by-copying t      ; don't clobber symlinks
-      backup-directory-alist
-      '(("." . "~/.saves"))    ; don't litter my fs tree
-      delete-old-versions t
-      kept-new-versions 6
-      kept-old-versions 2
-      version-control t)       ; use versioned backups
-   #+END_SRC
-
-** Enabling the disabled
-
-*** upcase and downcase region
-
-    I like to be able to do this. I get lots of things that come in
-    SHOUTING or that need to SHOUT.
-
-    #+BEGIN_SRC emacs-lisp
-      (put 'downcase-region 'disabled nil)
-      (put 'upcase-region 'disabled nil)
-    #+END_SRC
-
-*** Narrowing the region to what I want to look at
-
-    This isn't needed quite so much now that searches, regexp and
-    otherwise operate, sometimes annoyingly to an old timer like me, on
-    the region rather than the whole buffer window. I still like to
-    narrow down to what I'm interested in though and not every handy
-    tool in emacs is quite so region oriented.
-
-    #+BEGIN_SRC emacs-lisp
-      (put 'narrow-to-region 'disabled nil)
-    #+END_SRC
-
-** custom.el
-
-   custom.el is great for configuring things through that "gui" in
-   emacs, but it is a real pain when it drops junk in your [[../init.el][init.el]] and
-   messes up your pretty config and git history and is stuff that you
-   don't want to leak out on to github. You can change the location of
-   this file though and I like to do this.
-
-   #+BEGIN_SRC emacs-lisp
-     (setq custom-file (concat user-emacs-directory "local/custom.el"))
-     (load-if-exists custom-file)
-   #+END_SRC
-
-** passwords and encrypted things
-
-   It is good to store your passwords and things in an encrypted
-   file. I call mine mellon, because you can only read it if you are
-   my friend and have the passphrase.
-
-   This does mean that every time you use it you have to give the
-   passphrase, but it does mean that you can keep all your passwords
-   for things like erc and stuff in a file reasonably safely (though
-   it will be in memory when emacs is running, so it isn't completely
-   secure).
-
-   #+BEGIN_SRC emacs-lisp
-     (load-if-exists (concat user-emacs-directory "local/mellon.el.gpg"))
-   #+END_SRC
 
 ** Finis
 
