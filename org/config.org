@@ -681,6 +681,13 @@
                                      "Belfast")))
    #+END_SRC
 
+** The Great Eye of Sauron
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package sauron
+       :ensure t)
+   #+END_SRC
+
 * Finishing
 
 ** Finis
