@@ -370,6 +370,16 @@
         (add-hook 'clojure-mode-hook 'my-clj-refactor-hook))
     #+END_SRC
 
+** Scala
+
+   Yeah, I'll have a java mode here too at some point.
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package ensime
+       :ensure t
+       :pin melpa-stable)
+   #+END_SRC
+
 * Text Modes
 
 ** Text Mode Basics
