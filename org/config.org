@@ -556,14 +556,14 @@
    #+BEGIN_SRC emacs-lisp
      (use-package buffer-move
        :ensure t
-       :bind (([M-s-up] . windmove-up)
-              ([M-s-down] . windmove-down)
-              ([M-s-right] . windmove-right)
-              ([M-s-left] . windmove-left)
-              ([s-up] . buf-move-up)
-              ([s-down] . buf-move-down)
-              ([s-right] . buf-move-right)
-              ([s-left] . buf-move-left)))
+       :bind (([M-s-up] . buf-move-up)
+              ([M-s-down] . buf-move-down)
+              ([M-s-right] . buf-move-right)
+              ([M-s-left] . buf-move-left)
+              ([s-up] . windmove-up)
+              ([s-down] . windmove-down)
+              ([s-right] . windmove-right)
+              ([s-left] . windmove-left)))
    #+END_SRC
 
 ** yasnippet
