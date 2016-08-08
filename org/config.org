@@ -475,7 +475,7 @@
       (use-package org-journal
         :ensure t
         :bind (("C-c j" . org-journal-new-entry))
-        :config
+        :init
         (setq org-journal-dir "~/org/journal/")
         (add-to-list 'org-agenda-files "~/org/journal/")
         (setq org-agenda-file-regexp "\\`[^.].*\\.org'\\|[0-9]+")
@@ -488,15 +488,15 @@
     of the ones that are core to me.
 
     #+BEGIN_SRC emacs-lisp
-      (use-package org-mode
-        :bind (("C-c a" . org-agenda))
-        :config
-        (setq org-log-done 'note) ; log when we finish things
-        (setq org-log-into-drawer t) ; put log into the drawer
-        (setq org-clock-persist 'history)
-        (org-clock-persistence-insinuate) ; keep the clock history
-        (appt-activate 1) ; shout when we have appts
-        )
+      (eval-after-load "org"
+        '(progn (setq org-log-done 'note)         ; log when we finish things
+                (setq org-log-into-drawer t) ; put log into the drawer
+                (setq org-clock-persist 'history)
+                (org-clock-persistence-insinuate) ; keep the clock history
+                (appt-activate 1))) ; shout when we have appts
+
+      (global-set-key (kbd "C-c a") 'org-agenda)
+
     #+END_SRC
 
 * Other Modes
