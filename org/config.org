@@ -516,6 +516,45 @@
 
     #+END_SRC
 
+*** What am I doing in the Current Cake Countdown?
+
+    My default view, as I mostly use org for keeping my working
+    days in line is around the Current Cake Countdown, which is
+    what we call our iterations as we celebrate the end of each
+    iteration with cake and don't do a lot of fast running as we
+    are programmers.
+
+    This is a composite agenda view that shows the agenda by date
+    at the top and the todo list below that.
+
+    The agenda spans one week and starts on a Wednesday (weekday
+    3).
+
+    It shows the tasks I have scheduled for this week and my deadlines
+    in the main agenda and a sub area showing things I've not put a
+    date on yet.
+
+    I also remove items that are scheduled or with deadlines from
+    the weekly agenda when they are done. This is so I can keep the
+    clutter down in this view and decide on what I want my next
+    step to be.
+
+    The todo items are also filtered to only show things that have
+    the Owner property set to my name.
+
+    #+BEGIN_SRC emacs-lisp
+      (setq org-agenda-custom-commands
+            '(("M" "My Current Cake Countdown"
+               ((agenda "My Current Cake Countdown"
+                        ((org-agenda-span 'week)
+                         (org-agenda-start-on-weekday 3)
+                         (org-agenda-skip-deadline-if-done t)
+                         (org-agenda-skip-scheduled-if-done t)))
+                (tags-todo "TODO=\"TODO\""
+                 ((org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))
+                  (org-agenda-overriding-header "Unscheduled TODOs: ")))))))
+    #+END_SRC
+
 *** Interleave
 
     Could this be the best way to take notes on pdfs?
