@@ -516,6 +516,16 @@
 
     #+END_SRC
 
+*** Interleave
+
+    Could this be the best way to take notes on pdfs?
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package interleave
+        :ensure t
+        :config (setq interleave-org-notes-dir-list '("~/org/interleave" ".")))
+    #+END_SRC
+
 * Other Modes
 
 ** ido and smex
