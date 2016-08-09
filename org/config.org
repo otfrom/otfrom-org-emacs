@@ -133,6 +133,13 @@
       (setq ediff-window-setup-function 'ediff-setup-windows-plain))
   #+END_SRC
 
+** link to github
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package git-link
+       :ensure t)
+   #+END_SRC
+
 ** Delete that trailing whitespace
 
    Trailing whitespace just causes trouble with diffs and version
