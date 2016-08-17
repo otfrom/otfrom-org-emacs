@@ -425,7 +425,6 @@
 
    This mode is so powerful, I like to program in it. :-D
 
-
 *** org-gcal
 
     I'd like to have my Google Calendar events in org-mode agenda
@@ -445,7 +444,8 @@
 
     #+BEGIN_SRC emacs-lisp
       (setq org-agenda-files
-            (append '("~/org/refile.org")
+            (append '("~/org/refile.org"
+                      "~/org/todos.org")
                     (mapcar 'cdr org-gcal-file-alist)))
       #+END_SRC
 
@@ -494,8 +494,6 @@
         :bind (("C-c j" . org-journal-new-entry))
         :init
         (setq org-journal-dir "~/org/journal/")
-        (add-to-list 'org-agenda-files "~/org/journal/")
-        (setq org-agenda-file-regexp "\\`[^.].*\\.org'\\|[0-9]+")
         (add-to-list 'auto-mode-alist '("org/journal" . org-mode)))
     #+END_SRC
 
@@ -508,52 +506,187 @@
       (eval-after-load "org"
         '(progn (setq org-log-done 'note)         ; log when we finish things
                 (setq org-log-into-drawer t) ; put log into the drawer
+                (setq org-default-notes-file "~/org/todos.org")
                 (setq org-clock-persist 'history)
+                (setq org-agenda-window-setup 'current-window) ; agenda in current window
                 (org-clock-persistence-insinuate) ; keep the clock history
                 (appt-activate 1))) ; shout when we have appts
 
+      (global-set-key (kbd "C-c o") 'org-capture)
       (global-set-key (kbd "C-c a") 'org-agenda)
-
     #+END_SRC
 
-*** What am I doing in the Current Cake Countdown?
+*** Custom Agenda Views
 
-    My default view, as I mostly use org for keeping my working
-    days in line is around the Current Cake Countdown, which is
-    what we call our iterations as we celebrate the end of each
-    iteration with cake and don't do a lot of fast running as we
-    are programmers.
+    The default agenda is a good start, but we can do a bit better.
 
-    This is a composite agenda view that shows the agenda by date
-    at the top and the todo list below that.
+**** What am I doing in the Current Cake Countdown?
 
-    The agenda spans one week and starts on a Wednesday (weekday
-    3).
+     My default view, as I mostly use org for keeping my working
+     days in line is around the Current Cake Countdown, which is
+     what we call our iterations as we celebrate the end of each
+     iteration with cake and don't do a lot of fast running as we
+     are programmers.
 
-    It shows the tasks I have scheduled for this week and my deadlines
-    in the main agenda and a sub area showing things I've not put a
-    date on yet.
+     This is a composite agenda view that shows the agenda by date
+     at the top and the todo list below that.
 
-    I also remove items that are scheduled or with deadlines from
-    the weekly agenda when they are done. This is so I can keep the
-    clutter down in this view and decide on what I want my next
-    step to be.
+     The agenda spans one week and starts on a Wednesday (weekday
+     3).
 
-    The todo items are also filtered to only show things that have
-    the Owner property set to my name.
+     It shows the tasks I have scheduled for this week and my deadlines
+     in the main agenda and a sub area showing things I've not put a
+     date on yet.
 
-    #+BEGIN_SRC emacs-lisp
-      (setq org-agenda-custom-commands
-            '(("M" "My Current Cake Countdown"
-               ((agenda "My Current Cake Countdown"
-                        ((org-agenda-span 'week)
-                         (org-agenda-start-on-weekday 3)
-                         (org-agenda-skip-deadline-if-done t)
-                         (org-agenda-skip-scheduled-if-done t)))
-                (tags-todo "TODO=\"TODO\""
-                 ((org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))
-                  (org-agenda-overriding-header "Unscheduled TODOs: ")))))))
-    #+END_SRC
+     I also remove items that are scheduled or with deadlines from
+     the weekly agenda when they are done. This is so I can keep the
+     clutter down in this view and decide on what I want my next
+     step to be.
+
+     The todo items are also filtered to only show things that have
+     the Owner property set to my name.
+
+     #+BEGIN_SRC emacs-lisp
+       (add-to-list
+        'org-agenda-custom-commands
+        '("M" "My Current Cake Countdown"
+          ((agenda "My Current Cake Countdown"
+                   ((org-agenda-span 'week)
+                    (org-agenda-start-on-weekday 3)
+                    (org-agenda-skip-deadline-if-done t)
+                    (org-agenda-skip-scheduled-if-done t)))
+           (tags-todo "TODO=\"TODO\""
+                      ((org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))
+                       (org-agenda-overriding-header "Unscheduled TODOs: "))))))
+     #+END_SRC
+
+**** Last & Upcoming
+
+     I need to know what I was doing on the last working day and I'd
+     like to know what is coming up in the next 7 days.
+
+     #+BEGIN_SRC emacs-lisp
+       (add-to-list
+        'org-agenda-custom-commands
+        '("U" "Last and Upcoming"
+          ((agenda "Last and Upcoming"
+                   ((org-agenda-span 10)
+                    (org-agenda-start-day
+                     (pcase (calendar-day-of-week (calendar-current-date))
+                       (1 "-3d") ; Show Friday
+                       (0 "-2d") ; Show Friday
+                       (_ "-1d")))))
+           (tags-todo "TODO=\"TODO\""
+                      ((org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))
+                       (org-agenda-overriding-header "Unscheduled TODOs: "))))))
+     #+END_SRC
+
+**** Yesterday & Today
+
+     I need to know what I was doing on the last working day and I'd
+     like to know what is coming up in the next 7 days.
+
+     #+BEGIN_SRC emacs-lisp
+       (add-to-list
+        'org-agenda-custom-commands
+        '("y" "Yesterday and Today"
+          ((agenda "Yesterday and Today"
+                   ((org-agenda-span (pcase (calendar-day-of-week (calendar-current-date))
+                                       (1 4) ; Show Friday
+                                       (0 3) ; Show Friday
+                                       (_ 2)))
+                    (org-agenda-start-day
+                     (pcase (calendar-day-of-week (calendar-current-date))
+                       (1 "-3d") ; Show Friday
+                       (0 "-2d") ; Show Friday
+                       (_ "-1d")))))
+           (tags-todo "TODO=\"TODO\""
+                      ((org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))
+                       (org-agenda-overriding-header "Unscheduled TODOs: "))))))
+     #+END_SRC
+
+**** Holidays
+
+     From the help-gnu-emacs [[https://lists.gnu.org/archive/html/help-gnu-emacs/2014-08/msg00093.html][list]].
+
+     And more details from the [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Holiday-Customizing.html][GNU Emacs Manual]].
+
+     #+BEGIN_EXAMPLE
+       Hmmm, a very quick try:
+       Holidays from:
+       https://en.wikipedia.org/wiki/Public_holidays_in_the_United_Kingdom
+
+       Put this in your .emacs, restart, and give it a try:
+
+       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+       (setq european-calendar-style t             ; obsolete!
+             calendar-date-style 'european
+                                               ;        calendar-latitude
+                                               ;        calendar-longitude
+             calendar-week-start-day 1
+             mark-holidays-in-calendar t
+             ;; remove some holidays
+             all-christian-calendar-holidays nil         ;obsolete
+             calendar-christian-all-holidays-flag nil
+             general-holidays t
+             hebrew-holidays nil
+             islamic-holidays nil
+             oriental-holidays nil
+             bahai-holidays nil)
+
+       (setq holiday-general-holidays
+             '((holiday-fixed 1 1 "New Year's Day")
+               (holiday-fixed 3 17 "St. Patrick's Day")
+               (holiday-float 5 1 1 "May Day Bank Holiday")
+               (holiday-fixed 7 12 "Battle of the Boyne")
+               (holiday-float 8 1 -1 "May Day Bank Holiday")
+               (holiday-fixed 12 26 "Boxing Day")))
+
+       (setq holiday-christian-holidays
+             '((holiday-fixed 12 25 "Christmas Day")
+               (holiday-easter-etc  -2 "Good Friday")
+               (holiday-easter-etc  +1 "Easter Monday")))
+
+       (setq calendar-holidays
+             (append general-holidays
+                     christian-holidays))
+
+       (setq org-agenda-include-diary t)
+       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+     #+END_EXAMPLE
+
+**** Pomodoro in agenda
+
+     Something to keep me focused and take breaks when I am focused
+     (so I don't die from sitting in one place for too long).
+
+     #+BEGIN_SRC emacs-lisp
+       (use-package org-pomodoro
+         :ensure t
+         :config
+         (add-hook 'org-agenda-mode-hook
+                   (lambda () (local-set-key (kbd "P") 'org-pomodoro))))
+     #+END_SRC
+
+*** Capturing
+
+    My thinking at the moment is that I'll take day notes in
+    org-journal, have a wiki like thing in other org files and
+    interleave (and use org links to keep them all together under my
+    org-directory) and have a todos.org file which will have all my
+    other todo goodies which I can capture from other files, pivotal
+    tracker stuff or from the journal itself which should make it so
+    my todos always point back to where they initially came from.
+
+    We'll see if it works for now.
+
+         #+BEGIN_SRC emacs-lisp
+           (setq org-capture-templates
+                 '(("c" "Contacts" entry (file "~/org/contacts.org")
+                    "* %(org-contacts-template-name)\n:PROPERTIES:\n:EMAIL: %(org-contacts-template-email)\n:PHONE:\n:ALIAS:\n:NICKNAME:\n:IGNORE:\n:ICON:\n:NOTE:\n:ADDRESS:\n:BIRTHDAY:\n:LAST_READ_MAIL:\n:END:" :empty-lines-after 1)
+                   ("t" "To do" entry (file+datetree org-default-notes-file)
+                    "* TODO %?\n%^{Owner}p\n%U\n%a\n" :empty-lines-after 1)))
+     #+END_SRC
 
 *** Interleave
 
@@ -563,6 +696,15 @@
       (use-package interleave
         :ensure t
         :config (setq interleave-org-notes-dir-list '("~/org/interleave" ".")))
+    #+END_SRC
+
+*** Transport for London in org-mode
+
+    Because, why not and I don't always want to got to the website.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package org-tfl
+        :ensure t)
     #+END_SRC
 
 * Other Modes
