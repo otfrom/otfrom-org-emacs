@@ -387,6 +387,15 @@
        :pin melpa-stable)
    #+END_SRC
 
+** Docker
+
+   DOCKER ALL THE THINGS!!!!
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package dockerfile-mode
+       :ensure t)
+   #+END_SRC
+
 * Text Modes
 
 ** Text Mode Basics
