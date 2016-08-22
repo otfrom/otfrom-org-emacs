@@ -703,12 +703,22 @@
 
     We'll see if it works for now.
 
-         #+BEGIN_SRC emacs-lisp
-           (setq org-capture-templates
-                 '(("c" "Contacts" entry (file "~/org/contacts.org")
-                    "* %(org-contacts-template-name)\n:PROPERTIES:\n:EMAIL: %(org-contacts-template-email)\n:PHONE:\n:ALIAS:\n:NICKNAME:\n:IGNORE:\n:ICON:\n:NOTE:\n:ADDRESS:\n:BIRTHDAY:\n:LAST_READ_MAIL:\n:END:" :empty-lines-after 1)
-                   ("t" "To do" entry (file+datetree org-default-notes-file)
-                    "* TODO %?\n%^{Owner}p\n%U\n%a\n" :empty-lines-after 1)))
+    #+BEGIN_SRC emacs-lisp
+      (setq org-capture-templates
+            '(("c" "Contacts"
+               entry (file "~/org/contacts.org")
+               "* %(org-contacts-template-name)\n:PROPERTIES:\n:EMAIL: %(org-contacts-template-email)\n:PHONE:\n:ALIAS:\n:NICKNAME:\n:IGNORE:\n:ICON:\n:NOTE:\n:ADDRESS:\n:BIRTHDAY:\n:LAST_READ_MAIL:\n:END:"
+               :empty-lines-before 1)
+              ("t" "To do"
+               entry (file+datetree org-default-notes-file)
+               "* TODO %?\n%^{Owner}p\n%U\n%a\n"
+               :empty-lines-before 1)
+              ("l"
+               "Capture a link"
+               entry
+               (file+datetree "~/org/links.org")
+               "* %? %^g\n"
+               :empty-lines-before 1)))
      #+END_SRC
 
 *** Interleave
@@ -727,6 +737,18 @@
 
     #+BEGIN_SRC emacs-lisp
       (use-package org-tfl
+        :ensure t)
+    #+END_SRC
+
+*** clipboard URLs to org-mode
+
+    I'm a real pack rat when it comes to book marking things. I've
+    always wanted to have them integrated with everything else and
+    under my control. I'm hoping that org-cliplink will help with
+    that.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package org-cliplink
         :ensure t)
     #+END_SRC
 
