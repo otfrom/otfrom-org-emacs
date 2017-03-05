@@ -263,6 +263,18 @@
       (setq-default indent-tabs-mode nil)
     #+END_SRC
 
+*** whitespace mode
+
+    You never know when the evils of whitespace might be around. When
+    will it catch you out?
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package whitespace
+        :diminish whitespace
+        :init (setq whitespace-style '(face empty tabs lines-tail trailing))
+        :config (global-whitespace-mode t))
+    #+END_SRC
+
 *** flycheck
 
     #+BEGIN_SRC emacs-lisp
