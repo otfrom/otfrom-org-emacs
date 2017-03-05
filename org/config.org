@@ -1051,3 +1051,24 @@
    #+BEGIN_SRC emacs-lisp
      (message "Cogito ergo sum.")
    #+END_SRC
+
+** Extra Bits
+
+   #+BEGIN_EXAMPLE
+     (setq org-refile-allow-creating-parent-nodes t)
+
+     (setq org-refile-targets
+           '(("work.org" :maxlevel . 4)
+             ("personal.org" :maxlevel . 4)))
+     (setq org-refile-use-outline-path t)
+
+     (setq org-link-search-must-match-exact-headline nil)
+
+     (add-to-list 'mu4e-bookmarks
+                  '("maildir:\"/otfrom/[Gmail].All Mail\" \\\\Inbox" "otfrom inbox" ?o))
+
+     (add-to-list 'mu4e-bookmarks
+                  '("maildir:\"/mastodonc/[Gmail].All Mail\" \\\\Inbox" "mastodonc inbox" ?m))
+
+
+   #+END_EXAMPLE
