@@ -514,8 +514,9 @@
 
     #+BEGIN_SRC emacs-lisp
       (setq org-agenda-files
-            (append '("~/org/refile.org"
-                      "~/org/todos.org")
+            (append '("~/org/todos.org"
+                      "~/org/work.org"
+                      "~/org/personal.org")
                     (mapcar 'cdr org-gcal-file-alist)))
       #+END_SRC
 
@@ -578,6 +579,7 @@
                 (setq org-log-into-drawer t) ; put log into the drawer
                 (setq org-default-notes-file "~/org/todos.org")
                 (setq org-clock-persist 'history)
+                (setq org-link-search-must-match-exact-headline nil) ;; fuzzy match headlines
                 (setq org-agenda-window-setup 'current-window) ; agenda in current window
                 (org-clock-persistence-insinuate) ; keep the clock history
                 (appt-activate 1))) ; shout when we have appts
@@ -782,6 +784,10 @@
                entry (file+datetree org-default-notes-file)
                "* TODO %?\n%^{Owner}p\n%U\n%a\n"
                :empty-lines-before 1)
+              ("n" "Doing RIGHT NOW"
+               entry (file+datetree org-default-notes-file)
+               "* TODO %?\n%^{Owner}p\n%U\n%a\n"
+               :clock-in t :clock-resume t :empty-lines-before 1)
               ("l"
                "Capture a link"
                entry
@@ -818,6 +824,26 @@
 
     #+BEGIN_SRC emacs-lisp
       (use-package org-cliplink
+        :ensure t)
+    #+END_SRC
+
+*** org pinboard like thing
+
+    I want to archive those pages. Who knows I might want to do some
+    text analysis son them.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package org-board
+        :ensure t)
+    #+END_SRC
+
+*** Preview org-mode pages as html
+
+    I'm hoping this will be handy for copying and pasting org-mode
+    stuff into emails and google docs for sharing with unbelievers.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package org-preview-html
         :ensure t)
     #+END_SRC
 
