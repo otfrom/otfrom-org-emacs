@@ -1009,7 +1009,7 @@
      (use-package emojify
        :ensure t
        :defer t
-       :config (add-hook 'after-init-hook #'global-emojify-mode))
+       :init (add-hook 'after-init-hook #'global-emojify-mode))
    #+END_SRC
 
 ** What is the weather?
