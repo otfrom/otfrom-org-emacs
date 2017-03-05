@@ -19,7 +19,7 @@
         (bind-key . "melpa-stable")
         (cider . "melpa-stable")
         (cider-eval-sexp-fu . "melpa-stable")
-	(clj-refactor . "melpa-stable")
+        (clj-refactor . "melpa-stable")
         (clojure-mode . "melpa-stable")
         (company . "melpa-stable")
         ;; (dash . "melpa-stable")

@@ -263,6 +263,25 @@
       (setq-default indent-tabs-mode nil)
     #+END_SRC
 
+*** whitespace mode
+
+    You never know when the evils of whitespace might be around. When
+    will it catch you out?
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package whitespace
+        :diminish whitespace
+        :init (setq whitespace-style '(face empty tabs lines-tail trailing))
+        :config (global-whitespace-mode t))
+    #+END_SRC
+
+*** flycheck
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package flycheck
+        :ensure t)
+    #+END_SRC
+
 ** Lisps
 
    I am a big fan of lisps. I like the syntax and some of the
@@ -420,6 +439,14 @@
         :ensure t)
     #+END_SRC
 
+** Shell Scripting
+
+   Check those bash scripts using [[http://skybert.net/emacs/bash-linting-in-emacs/][shellcheck]].
+
+   #+BEGIN_SRC emacs-lisp
+     (add-hook 'sh-mode-hook 'flycheck-mode)
+   #+END_SRC
+
 * Text Modes
 
 ** Text Mode Basics
@@ -442,6 +469,16 @@
                (lambda ()
                  (auto-fill-mode 1)
                  (diminish auto-fill-function)))
+   #+END_SRC
+
+** unfill - the lpad of emacs lisp?
+
+   I may regret this, but I actually want it for copying and pasting
+   from emacs into other things that don't want lines filled nicely.
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package unfill
+       :ensure t)
    #+END_SRC
 
 ** Markdown
@@ -477,8 +514,9 @@
 
     #+BEGIN_SRC emacs-lisp
       (setq org-agenda-files
-            (append '("~/org/refile.org"
-                      "~/org/todos.org")
+            (append '("~/org/todos.org"
+                      "~/org/work.org"
+                      "~/org/personal.org")
                     (mapcar 'cdr org-gcal-file-alist)))
       #+END_SRC
 
@@ -541,6 +579,7 @@
                 (setq org-log-into-drawer t) ; put log into the drawer
                 (setq org-default-notes-file "~/org/todos.org")
                 (setq org-clock-persist 'history)
+                (setq org-link-search-must-match-exact-headline nil) ;; fuzzy match headlines
                 (setq org-agenda-window-setup 'current-window) ; agenda in current window
                 (org-clock-persistence-insinuate) ; keep the clock history
                 (appt-activate 1))) ; shout when we have appts
@@ -745,6 +784,10 @@
                entry (file+datetree org-default-notes-file)
                "* TODO %?\n%^{Owner}p\n%U\n%a\n"
                :empty-lines-before 1)
+              ("n" "Doing RIGHT NOW"
+               entry (file+datetree org-default-notes-file)
+               "* TODO %?\n%^{Owner}p\n%U\n%a\n"
+               :clock-in t :clock-resume t :empty-lines-before 1)
               ("l"
                "Capture a link"
                entry
@@ -781,6 +824,26 @@
 
     #+BEGIN_SRC emacs-lisp
       (use-package org-cliplink
+        :ensure t)
+    #+END_SRC
+
+*** org pinboard like thing
+
+    I want to archive those pages. Who knows I might want to do some
+    text analysis son them.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package org-board
+        :ensure t)
+    #+END_SRC
+
+*** Preview org-mode pages as html
+
+    I'm hoping this will be handy for copying and pasting org-mode
+    stuff into emails and google docs for sharing with unbelievers.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package org-preview-html
         :ensure t)
     #+END_SRC
 
@@ -946,7 +1009,7 @@
      (use-package emojify
        :ensure t
        :defer t
-       :config (add-hook 'after-init-hook #'global-emojify-mode))
+       :init (add-hook 'after-init-hook #'global-emojify-mode))
    #+END_SRC
 
 ** What is the weather?
@@ -988,3 +1051,24 @@
    #+BEGIN_SRC emacs-lisp
      (message "Cogito ergo sum.")
    #+END_SRC
+
+** Extra Bits
+
+   #+BEGIN_EXAMPLE
+     (setq org-refile-allow-creating-parent-nodes t)
+
+     (setq org-refile-targets
+           '(("work.org" :maxlevel . 4)
+             ("personal.org" :maxlevel . 4)))
+     (setq org-refile-use-outline-path t)
+
+     (setq org-link-search-must-match-exact-headline nil)
+
+     (add-to-list 'mu4e-bookmarks
+                  '("maildir:\"/otfrom/[Gmail].All Mail\" \\\\Inbox" "otfrom inbox" ?o))
+
+     (add-to-list 'mu4e-bookmarks
+                  '("maildir:\"/mastodonc/[Gmail].All Mail\" \\\\Inbox" "mastodonc inbox" ?m))
+
+
+   #+END_EXAMPLE
