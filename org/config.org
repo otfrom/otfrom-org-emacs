@@ -471,6 +471,16 @@
                  (diminish auto-fill-function)))
    #+END_SRC
 
+** unfill - the lpad of emacs lisp?
+
+   I may regret this, but I actually want it for copying and pasting
+   from emacs into other things that don't want lines filled nicely.
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package unfill
+       :ensure t)
+   #+END_SRC
+
 ** Markdown
 
    Not everything is done in org-mode. Though perhaps it should be.
