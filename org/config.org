@@ -1050,6 +1050,17 @@
        :ensure t)
    #+END_SRC
 
+** expand-region
+
+   Looks like a cool way to expand what it is that you want to
+   select.
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package expand-region
+       :ensure t
+       :bind (("C-=" . er/expand-region)))
+   #+END_SRC
+
 * Finishing
 
 ** Finis
