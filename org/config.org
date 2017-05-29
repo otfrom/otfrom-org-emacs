@@ -174,7 +174,11 @@
    basic window chrome and geegaws right.
 
    #+BEGIN_SRC emacs-lisp
-     (load-theme 'wheatgrass)
+     (use-package color-theme-sanityinc-tomorrow
+       :ensure t
+       :load-path "themes"
+       :config
+       (load-theme 'sanityinc-tomorrow-bright t))
    #+END_SRC
 
 ** Bars, columns and lines
@@ -271,7 +275,7 @@
     #+BEGIN_SRC emacs-lisp
       (use-package whitespace
         :diminish whitespace
-        :init (setq whitespace-style '(face empty tabs lines-tail trailing))
+        :init (setq whitespace-style '(face empty tabs trailing))
         :config (global-whitespace-mode t))
     #+END_SRC
 
