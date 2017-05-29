@@ -857,6 +857,13 @@
         :ensure t)
     #+END_SRC
 
+*** org-babel
+
+    #+BEGIN_SRC emacs-lisp
+      (org-babel-do-load-languages
+       'org-babel-load-languages '((shell . t)))
+    #+END_SRC
+
 * Other Modes
 
 ** ido and smex
