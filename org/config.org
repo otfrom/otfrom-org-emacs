@@ -1107,6 +1107,22 @@
        :bind (("C-=" . er/expand-region)))
    #+END_SRC
 
+** music and sound
+
+   Yeah, I play music from inside emacs. What of it?
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package emms
+       :ensure t
+       :config
+       (progn
+         (emms-standard)
+         (emms-default-players)
+         (setq emms-playlist-buffer-name "Music-EMMS")
+         (setq emms-source-file-default-directory (concat (getenv "HOME") "/Music/"))
+         (emms-mode-line 0)))
+   #+END_SRC
+
 * Finishing
 
 ** Finis
