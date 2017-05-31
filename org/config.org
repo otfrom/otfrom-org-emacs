@@ -275,7 +275,7 @@
     #+BEGIN_SRC emacs-lisp
       (use-package whitespace
         :diminish whitespace
-        :init (setq whitespace-style '(face empty tabs trailing))
+        :init (setq whitespace-style '(face tabs trailing))
         :config (global-whitespace-mode t))
     #+END_SRC
 
@@ -530,6 +530,7 @@
       (setq org-agenda-files
             (append '("~/org/todos.org"
                       "~/org/work.org"
+                      "~/org/diary.org"
                       "~/org/personal.org")
                     (mapcar 'cdr org-gcal-file-alist)))
       #+END_SRC
@@ -598,7 +599,23 @@
                 (org-clock-persistence-insinuate) ; keep the clock history
                 (appt-activate 1))) ; shout when we have appts
 
-      (global-set-key (kbd "C-c o") 'org-capture)
+
+      (setq org-use-fast-todo-selection t)
+      (setq org-todo-keywords
+            '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+              (sequence "WAITING(w@/!)" "INACTIVE(i@/!)" "|" "CANCELLED(c@/!)" "MEETING")))
+
+      (setq org-todo-state-tags-triggers
+            '(("CANCELLED" ("CANCELLED" . t))
+              ("WAITING" ("WAITING" . t))
+              ("INACTIVE" ("WAITING") ("INACTIVE" . t))
+              (done ("WAITING") ("INACTIVE"))
+              ("TODO" ("WAITING") ("CANCELLED") ("INACTIVE"))
+              ("NEXT" ("WAITING") ("CANCELLED") ("INACTIVE"))
+              ("DONE" ("WAITING") ("CANCELLED") ("INACTIVE"))))
+
+
+      (global-set-key (kbd "C-c c") 'org-capture)
       (global-set-key (kbd "C-c a") 'org-agenda)
     #+END_SRC
 
@@ -641,8 +658,11 @@
                     (org-agenda-start-on-weekday 3)
                     (org-agenda-skip-deadline-if-done t)
                     (org-agenda-skip-scheduled-if-done t)))
+           (tags-todo "TODO=\"NEXT\""
+                      ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))
+                       (org-agenda-overriding-header "Unscheduled NEXTs: ")))
            (tags-todo "TODO=\"TODO\""
-                      ((org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))
+                      ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))
                        (org-agenda-overriding-header "Unscheduled TODOs: "))))))
      #+END_SRC
 
@@ -662,8 +682,11 @@
                        (1 "-3d") ; Show Friday
                        (0 "-2d") ; Show Friday
                        (_ "-1d")))))
+           (tags-todo "TODO=\"NEXT\""
+                      ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))
+                       (org-agenda-overriding-header "Unscheduled NEXTs: ")))
            (tags-todo "TODO=\"TODO\""
-                      ((org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))
+                      ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))
                        (org-agenda-overriding-header "Unscheduled TODOs: "))))))
      #+END_SRC
 
@@ -701,11 +724,17 @@
        (add-to-list
         'org-agenda-custom-commands
         '("y" "Yesterday-ish, Today and Tomorrow-ish"
-          ((agenda "Yesterday-ish, Today and Tomorrow-ish"
+          ((agenda "Today"
+                   ((org-agenda-span 0)
+                    (org-agenda-start-day "+0d")))
+           (tags-todo "TODO=\"NEXT\""
+                      ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))
+                       (org-agenda-overriding-header "Unscheduled NEXTs: ")))
+           (agenda "Yesterday-ish, Today and Tomorrow-ish"
                    ((org-agenda-span (ytt-span (calendar-day-of-week (calendar-current-date))))
                     (org-agenda-start-day (ytt-start-day (calendar-day-of-week (calendar-current-date))))))
            (tags-todo "TODO=\"TODO\""
-                      ((org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))
+                      ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))
                        (org-agenda-overriding-header "Unscheduled TODOs: "))))))
      #+END_SRC
 
@@ -790,18 +819,31 @@
 
     #+BEGIN_SRC emacs-lisp
       (setq org-capture-templates
-            '(("c" "Contacts"
-               entry (file "~/org/contacts.org")
-               "* %(org-contacts-template-name)\n:PROPERTIES:\n:EMAIL: %(org-contacts-template-email)\n:PHONE:\n:ALIAS:\n:NICKNAME:\n:IGNORE:\n:ICON:\n:NOTE:\n:ADDRESS:\n:BIRTHDAY:\n:LAST_READ_MAIL:\n:END:"
-               :empty-lines-before 1)
-              ("t" "To do"
+            '(("t" "To do"
                entry (file+datetree org-default-notes-file)
                "* TODO %?\n%^{Owner}p\n%U\n%a\n"
                :empty-lines-before 1)
               ("n" "Doing RIGHT NOW"
                entry (file+datetree org-default-notes-file)
-               "* TODO %?\n%^{Owner}p\n%U\n%a\n"
+               "* NEXT %?\n%^{Owner}p\n%U\n%a\n"
                :clock-in t :clock-resume t :empty-lines-before 1)
+              ("r" "Running commentary"
+               entry (clock)
+               "* %?\n%U\n%a\n"
+               :clock-keep t :empty-lines-before 1)
+              ("m" "Meeting"
+               entry (file+datetree org-default-notes-file)
+               "* MEETING with %? :MEETING:\n%T\n%a" :clock-in t :clock-resume t)
+              ("d" "Diary"
+               entry (file+datetree "~/org/diary.org")
+               "* %?\n%U\n" :clock-in t :clock-resume t)
+              ("i" "Idea"
+               entry (file org-default-notes-file)
+               "* %? :IDEA: \n%t" :clock-in t :clock-resume t)
+              ("c" "Contacts"
+               entry (file "~/org/contacts.org")
+               "* %(org-contacts-template-name)\n:PROPERTIES:\n:EMAIL: %(org-contacts-template-email)\n:PHONE:\n:ALIAS:\n:NICKNAME:\n:IGNORE:\n:ICON:\n:NOTE:\n:ADDRESS:\n:BIRTHDAY:\n:LAST_READ_MAIL:\n:END:"
+               :empty-lines-before 1)
               ("l"
                "Capture a link"
                entry
