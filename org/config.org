@@ -1102,7 +1102,8 @@
        :commands (wttrin)
        :init
        (setq wttrin-default-cities '("London"
-                                     "Belfast")))
+                                     "Belfast")
+             wttrin-default-accept-language '("Accept-Language" . "en-GB")))
    #+END_SRC
 
 ** The Great Eye of Sauron
