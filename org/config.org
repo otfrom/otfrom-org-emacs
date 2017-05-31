@@ -724,12 +724,15 @@
        (add-to-list
         'org-agenda-custom-commands
         '("y" "Yesterday-ish, Today and Tomorrow-ish"
-          ((agenda "Yesterday-ish, Today and Tomorrow-ish"
-                   ((org-agenda-span (ytt-span (calendar-day-of-week (calendar-current-date))))
-                    (org-agenda-start-day (ytt-start-day (calendar-day-of-week (calendar-current-date))))))
+          ((agenda "Today"
+                   ((org-agenda-span 0)
+                    (org-agenda-start-day "+0d")))
            (tags-todo "TODO=\"NEXT\""
                       ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))
                        (org-agenda-overriding-header "Unscheduled NEXTs: ")))
+           (agenda "Yesterday-ish, Today and Tomorrow-ish"
+                   ((org-agenda-span (ytt-span (calendar-day-of-week (calendar-current-date))))
+                    (org-agenda-start-day (ytt-start-day (calendar-day-of-week (calendar-current-date))))))
            (tags-todo "TODO=\"TODO\""
                       ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))
                        (org-agenda-overriding-header "Unscheduled TODOs: "))))))
