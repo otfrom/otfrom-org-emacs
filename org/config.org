@@ -1123,6 +1123,18 @@
          (emms-mode-line 0)))
    #+END_SRC
 
+*** I miss big thunderstorms
+
+    Sometimes I need to concentrate and I don't want to be engaged by
+    music but just white noise won't do. I like a thunderstorm for
+    that.
+
+    #+BEGIN_SRC emacs-lisp
+      (defun make-it-rain ()
+        (interactive)
+        (emms-play-file (concat user-emacs-directory "resources/16480__martin-lightning__severe-thunderstorm.mp3")))
+    #+END_SRC
+
 * Finishing
 
 ** Finis
