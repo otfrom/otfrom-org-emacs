@@ -275,7 +275,7 @@
     #+BEGIN_SRC emacs-lisp
       (use-package whitespace
         :diminish whitespace
-        :init (setq whitespace-style '(face empty tabs trailing))
+        :init (setq whitespace-style '(face tabs trailing))
         :config (global-whitespace-mode t))
     #+END_SRC
 
