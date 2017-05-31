@@ -805,7 +805,7 @@
                    (lambda () (local-set-key (kbd "P") 'org-pomodoro))))
      #+END_SRC
 
-*** Capturing
+*** Capturing & Refiling
 
     My thinking at the moment is that I'll take day notes in
     org-journal, have a wiki like thing in other org files and
@@ -850,6 +850,22 @@
                (file+datetree "~/org/links.org")
                "* %? %^g\n"
                :empty-lines-before 1)))
+     #+END_SRC
+
+**** Refiling
+
+     I've never really been terribly happy with how this works. This
+     might be a reasonable start though.
+
+     #+BEGIN_SRC emacs-lisp
+       (setq org-refile-allow-creating-parent-nodes t)
+
+       (setq org-refile-targets
+             '(("work.org" :maxlevel . 9)
+               ("personal.org" :maxlevel . 9)))
+       (setq org-refile-use-outline-path t)
+
+       (setq org-link-search-must-match-exact-headline nil)
      #+END_SRC
 
 *** Interleave
@@ -1157,14 +1173,6 @@
 ** Extra Bits
 
    #+BEGIN_EXAMPLE
-     (setq org-refile-allow-creating-parent-nodes t)
-
-     (setq org-refile-targets
-           '(("work.org" :maxlevel . 4)
-             ("personal.org" :maxlevel . 4)))
-     (setq org-refile-use-outline-path t)
-
-     (setq org-link-search-must-match-exact-headline nil)
 
      (add-to-list 'mu4e-bookmarks
                   '("maildir:\"/otfrom/[Gmail].All Mail\" \\\\Inbox" "otfrom inbox" ?o))
