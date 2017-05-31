@@ -1107,6 +1107,34 @@
        :bind (("C-=" . er/expand-region)))
    #+END_SRC
 
+** music and sound
+
+   Yeah, I play music from inside emacs. What of it?
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package emms
+       :ensure t
+       :config
+       (progn
+         (emms-standard)
+         (emms-default-players)
+         (setq emms-playlist-buffer-name "Music-EMMS")
+         (setq emms-source-file-default-directory (concat (getenv "HOME") "/Music/"))
+         (emms-mode-line 0)))
+   #+END_SRC
+
+*** I miss big thunderstorms
+
+    Sometimes I need to concentrate and I don't want to be engaged by
+    music but just white noise won't do. I like a thunderstorm for
+    that.
+
+    #+BEGIN_SRC emacs-lisp
+      (defun make-it-rain ()
+        (interactive)
+        (emms-play-file (concat user-emacs-directory "resources/16480__martin-lightning__severe-thunderstorm.mp3")))
+    #+END_SRC
+
 * Finishing
 
 ** Finis
