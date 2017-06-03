@@ -602,7 +602,8 @@
 
       (setq org-use-fast-todo-selection t)
       (setq org-todo-keywords
-            '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+            '((sequence "UPCOMING(u)" "PROJECT(p)" "|" "SHIPPED(s)")
+              (sequence "TODO(t)" "NEXT(n!/!)" "|" "DONE(d)")
               (sequence "WAITING(w@/!)" "INACTIVE(i@/!)" "|" "CANCELLED(c@/!)" "MEETING")))
 
       (setq org-todo-state-tags-triggers
@@ -721,6 +722,7 @@
      And then let's use it in the agenda here:
 
      #+BEGIN_SRC emacs-lisp
+       (setq org-stuck-projects '("TODO=\"PROJECT\"+CATEGORY=\"work\"" ("NEXT") nil ""))
        (add-to-list
         'org-agenda-custom-commands
         '("y" "Yesterday-ish, Today and Tomorrow-ish"
