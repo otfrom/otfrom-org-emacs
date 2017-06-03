@@ -732,6 +732,18 @@
            (tags-todo "TODO=\"NEXT\""
                       ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))
                        (org-agenda-overriding-header "Unscheduled NEXTs: ")))
+           (tags-todo "TODO=\"WAITING\""
+                      ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))
+                       (org-agenda-overriding-header "Blocked: ")))
+           (tags-todo "kaylee"
+                      ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))
+                       (org-agenda-overriding-header "Unscheduled Kaylee Tasks")))
+           (stuck "CATEGORY=\"work\""
+                  ((org-agenda-overriding-header "Stuck Work Projects: ")))
+           (tags-todo "TODO=\"PROJECT\"+CATEGORY=\"work\""
+                      ((org-agenda-overriding-header "Active Work Projects: ")))
+           (tags-todo "TODO=\"PROJECT\"+CATEGORY=\"personal\""
+                      ((org-agenda-overriding-header "Personal Projects: ")))
            (agenda "Yesterday-ish, Today and Tomorrow-ish"
                    ((org-agenda-span (ytt-span (calendar-day-of-week (calendar-current-date))))
                     (org-agenda-start-day (ytt-start-day (calendar-day-of-week (calendar-current-date))))))
