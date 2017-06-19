@@ -597,6 +597,7 @@
                 (setq org-link-search-must-match-exact-headline nil) ;; fuzzy match headlines
                 (setq org-agenda-window-setup 'current-window) ; agenda in current window
                 (org-clock-persistence-insinuate) ; keep the clock history
+                (require 'org-habit) ; track habits
                 (appt-activate 1))) ; shout when we have appts
 
 
@@ -722,13 +723,16 @@
      And then let's use it in the agenda here:
 
      #+BEGIN_SRC emacs-lisp
-       (setq org-stuck-projects '("TODO=\"PROJECT\"+CATEGORY=\"work\"" ("NEXT") nil ""))
+       ;;(setq org-stuck-projects '("TODO=\"PROJECT\"+CATEGORY=\"work\"" ("NEXT") nil ""))
+       (setq org-stuck-projects '("TODO=\"PROJECT\"" ("NEXT") nil ""))
        (add-to-list
         'org-agenda-custom-commands
         '("y" "Yesterday-ish, Today and Tomorrow-ish"
           ((agenda "Today"
                    ((org-agenda-span 0)
-                    (org-agenda-start-day "+0d")))
+                    (org-agenda-start-day "+0d")
+                    (org-agenda-skip-deadline-if-done 't)
+                    (org-agenda-sorting-strategy '(habit-up time-up scheduled-up category-down todo-state-down tag-up deadline-up))))
            (tags-todo "TODO=\"NEXT\""
                       ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))
                        (org-agenda-overriding-header "Unscheduled NEXTs: ")))
@@ -844,24 +848,33 @@
               ("n" "Doing RIGHT NOW"
                entry (file+datetree org-default-notes-file)
                "* NEXT %?\n%^{Owner}p\n%U\n%a\n"
-               :clock-in t :clock-resume t :empty-lines-before 1)
+               :clock-in t :clock-resume t
+               :empty-lines-before 1)
               ("k" "Kaylee Checks"
                entry (file+datetree org-default-notes-file)
                "* NEXT Kaylee Checks\n%^{Owner}p\n%U\n%a\n%?%[~/org/kaylee-template.org]"
-               :clock-in t :clock-resume t :empty-lines-before 1)
+               :clock-in t :clock-resume t
+               :empty-lines-before 1)
               ("r" "Running commentary"
                entry (clock)
                "* %?\n%U\n%a\n"
-               :clock-keep t :empty-lines-before 1)
+               :clock-keep t
+               :empty-lines-before 1)
               ("m" "Meeting"
                entry (file+datetree org-default-notes-file)
-               "* MEETING with %? :MEETING:\n%T\n%a" :clock-in t :clock-resume t)
+               "* MEETING with %? :MEETING:\n%T\n%a"
+               :clock-in t :clock-resume t
+               :empty-lines-before 1)
               ("d" "Diary"
                entry (file+datetree "~/org/diary.org")
-               "* %?\n%U\n" :clock-in t :clock-resume t)
+               "* %?\n%U\n"
+               :clock-in t :clock-resume t
+               :empty-lines-before 1)
               ("i" "Idea"
                entry (file org-default-notes-file)
-               "* %? :IDEA: \n%t" :clock-in t :clock-resume t)
+               "* %? :IDEA: \n%t"
+               :clock-in t :clock-resume t
+               :empty-lines-before 1)
               ("c" "Contacts"
                entry (file "~/org/contacts.org")
                "* %(org-contacts-template-name)\n:PROPERTIES:\n:EMAIL: %(org-contacts-template-email)\n:PHONE:\n:ALIAS:\n:NICKNAME:\n:IGNORE:\n:ICON:\n:NOTE:\n:ADDRESS:\n:BIRTHDAY:\n:LAST_READ_MAIL:\n:END:"
