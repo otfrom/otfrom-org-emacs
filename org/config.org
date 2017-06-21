@@ -843,7 +843,7 @@
                :empty-lines-before 1)
               ("w" "To do from the web"
                entry (file+datetree org-default-notes-file)
-               "* TODO %^{Description}\n%^{Owner}p\n%U\n%^L\n%?"
+               "* TODO %?\n%^{Owner}p\n%U\n%(org-cliplink-capture)\n"
                :empty-lines-before 1)
               ("n" "Doing RIGHT NOW"
                entry (file+datetree org-default-notes-file)
@@ -883,7 +883,7 @@
                "Capture a link"
                entry
                (file+datetree "~/org/links.org")
-               "* %? %^g\n"
+               "* %(org-cliplink-capture) %^g\n%?"
                :empty-lines-before 1)))
      #+END_SRC
 
