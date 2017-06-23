@@ -732,7 +732,7 @@
                    ((org-agenda-span 0)
                     (org-agenda-start-day "+0d")
                     (org-agenda-skip-deadline-if-done 't)
-                    (org-agenda-sorting-strategy '(habit-up time-up scheduled-up category-down todo-state-down tag-up deadline-up))))
+                    (org-agenda-sorting-strategy '(habit-up time-up scheduled-up deadline-up category-down todo-state-down tag-up))))
            (tags-todo "TODO=\"NEXT\""
                       ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))
                        (org-agenda-overriding-header "Unscheduled NEXTs: ")))
