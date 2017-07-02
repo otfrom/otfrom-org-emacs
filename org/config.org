@@ -509,6 +509,16 @@
 
    This mode is so powerful, I like to program in it. :-D
 
+*** IDs for everything
+    :PROPERTIES:
+    :ID:       18578255-c92e-42ab-b4e4-a687d444e87a
+    :END:
+
+    #+BEGIN_SRC emacs-lisp
+      (add-to-list 'org-modules 'org-id)
+      (setq org-id-link-to-org-use-id t)
+    #+END_SRC
+
 *** org-gcal
 
     I'd like to have my Google Calendar events in org-mode agenda
@@ -533,7 +543,13 @@
                       "~/org/diary.org"
                       "~/org/personal.org")
                     (mapcar 'cdr org-gcal-file-alist)))
-      #+END_SRC
+    #+END_SRC
+
+    And I always want to see the clock-report
+
+    #+BEGIN_SRC emacs-lisp
+      (setq org-agenda-start-with-clockreport-mode t)
+    #+END_SRC
 
 *** org agenda clock editing
 
@@ -668,30 +684,6 @@
                        (org-agenda-overriding-header "Unscheduled TODOs: "))))))
      #+END_SRC
 
-**** Last & Upcoming
-
-     I need to know what I was doing on the last working day and I'd
-     like to know what is coming up in the next 7 days.
-
-     #+BEGIN_SRC emacs-lisp
-       (add-to-list
-        'org-agenda-custom-commands
-        '("U" "Last and Upcoming"
-          ((agenda "Last and Upcoming"
-                   ((org-agenda-span 10)
-                    (org-agenda-start-day
-                     (pcase (calendar-day-of-week (calendar-current-date))
-                       (1 "-3d") ; Show Friday
-                       (0 "-2d") ; Show Friday
-                       (_ "-1d")))))
-           (tags-todo "TODO=\"NEXT\""
-                      ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))
-                       (org-agenda-overriding-header "Unscheduled NEXTs: ")))
-           (tags-todo "TODO=\"TODO\""
-                      ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))
-                       (org-agenda-overriding-header "Unscheduled TODOs: "))))))
-     #+END_SRC
-
 **** Yesterday-ish & Today & Tomorrow-ish
 
      I need to know what I was doing on the last working day and I'd
@@ -751,6 +743,56 @@
            (agenda "Yesterday-ish, Today and Tomorrow-ish"
                    ((org-agenda-span (ytt-span (calendar-day-of-week (calendar-current-date))))
                     (org-agenda-start-day (ytt-start-day (calendar-day-of-week (calendar-current-date))))))
+           (tags-todo "TODO=\"TODO\""
+                      ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))
+                       (org-agenda-overriding-header "Unscheduled TODOs: "))))))
+     #+END_SRC
+
+**** Last & Upcoming
+     :PROPERTIES:
+     :ID:       d6ec9e41-21ec-455c-821b-33817da5304f
+     :END:
+
+     I need to know what I was doing on the last working day and I'd
+     like to know what is coming up in the next 7 days.
+
+     #+BEGIN_SRC emacs-lisp
+       (defun yt-agenda-range (day-of-week)
+         (pcase day-of-week
+           (0 '("-2d" 3)) ;; On Sunday Show Friday to Sunday
+           (1 '("-3d" 5)) ;; On Monday Show Friday to Monday
+           (2 '("-1d" 2)) ;; On Tuesday Show Monday to Tuesday
+           (3 '("-1d" 2)) ;; On Wednesday Show Tuesday to Wednesday
+           (4 '("-1d" 2)) ;; On Thursday Show Wednesday to Thursday
+           (5 '("-1d" 2)) ;; On Friday Show Thursday to Friday
+           (6 '("-1d" 2)) ;; On Saturday Show Friday to Saturday
+           ))
+
+       (defun yt-start-day (day-of-week)
+         (car (yt-agenda-range day-of-week)))
+
+       (defun yt-span (day-of-week)
+         (cadr (yt-agenda-range day-of-week)))
+
+
+       (add-to-list
+        'org-agenda-custom-commands
+        '("U" "Yesterday-ish and Today"
+          ((agenda "Last and Upcoming"
+                   ((org-agenda-span (ytt-span (calendar-day-of-week (calendar-current-date))))
+                    (org-agenda-start-day (ytt-start-day (calendar-day-of-week (calendar-current-date))))))
+           (tags-todo "TODO=\"NEXT\""
+                      ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))
+                       (org-agenda-overriding-header "Unscheduled NEXTs: ")))
+           (tags-todo "TODO=\"WAITING\""
+                      ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))
+                       (org-agenda-overriding-header "Blocked: ")))
+           (stuck "CATEGORY=\"work\""
+                  ((org-agenda-overriding-header "Stuck Work Projects: ")))
+           (tags-todo "TODO=\"PROJECT\"+CATEGORY=\"work\""
+                      ((org-agenda-overriding-header "Active Work Projects: ")))
+           (tags-todo "TODO=\"PROJECT\"+CATEGORY=\"personal\""
+                      ((org-agenda-overriding-header "Personal Projects: ")))
            (tags-todo "TODO=\"TODO\""
                       ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))
                        (org-agenda-overriding-header "Unscheduled TODOs: "))))))
