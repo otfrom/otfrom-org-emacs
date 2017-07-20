@@ -108,7 +108,7 @@
      (load-if-exists (concat user-emacs-directory "local/mellon.el.gpg"))
    #+END_SRC
 
-* Version Control with magit and Diffing with ediff
+* Version Control and diff
 
   Once we have things up and running, really the most basic thing is
   version control. This allows us to add everything else we need in an
@@ -164,6 +164,18 @@
                (lambda nil
                  (delete-trailing-whitespace)))
    #+END_SRC
+
+** Git Auto Commit
+
+   There are some things, like my personal and work org trees, where I
+   want to keep versions in case I mess anything up and need to repair
+   anything, but don't really want to do proper thought through
+   version control. Emacs of course makes this possible.
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package git-auto-commit-mode
+       :ensure t)
+  #+END_SRC
 
 * Make it pretty
 
@@ -538,16 +550,19 @@
 
     #+BEGIN_SRC emacs-lisp
       (setq org-agenda-files
-            (append '("~/org/todos.org"
-                      "~/org/work.org"
-                      "~/org/diary.org"
-                      "~/org/personal.org")
-                    (mapcar 'cdr org-gcal-file-alist)))
+            (append
+             (file-expand-wildcards "~/org/capture/*.org")
+             (file-expand-wildcards "~/org/work/*.org")
+             (file-expand-wildcards "~/org/life/*.org")
+             (mapcar 'cdr org-gcal-file-alist)))
     #+END_SRC
 
-    And I always want to see the clock-report
+    And I always want to see the clock-report and I want that report
+    to show me hours rather than roll up to days.
 
     #+BEGIN_SRC emacs-lisp
+      (setq org-time-clocksum-format
+            (quote (:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t)))
       (setq org-agenda-start-with-clockreport-mode t)
     #+END_SRC
 
@@ -608,7 +623,7 @@
       (eval-after-load "org"
         '(progn (setq org-log-done 'note)         ; log when we finish things
                 (setq org-log-into-drawer t) ; put log into the drawer
-                (setq org-default-notes-file "~/org/todos.org")
+                (setq org-default-notes-file "~/org/capture/todos.org")
                 (setq org-clock-persist 'history)
                 (setq org-link-search-must-match-exact-headline nil) ;; fuzzy match headlines
                 (setq org-agenda-window-setup 'current-window) ; agenda in current window
@@ -635,6 +650,7 @@
 
       (global-set-key (kbd "C-c c") 'org-capture)
       (global-set-key (kbd "C-c a") 'org-agenda)
+      (define-key org-agenda-mode-map "y" 'org-store-link)
     #+END_SRC
 
 *** Custom Agenda Views
@@ -760,7 +776,7 @@
        (defun yt-agenda-range (day-of-week)
          (pcase day-of-week
            (0 '("-2d" 3)) ;; On Sunday Show Friday to Sunday
-           (1 '("-3d" 5)) ;; On Monday Show Friday to Monday
+           (1 '("-3d" 4)) ;; On Monday Show Friday to Monday
            (2 '("-1d" 2)) ;; On Tuesday Show Monday to Tuesday
            (3 '("-1d" 2)) ;; On Wednesday Show Tuesday to Wednesday
            (4 '("-1d" 2)) ;; On Thursday Show Wednesday to Thursday
@@ -779,8 +795,8 @@
         'org-agenda-custom-commands
         '("U" "Yesterday-ish and Today"
           ((agenda "Last and Upcoming"
-                   ((org-agenda-span (ytt-span (calendar-day-of-week (calendar-current-date))))
-                    (org-agenda-start-day (ytt-start-day (calendar-day-of-week (calendar-current-date))))))
+                   ((org-agenda-span (yt-span (calendar-day-of-week (calendar-current-date))))
+                    (org-agenda-start-day (yt-start-day (calendar-day-of-week (calendar-current-date))))))
            (tags-todo "TODO=\"NEXT\""
                       ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))
                        (org-agenda-overriding-header "Unscheduled NEXTs: ")))
@@ -866,6 +882,9 @@
      #+END_SRC
 
 *** Capturing & Refiling
+    :PROPERTIES:
+    :ID:       d5a6a956-3d13-424c-83c7-63743b8132a7
+    :END:
 
     My thinking at the moment is that I'll take day notes in
     org-journal, have a wiki like thing in other org files and
@@ -878,6 +897,9 @@
     We'll see if it works for now.
 
     #+BEGIN_SRC emacs-lisp
+      (defun sched-tomorrow ()
+        (format-time-string "<%Y-%m-%d>" (time-add (current-time) (* 24 60 60))))
+
       (setq org-capture-templates
             '(("t" "To do"
                entry (file+datetree org-default-notes-file)
@@ -892,9 +914,14 @@
                "* NEXT %?\n%^{Owner}p\n%U\n%a\n"
                :clock-in t :clock-resume t
                :empty-lines-before 1)
+              ("p" "Plan tomorrow"
+               entry (file+datetree "~/org/work/log.org")
+               "* Plan for %(sched-tomorrow)\n%^{Owner}p\n%U\n%a\n\n** Previous\n\n%?\n\n** Next\n"
+               :empty-lines-before 1
+               "")
               ("k" "Kaylee Checks"
                entry (file+datetree org-default-notes-file)
-               "* NEXT Kaylee Checks\n%^{Owner}p\n%U\n%a\n%?%[~/org/kaylee-template.org]"
+               "* NEXT Kaylee Checks\n%^{Owner}p\n%U\n%a\n%?%[~/org/templates/kaylee-template.org]"
                :clock-in t :clock-resume t
                :empty-lines-before 1)
               ("r" "Running commentary"
@@ -908,7 +935,7 @@
                :clock-in t :clock-resume t
                :empty-lines-before 1)
               ("d" "Diary"
-               entry (file+datetree "~/org/diary.org")
+               entry (file+datetree "~/org/capture/diary.org")
                "* %?\n%U\n"
                :clock-in t :clock-resume t
                :empty-lines-before 1)
@@ -918,13 +945,13 @@
                :clock-in t :clock-resume t
                :empty-lines-before 1)
               ("c" "Contacts"
-               entry (file "~/org/contacts.org")
+               entry (file "~/org/non-agenda/contacts.org")
                "* %(org-contacts-template-name)\n:PROPERTIES:\n:EMAIL: %(org-contacts-template-email)\n:PHONE:\n:ALIAS:\n:NICKNAME:\n:IGNORE:\n:ICON:\n:NOTE:\n:ADDRESS:\n:BIRTHDAY:\n:LAST_READ_MAIL:\n:END:"
                :empty-lines-before 1)
               ("l"
                "Capture a link"
                entry
-               (file+datetree "~/org/links.org")
+               (file+datetree "~/org/non-agenda/links.org")
                "* %(org-cliplink-capture) %^g\n%?"
                :empty-lines-before 1)))
      #+END_SRC
@@ -938,8 +965,8 @@
        (setq org-refile-allow-creating-parent-nodes t)
 
        (setq org-refile-targets
-             '(("work.org" :maxlevel . 9)
-               ("personal.org" :maxlevel . 9)))
+             '((nil :maxlevel . 9)
+               (org-agenda-files :maxlevel . 9)))
        (setq org-refile-use-outline-path t)
 
        (setq org-link-search-must-match-exact-headline nil)
