@@ -38,6 +38,14 @@
   the :config key in use-package, but sometimes, I'm not smart enough
   to know how to do it.
 
+** My elisp wip
+
+   Things I'm working on that may one day end up in melpa.
+
+   #+BEGIN_SRC emacs-lisp
+     (add-to-list 'load-path "~/.emacs.d/wip/")
+   #+END_SRC
+
 ** Backups
 
    Backups are handy for those times where you run out of power
@@ -473,6 +481,31 @@
         :ensure t)
    #+END_SRC
 
+** plantuml
+
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package plantuml-mode
+       :ensure t
+       :config
+       (setq plantuml-jar-path "/usr/share/plantuml/plantuml.jar")
+       (setq org-plantuml-jar-path plantuml-jar-path))
+
+     (use-package flycheck-plantuml
+       :ensure t
+       :config
+       (with-eval-after-load 'flycheck
+         (flycheck-plantuml-setup)))
+   #+END_SRC
+
+
+** graphviz
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package graphviz-dot-mode
+       :ensure t)
+   #+END_SRC
+
 * Text Modes
 
 ** Text Mode Basics
@@ -905,6 +938,10 @@
                entry (file+datetree org-default-notes-file)
                "* TODO %?\n%^{Owner}p\n%U\n%a\n"
                :empty-lines-before 1)
+              ("p" "To do from Pivotal"
+               entry (file+datetree org-default-notes-file)
+               "* TODO %:description\n%^{Owner}p\n%U\n%a\n%?"
+               :empty-lines-before 1)
               ("w" "To do from the web"
                entry (file+datetree org-default-notes-file)
                "* TODO %?\n%^{Owner}p\n%U\n%(org-cliplink-capture)\n"
@@ -914,7 +951,7 @@
                "* NEXT %?\n%^{Owner}p\n%U\n%a\n"
                :clock-in t :clock-resume t
                :empty-lines-before 1)
-              ("p" "Plan tomorrow"
+              ("P" "Plan tomorrow"
                entry (file+datetree "~/org/work/log.org")
                "* Plan for %(sched-tomorrow)\n%^{Owner}p\n%U\n%a\n\n** Previous\n\n%?\n\n** Next\n"
                :empty-lines-before 1
@@ -926,9 +963,10 @@
                :empty-lines-before 1)
               ("r" "Running commentary"
                entry (clock)
-               "* %?\n%U\n%a\n"
+               "* %?\n%U\n%a\n\n"
                :clock-keep t
-               :empty-lines-before 1)
+               :empty-lines-before 1
+               :empty-lines-after 1)
               ("m" "Meeting"
                entry (file+datetree org-default-notes-file)
                "* MEETING with %? :MEETING:\n%T\n%a"
@@ -1027,7 +1065,10 @@
 
     #+BEGIN_SRC emacs-lisp
       (org-babel-do-load-languages
-       'org-babel-load-languages '((shell . t)))
+       'org-babel-load-languages
+       '((shell . t)
+         (dot . graphviz-dot)
+         (plantuml . t)))
     #+END_SRC
 
 ** html, css, sass, scss and others
@@ -1189,6 +1230,12 @@
    #+BEGIN_SRC emacs-lisp
      (use-package pivotal-tracker
        :ensure t)
+   #+END_SRC
+
+   And I want it to play nicely with org-mode links
+
+   #+BEGIN_SRC emacs-lisp
+     (require 'org-pivotal)
    #+END_SRC
 
 ** twittering-mode
