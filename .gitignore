@@ -25,3 +25,8 @@ url/*
 elpa/
 /ido.last
 /projectile.cache
+/ede-projects.el
+emojis
+/local/custom.el
+*.save
+/network-security.data
