@@ -1174,6 +1174,19 @@
               ([s-left] . windmove-left)))
    #+END_SRC
 
+** workspaces
+
+   I'm giving eyebrowse a try to see if it means that I can have fewer
+   frames and more workspaces.
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package eyebrowse                  ; Easy workspaces creation and switching
+       :ensure t
+       :config
+       (setq eyebrowse-mode-line-separator " "
+             eyebrowse-new-workspace t)
+       (eyebrowse-mode t))
+   #+END_SRC
 ** yasnippet
 
    Yet another snippet package, but this one is pretty good so we'll
