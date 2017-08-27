@@ -411,7 +411,8 @@
         :ensure t
         :defer t
         :config
-        (setq cider-repl-history-file (concat user-emacs-directory "cider-history")
+        (setq cider-lein-parameters "repl :headless :host localhost"
+              cider-repl-history-file (concat user-emacs-directory "cider-history")
               cider-repl-history-size 1000
               cider-font-lock-dynamically '(macro core function var)
               cider-overlays-use-font-lock t
