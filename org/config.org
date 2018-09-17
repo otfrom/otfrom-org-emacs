@@ -530,14 +530,6 @@
         :ensure t)
     #+END_SRC
 
-** Shell Scripting
-
-   Check those bash scripts using [[http://skybert.net/emacs/bash-linting-in-emacs/][shellcheck]].
-
-   #+BEGIN_SRC emacs-lisp
-     (add-hook 'sh-mode-hook 'flycheck-mode)
-   #+END_SRC
-
 ** YAML
 
    So many bad things have been done with YAML. It is less verbose
