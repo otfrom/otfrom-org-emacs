@@ -70,7 +70,6 @@
   (require 'use-package))
 (defvar use-package-verbose t)
 (require 'bind-key)
-(require 'diminish)
 
 ;; org-mode always needs to be installed in an emacs where it isn't loaded.
 (use-package org

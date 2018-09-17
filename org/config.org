@@ -38,6 +38,13 @@
   the :config key in use-package, but sometimes, I'm not smart enough
   to know how to do it.
 
+** We need diminish
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package diminish
+       :ensure t)
+   #+END_SRC
+
 ** My elisp wip
 
    Things I'm working on that may one day end up in melpa.
