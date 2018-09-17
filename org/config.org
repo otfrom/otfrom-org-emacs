@@ -648,6 +648,17 @@
         :ensure t)
     #+END_SRC
 
+    And a way to update everything and get things in appt.
+
+    #+BEGIN_SRC emacs-lisp
+      (defun update-agenda ()
+        (interactive)
+        (org-gcal-fetch)
+        (setq appt-time-msg-list nil)
+        (org-agenda-redo-all)
+        (org-agenda-to-appt))
+    #+END_SRC
+
 *** org agenda
 
     These are the files that I currently need to keep an up to date
@@ -662,13 +673,12 @@
              (mapcar 'cdr org-gcal-file-alist)))
     #+END_SRC
 
-    And I always want to see the clock-report and I want that report
-    to show me hours rather than roll up to days.
+    I want the timeclock report to show me hours and not days.
 
     #+BEGIN_SRC emacs-lisp
       (setq org-time-clocksum-format
             (quote (:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t)))
-      (setq org-agenda-start-with-clockreport-mode t)
+      ;; (setq org-agenda-start-with-clockreport-mode t)
     #+END_SRC
 
 *** org agenda clock editing
@@ -688,6 +698,15 @@
           (define-key org-agenda-mode-map
             (kbd "ø") #'org-clock-convenience-fill-gap)) ; AltGr-o
         (add-hook 'org-agenda-mode-hook #'dfeich/org-agenda-mode-fn))
+    #+END_SRC
+
+*** org-clock-today
+
+    How much time have I clocked today?
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package org-clock-today
+        :ensure t)
     #+END_SRC
 
 *** mailbox like rescheduling.
@@ -740,7 +759,7 @@
       (setq org-use-fast-todo-selection t)
       (setq org-todo-keywords
             '((sequence "UPCOMING(u)" "PROJECT(p)" "|" "SHIPPED(s)")
-              (sequence "TODO(t)" "NEXT(n!/!)" "|" "DONE(d)")
+              (sequence "TODO(t)" "NEXT(n!/!)" "STARTED(r)" "|" "DONE(d)")
               (sequence "WAITING(w@/!)" "INACTIVE(i@/!)" "|" "CANCELLED(c@/!)" "MEETING")))
 
       (setq org-todo-state-tags-triggers
@@ -754,8 +773,37 @@
 
 
       (global-set-key (kbd "C-c c") 'org-capture)
+      (global-set-key (kbd "<f12>") 'org-capture)
       (global-set-key (kbd "C-c a") 'org-agenda)
+      (global-set-key (kbd "C-<f12>") 'org-agenda) ;; change this to switch or new
       (define-key org-agenda-mode-map "y" 'org-store-link)
+    #+END_SRC
+
+*** org-review
+
+    https://github.com/brabalan/org-review
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package org-review
+        :ensure t)
+    #+END_SRC
+
+
+    #+BEGIN_SRC emacs-lisp
+      (add-to-list
+       'org-agenda-custom-commands
+       '("R" "Review projects" tags-todo "PROJECT/"
+         ((org-agenda-overriding-header "Reviews Scheduled")
+          (org-agenda-skip-function 'org-review-agenda-skip)
+          (org-agenda-cmp-user-defined 'org-review-compare)
+          (org-agenda-sorting-strategy '(user-defined-down)))))
+    #+END_SRC
+
+    #+BEGIN_SRC emacs-lisp
+      (add-hook 'org-agenda-mode-hook
+                (lambda ()
+                  (local-set-key (kbd "C-c C-r")
+                                 'org-review-insert-last-review)))
     #+END_SRC
 
 *** Custom Agenda Views
@@ -763,6 +811,9 @@
     The default agenda is a good start, but we can do a bit better.
 
 **** What am I doing in the Current Cake Countdown?
+     :PROPERTIES:
+     :ID:       08f62b57-c7b5-47c2-bd72-3244336b923b
+     :END:
 
      My default view, as I mostly use org for keeping my working
      days in line is around the Current Cake Countdown, which is
@@ -791,18 +842,88 @@
      #+BEGIN_SRC emacs-lisp
        (add-to-list
         'org-agenda-custom-commands
-        '("M" "My Current Cake Countdown"
-          ((agenda "My Current Cake Countdown"
-                   ((org-agenda-span 'week)
-                    (org-agenda-start-on-weekday 3)
-                    (org-agenda-skip-deadline-if-done t)
-                    (org-agenda-skip-scheduled-if-done t)))
-           (tags-todo "TODO=\"NEXT\""
-                      ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))
-                       (org-agenda-overriding-header "Unscheduled NEXTs: ")))
-           (tags-todo "TODO=\"TODO\""
-                      ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))
-                       (org-agenda-overriding-header "Unscheduled TODOs: "))))))
+        '("M" "Super Agenda" agenda
+          (org-super-agenda-mode)
+          ((org-super-agenda-groups
+            '((:log t)  ; Automatically named "Log"
+              (:name "Schedule"
+                     :time-grid t)
+              (:name "Started"
+                     :todo ("STARTED"))
+              (:name "Today"
+                     :scheduled today)
+              (:habit t)
+              (:name "Due today"
+                     :deadline today)
+              (:name "Overdue"
+                     :deadline past)
+              (:name "Due soon"
+                     :deadline future)
+              (:name "Unimportant"
+                     :todo ("SOMEDAY" "MAYBE" "CHECK" "TO-READ" "TO-WATCH")
+                     :order 100)
+              (:name "Waiting..."
+                     :todo "WAITING"
+                     :order 98)
+              (:name "Scheduled earlier"
+                     :scheduled past))))
+          (org-agenda nil "a")))
+
+       ;; (add-to-list
+       ;;  'org-agenda-custom-commands
+       ;;  '("M" "My Current Cake Countdown"
+       ;;    ((agenda "My Current Cake Countdown"
+       ;;             ((org-agenda-span 'week)
+       ;;              (org-agenda-start-on-weekday 3)
+       ;;              (org-agenda-skip-deadline-if-done t)
+       ;;              (org-agenda-skip-scheduled-if-done t)))
+       ;;     (tags-todo "TODO=\"NEXT\""
+       ;;                ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))
+       ;;                 (org-agenda-overriding-header "Unscheduled NEXTs: ")))
+       ;;     (tags-todo "TODO=\"TODO\""
+       ;;                ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))
+       ;;                 (org-agenda-overriding-header "Unscheduled TODOs: "))))
+       ;;    (org-super-agenda-groups
+       ;;     '(;; Each group has an implicit boolean OR operator between its selectors.
+       ;;       (:name "Today"  ; Optionally specify section name
+       ;;              :time-grid t  ; Items that appear on the time grid
+       ;;              :todo "TODAY")  ; Items that have this TODO keyword
+       ;;       (:name "Important"
+       ;;              ;; Single arguments given alone
+       ;;              :tag "bills"
+       ;;              :priority "A")
+       ;;       ;; Set order of multiple groups at once
+       ;;       (:order-multi (2 (:name "Shopping in town"
+       ;;                               ;; Boolean AND group matches items that match all subgroups
+       ;;                               :and (:tag "shopping" :tag "@town"))
+       ;;                        (:name "Food-related"
+       ;;                               ;; Multiple args given in list with implicit OR
+       ;;                               :tag ("food" "dinner"))
+       ;;                        (:name "Personal"
+       ;;                               :habit t
+       ;;                               :tag "personal")
+       ;;                        (:name "Space-related (non-moon-or-planet-related)"
+       ;;                               ;; Regexps match case-insensitively on the entire entry
+       ;;                               :and (:regexp ("space" "NASA")
+       ;;                                             ;; Boolean NOT also has implicit OR between selectors
+       ;;                                             :not (:regexp "moon" :tag "planet")))))
+       ;;       ;; Groups supply their own section names when none are given
+       ;;       (:todo "WAITING" :order 8)  ; Set order of this section
+       ;;       (:todo ("SOMEDAY" "TO-READ" "CHECK" "TO-WATCH" "WATCHING")
+       ;;              ;; Show this group at the end of the agenda (since it has the
+       ;;              ;; highest number). If you specified this group last, items
+       ;;              ;; with these todo keywords that e.g. have priority A would be
+       ;;              ;; displayed in that group instead, because items are grouped
+       ;;              ;; out in the order the groups are listed.
+       ;;              :order 9)
+       ;;       (:priority<= "B"
+       ;;                    ;; Show this section after "Today" and "Important", because
+       ;;                    ;; their order is unspecified, defaulting to 0. Sections
+       ;;                    ;; are displayed lowest-number-first.
+       ;;                    :order 1)
+       ;;       ;; After the last group, the agenda will display items that didn't
+       ;;       ;; match any of these groups, with the default order position of 99
+       ;;       ))))
      #+END_SRC
 
 **** Yesterday-ish & Today & Tomorrow-ish
@@ -845,7 +966,7 @@
                    ((org-agenda-span 0)
                     (org-agenda-start-day "+0d")
                     (org-agenda-skip-deadline-if-done 't)
-                    (org-agenda-sorting-strategy '(habit-up time-up scheduled-up deadline-up category-down todo-state-down tag-up))))
+                    (org-agenda-sorting-strategy '(habit-up time-up priority-down todo-state-up deadline-up category-down todo-state-down tag-up))))
            (tags-todo "TODO=\"NEXT\""
                       ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))
                        (org-agenda-overriding-header "Unscheduled NEXTs: ")))
@@ -986,6 +1107,26 @@
                    (lambda () (local-set-key (kbd "P") 'org-pomodoro))))
      #+END_SRC
 
+*** org-super-agenda
+
+    Lots of examples [[https://github.com/alphapapa/org-super-agenda/blob/master/examples.org][here]].
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package org-super-agenda
+        :ensure t)
+    #+END_SRC
+
+*** org-web-tools
+
+    Something like pocket, but in org-mode and locally. This might be
+    the start of my own outboard brain. I just need to figure out how
+    to make it work well with org-capture.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package org-web-tools
+        :ensure t)
+    #+END_SRC
+
 *** Capturing & Refiling
     :PROPERTIES:
     :ID:       d5a6a956-3d13-424c-83c7-63743b8132a7
@@ -1018,6 +1159,9 @@
                entry (file+datetree org-default-notes-file)
                "* TODO %?\n%^{Owner}p\n%U\n%(org-cliplink-capture)\n"
                :empty-lines-before 1)
+              ;; ("r" "Capture Web site with eww-readable"
+              ;;  entry (file+datetree "~/org/web-archive/articles.org")
+              ;;  "%(org-web-tools--url-as-readable-org)")
               ("n" "Doing RIGHT NOW"
                entry (file+datetree org-default-notes-file)
                "* NEXT %?\n%^{Owner}p\n%U\n%a\n"
@@ -1030,15 +1174,14 @@
                "")
               ("k" "Kaylee Checks"
                entry (file+datetree org-default-notes-file)
-               "* NEXT Kaylee Checks\n%^{Owner}p\n%U\n%a\n%?%[~/org/templates/kaylee-template.org]"
+               "* NEXT Kaylee Checks\n%^{Owner}p\n%U\n%a\n%?%[~/wip/kaylee-tools/org/kaylee-template.org]"
                :clock-in t :clock-resume t
                :empty-lines-before 1)
               ("r" "Running commentary"
                entry (clock)
                "* %?\n%U\n%a\n\n"
                :clock-keep t
-               :empty-lines-before 1
-               :empty-lines-after 1)
+               :unnarrowed t)
               ("m" "Meeting"
                entry (file+datetree org-default-notes-file)
                "* MEETING with %? :MEETING:\n%T\n%a"
@@ -1072,14 +1215,16 @@
      might be a reasonable start though.
 
      #+BEGIN_SRC emacs-lisp
-       (setq org-refile-allow-creating-parent-nodes t)
+       ;;(setq org-refile-allow-creating-parent-nodes t)
+       (setq org-refile-use-outline-path 'file)
+       (setq org-outline-path-complete-in-steps nil)
 
        (setq org-refile-targets
              '((nil :maxlevel . 9)
                (org-agenda-files :maxlevel . 9)))
-       (setq org-refile-use-outline-path t)
+       ;; (setq org-refile-use-outline-path t)
 
-       (setq org-link-search-must-match-exact-headline nil)
+       ;; (setq org-link-search-must-match-exact-headline nil)
      #+END_SRC
 
 *** Interleave
@@ -1097,8 +1242,8 @@
     Because, why not and I don't always want to got to the website.
 
     #+BEGIN_SRC emacs-lisp
-      (use-package org-tfl
-        :ensure t)
+      ;; (use-package org-tfl
+      ;;  :ensure t)
     #+END_SRC
 
 *** clipboard URLs to org-mode
@@ -1134,6 +1279,19 @@
     #+END_SRC
 
 *** org-babel
+
+    I want to be able to do shell and have graphviz and plantuml
+    visualisations in my org-mode buffers (this is where I do a lot of
+    my thinking).
+
+    For some of the longer running things though I want them to be
+    asynchronous so they don't tie up my emacs while they are running
+    in the background.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package ob-async
+        :ensure t)
+    #+END_SRC
 
     #+BEGIN_SRC emacs-lisp
       (org-babel-do-load-languages
