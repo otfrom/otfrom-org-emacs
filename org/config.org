@@ -112,6 +112,13 @@
      (load-if-exists (concat user-emacs-directory "local/mellon.el.gpg"))
    #+END_SRC
 
+
+*** Let's use ~/.netrc tool
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package netrc)
+    #+END_SRC
+
 * Version Control and diff
 
   Once we have things up and running, really the most basic thing is
@@ -1115,6 +1122,23 @@
        '((shell . t)
          (dot . graphviz-dot)
          (plantuml . t)))
+    #+END_SRC
+
+*** org2blog
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package org2blog
+        :ensure t
+        :config (setq org2blog/wp-use-sourcecode-shortcode nil
+                      org2blog/wp-blog-alist
+                      (->> (netrc-parse "~/.netrc")
+                           (-filter #'(lambda (m) (string-match-p "wordpress.com" (cdr (assoc "machine" m)))))
+                           (mapcar
+                            #'(lambda (m)
+                                (list (cdr (assoc "machine" m))
+                                      :url (concat "https://" (cdr (assoc "machine" m)) "/xmlrpc.php")
+                                      :username (cdr (assoc "login" m))
+                                      :password (cdr (assoc "password" m))))))))
     #+END_SRC
 
 ** html, css, sass, scss and others
