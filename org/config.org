@@ -20,17 +20,6 @@
          (message (format "No %s file. So not loading one." file))))
    #+END_SRC
 
-** add-to-hooks
-
-   A little helper function to make adding things to hooks easier.
-
-   #+BEGIN_SRC emacs-lisp
-     (defun bld/add-to-hooks (f hooks)
-       "Add funcion F to all HOOKS."
-       (dolist (hook hooks)
-         (add-hook hook f)))
-   #+END_SRC
-
 * Starting
 
   There are some variables we'll really want to set up before
