@@ -542,21 +542,18 @@
 
 ** plantuml
 
-
    #+BEGIN_SRC emacs-lisp
      (use-package plantuml-mode
        :ensure t
-       :config
+       :init
        (setq plantuml-jar-path "/usr/share/plantuml/plantuml.jar")
        (setq org-plantuml-jar-path plantuml-jar-path))
 
      (use-package flycheck-plantuml
        :ensure t
        :config
-       (with-eval-after-load 'flycheck
-         (flycheck-plantuml-setup)))
+       (flycheck-plantuml-setup))
    #+END_SRC
-
 
 ** graphviz
 
