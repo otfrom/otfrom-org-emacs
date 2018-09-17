@@ -569,6 +569,15 @@
     :ensure t)
 #+END_SRC
 
+** sql
+
+   Formatting SQL is a pain
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package sql-indent
+       :ensure t)
+   #+END_SRC
+
 * Text Modes
 
 ** Text Mode Basics
