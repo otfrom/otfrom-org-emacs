@@ -562,6 +562,13 @@
        :ensure t)
    #+END_SRC
 
+** jenkins
+
+#+BEGIN_SRC emacs-lisp
+  (use-package jenkins
+    :ensure t)
+#+END_SRC
+
 * Text Modes
 
 ** Text Mode Basics
