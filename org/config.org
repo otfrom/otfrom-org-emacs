@@ -132,6 +132,17 @@
       :bind (("C-c g" . magit-status)))
   #+END_SRC
 
+  And as we love org and love magit we want to be able to have
+  todo.org files in our git repos so that we can see what we still
+  have to do.
+
+  #+BEGIN_SRC emacs-lisp
+    (use-package magit-org-todos
+      :ensure t
+      :config
+      (magit-org-todos-autoinsert))
+  #+END_SRC
+
   Once we do have version control and can do things with ediff, which
   is a great mode for looking at diffs between versions, buffer, files
   and directory trees, I want to fix how the windows work as the
