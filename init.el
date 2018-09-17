@@ -73,8 +73,20 @@
 (require 'diminish)
 
 ;; org-mode always needs to be installed in an emacs where it isn't loaded.
-(when (not (package-installed-p 'org-plus-contrib))
-  (package-install 'org-plus-contrib))
-(require 'org)
+(use-package org
+  :pin org
+  :ensure t)
+
+;; I like using appt. I update my agenda mulitple times per day. I do
+;; lots of scheduling.
+(defun update-agenda-and-appt ()
+  (interactive)
+  (setq appt-time-msg-list nil)
+  (org-agenda-redo-all)
+  (org-agenda-to-appt))
+
+(use-package org-agenda
+  :bind (:map org-agenda-mode-map
+              ("g" . update-agenda-and-appt)))
 
 (org-babel-load-file (concat user-emacs-directory "org/config.org"))
