@@ -224,9 +224,33 @@
    line and column numbers.
 
    #+BEGIN_SRC emacs-lisp
+     (size-indication-mode 1)
      (line-number-mode 1)
      (column-number-mode 1)
    #+END_SRC
+
+** powerline
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package powerline
+       :ensure t
+       :config (powerline-default-theme))
+   #+END_SRC
+
+** Beacon
+
+   Make with the wooshy cursor to see where it is
+
+   #+BEGIN_SRC emacs-lisp
+     (blink-cursor-mode -1)
+
+     (use-package beacon
+       :diminish
+       :ensure t
+       :config
+       (beacon-mode 1))
+   #+END_SRC
+
 ** Startup Screen
 
    I'd also like to skip the startup screen and go straight to the
@@ -290,7 +314,7 @@
 
     #+BEGIN_SRC emacs-lisp
       (use-package whitespace
-        :diminish whitespace
+        :diminish whitespace-mode
         :init (setq whitespace-style '(face tabs trailing))
         :config (global-whitespace-mode t))
     #+END_SRC
@@ -299,7 +323,32 @@
 
     #+BEGIN_SRC emacs-lisp
       (use-package flycheck
-        :ensure t)
+        :ensure t
+        :hook ((sh-mode) . flycheck-mode))
+    #+END_SRC
+
+*** Highlight the symbol you are on
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package highlight-symbol
+        :ensure t
+        :diminish highlight-symbol-mode
+        :hook (prog-mode . highlight-symbol-mode)
+        :config
+        (setq highlight-symbol-on-navigation-p t))
+    #+END_SRC
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package highlight-symbol-nav-mode
+        :hook (prog-mode . highlight-symbol-nav-mode))
+    #+END_SRC
+
+*** ivy-xref
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package ivy-xref
+        :ensure t
+        :config (setq xref-show-xrefs-function #'ivy-xref-show-xrefs))
     #+END_SRC
 
 ** Lisps
@@ -1114,32 +1163,81 @@
    with helm, then create your own. ;-)
 
    #+BEGIN_SRC emacs-lisp
-     (use-package smex
-       :ensure t
-       :bind (("M-x" . smex))
-       :config (smex-initialize))  ; smart meta-x (use IDO in minibuffer)
+     ;; (use-package smex
+     ;;   :ensure t
+     ;;   :bind (("M-x" . smex))
+     ;;   :config (smex-initialize))  ; smart meta-x (use IDO in minibuffer)
 
-     (use-package ido
-       :ensure t
-       :demand t
-       :bind (("C-x b" . ido-switch-buffer))
-       :config (ido-mode 1)
-       (setq ido-create-new-buffer 'always  ; don't confirm when creating new buffers
-             ido-enable-flex-matching t     ; fuzzy matching
-             ido-everywhere t  ; tbd
-             ido-case-fold t)) ; ignore case
+     ;; (use-package ido
+     ;;   :ensure t
+     ;;   :demand t
+     ;;   :bind (("C-x b" . ido-switch-buffer))
+     ;;   :config (ido-mode 1)
+     ;;   (setq ido-create-new-buffer 'always  ; don't confirm when creating new buffers
+     ;;         ido-enable-flex-matching t     ; fuzzy matching
+     ;;         ido-everywhere t  ; tbd
+     ;;         ido-case-fold t)) ; ignore case
 
-     (use-package ido-completing-read+
-       :ensure t
-       :config (ido-ubiquitous-mode 1))
+     ;; (use-package ido-completing-read+
+     ;;   :ensure t
+     ;;   :config (ido-ubiquitous-mode 1))
 
-     (use-package flx-ido
-       :ensure t
-       :config (flx-ido-mode 1))
+     ;; (use-package flx-ido
+     ;;   :ensure t
+     ;;   :config (flx-ido-mode 1))
 
-     (use-package ido-vertical-mode
+     ;; (use-package ido-vertical-mode
+     ;;   :ensure t
+     ;;   :config (ido-vertical-mode 1))
+   #+END_SRC
+
+** make dired pretty
+
+   Who doesn't want all the icons?
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package all-the-icons
+       :ensure t)
+   #+END_SRC
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package all-the-icons-dired
        :ensure t
-       :config (ido-vertical-mode 1))
+       :hook ((dired-mode) . all-the-icons-dired-mode))
+   #+END_SRC
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package all-the-icons-ivy
+       :ensure t
+       :config
+       (all-the-icons-ivy-setup))
+   #+END_SRC
+
+** ivy, swiper and others
+
+   Shamelessly stolen from [[https://github.com/kaushalmodi/.emacs.d/blob/master/setup-files/setup-ivy.el][here]].
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package counsel
+       :ensure t)
+
+     (use-package swiper
+       :ensure t)
+
+     (use-package ivy
+       :ensure t
+       :diminish ivy-mode
+       :init (setq ivy-use-virtual-buffers t
+                   ivy-count-format "(%d/%d) ")
+       (global-set-key (kbd "C-s") 'swiper)
+       (global-set-key (kbd "M-x") 'counsel-M-x)
+       (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+       (global-set-key (kbd "<f1> f") 'counsel-describe-function)
+       (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+       (global-set-key (kbd "<f1> l") 'counsel-find-library)
+       (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+       (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+       :config (ivy-mode 1))
    #+END_SRC
 
 ** ibuffer
@@ -1170,20 +1268,30 @@
               ([s-left] . windmove-left)))
    #+END_SRC
 
+   #+BEGIN_SRC emacs-lisp
+     (use-package ace-window
+       :ensure t
+       :init (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+       :bind ("M-o". ace-window))
+   #+END_SRC
+
 ** workspaces
 
    I'm giving eyebrowse a try to see if it means that I can have fewer
    frames and more workspaces.
 
    #+BEGIN_SRC emacs-lisp
-     (use-package eyebrowse                  ; Easy workspaces creation and switching
+     (use-package eyebrowse ; Easy workspaces creation and switching
        :ensure t
-       :config
-       (setq eyebrowse-mode-line-separator " "
-             eyebrowse-new-workspace t)
-       (eyebrowse-mode t))
+       :init (setq eyebrowse-mode-line-separator " "
+                   eyebrowse-keymap-prefix (kbd "C-c M-w")
+                   eyebrowse-new-workspace t)
+       :config (eyebrowse-mode t))
    #+END_SRC
 ** yasnippet
+   :PROPERTIES:
+   :ORDERED:  t
+   :END:
 
    Yet another snippet package, but this one is pretty good so we'll
    use it.
@@ -1192,6 +1300,7 @@
      (use-package yasnippet
        :ensure t
        :defer t
+       :diminish yas-minor-mode
        :config (yas-global-mode 1))
    #+END_SRC
 
@@ -1302,12 +1411,25 @@
              wttrin-default-accept-language '("Accept-Language" . "en-GB")))
    #+END_SRC
 
-** The Great Eye of Sauron
+** Alerting and Other Status Things
 
-   #+BEGIN_SRC emacs-lisp
-     (use-package sauron
-       :ensure t)
-   #+END_SRC
+*** alert
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package alert
+        :commands (alert)
+        :init
+        (setq alert-default-style 'notifications))
+    #+END_SRC
+
+*** The Great Eye of Sauron
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package sauron
+        :ensure t
+        :config (setq sauron-separate-frame nil
+                      sauron-prio-twittering-new-tweets 2))
+    #+END_SRC
 
 ** expand-region
 
