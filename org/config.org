@@ -1572,10 +1572,12 @@
        :ensure t
        :defer t
        :bind (([M-f6] . twittering-update-status-interactive))
-       :config (setq twittering-url-show-status nil
+       :config (setq twittering-username "otfrom"
+                     twittering-url-show-status nil
                      twittering-icon-mode 1
                      twittering-use-icon-storage t
                      twittering-use-master-password t
+                     twittering-connection-type-order '(wget curl urllib-http native urllib-https)
                      twittering-initial-timeline-spec-string
                      '("otfrom/people-i-know"
                        ":replies"
