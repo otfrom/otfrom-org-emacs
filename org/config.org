@@ -1597,6 +1597,15 @@
        :init (add-hook 'after-init-hook #'global-emojify-mode))
    #+END_SRC
 
+** elfeed
+
+#+BEGIN_SRC emacs-lisp
+  (use-package elfeed-org
+    :ensure t
+    :init (elfeed-org)
+    :config (setq rmh-elfeed-org-files (list "~/org/elfeed.org")))
+#+END_SRC
+
 ** What is the weather?
 
    This probably falls under "more stupid emacs tricks", but who
