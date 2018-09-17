@@ -301,6 +301,13 @@
         (global-company-mode))
     #+END_SRC
 
+*** Faster searching with ag
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package ag
+        :ensure t)
+    #+END_SRC
+
 *** projectile
 
     Projectile allows you to treat gropus of files under git control
