@@ -491,6 +491,13 @@
       ;;   (add-hook 'clojure-mode-hook 'my-clj-refactor-hook))
     #+END_SRC
 
+**** joker and linting
+
+     #+BEGIN_SRC emacs-lisp
+       (use-package flycheck-joker
+         :ensure t)
+     #+END_SRC
+
 ** Scala
 
    Yeah, I'll have a java mode here too at some point.
