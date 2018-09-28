@@ -663,8 +663,9 @@
      having the same text or if they move around.
 
      #+BEGIN_SRC emacs-lisp
-       (add-to-list 'org-modules 'org-id)
-       (setq org-id-link-to-org-use-id t)
+       (use-package org-id
+         :init
+         (setq org-id-link-to-org-use-id t))
      #+END_SRC
 
 *** org-mode add ons
