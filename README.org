@@ -15,10 +15,10 @@
   The real content is in [[./org/config.org][config.org]], which would probably be more
   interesting to read.
 
-  This emacs config was set up to run on Mac OS X using the emacs from
-  the very good [[http://emacsformacosx.com/][emacsformacosx.com]]. I've not made it multi OS yet, and
-  a lot of the things solve problems that really only occur on a UK
-  Mac (things like the # key).
+  I used to have some things here to make stuff work on mac osx, but
+  I've been all in on GNU/Linux for a while now (Ubuntu 18.04 at the
+  time of this commit), so I'm not sure I can guarantee that any macos
+  things will work any more.
 
   If you want to use this I suggest you do the following:
 
@@ -30,27 +30,3 @@
   emacs configurations without trashing any of the earlier ones and
   lets me try a lot of things out. It seems to be working for me so
   far.
-
-* Features
-
-  Here are the things this emacs config gives examples for:
-
-  - uses use-package for clean start up
-  - package pinning for safer upgrades
-  - clojure support with cider
-  - Separating custom.el from the rest of your files.
-  - hippie expand
-  - upcasing and downcasing
-  - Using diminish to clean up a mode-line
-  - Using multiple elpa package archives
-  - Using color themes and custom fonts
-  - removing chrome from the windows
-  - very basic helm mode setup
-  - a basic ido setup for somethings
-  - magit
-  - using Emacs as a twitter client
-  - using Emacs as a gtalk/jabber client
-  - using Emacs as an irc client
-  - paredit and rainbow delimiters
-  - org-mode with some custom agendas and sorting
-  - emacs on Mac OS X fixes (vestigial now)
