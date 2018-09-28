@@ -1184,6 +1184,111 @@
        :ensure t)
    #+END_SRC
 
+** elfeed
+
+   There are still a lot of good blogs out there. I do get tickled
+   sometimes that people call blog posts "long reads"
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package elfeed-org
+     :ensure t
+     :init (elfeed-org)
+     :config (setq rmh-elfeed-org-files (list "~/org/elfeed.org")))
+   #+END_SRC
+
+** What is the weather?
+
+   This probably falls under "more stupid emacs tricks", but who
+   wouldn't want to to see the weather in emacs?
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package wttrin
+       :ensure t
+       :commands (wttrin)
+       :init
+       (setq wttrin-default-cities '("London"
+                                     "Dundee")
+             wttrin-default-accept-language '("Accept-Language" . "en-GB")))
+   #+END_SRC
+
+   or we can open up a browser and look at darksky.net
+
+   #+BEGIN_SRC emacs-lisp
+     (defun dundee-darksky ()
+       (interactive)
+       (browse-url-chrome "https://darksky.net/forecast/56.46,-2.9933/uk212/en" t))
+   #+END_SRC
+
+** twittering-mode
+
+   I have been accused by many ([[http://twitter.com/rrees][Robert Rees]] and [[http://twitter.com/cluttercup][Jane Dickson]] to name
+   but two) of being constantly on twitter. This is mostly fair. I'm
+   curious to see the revision history of this file and see if I
+   change this description before I declare .emacs bankruptcy again.
+
+   The best twitter client I've found is twittering-mode.
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package twittering-mode
+       :ensure t
+       :defer t
+       :bind (([M-f6] . twittering-update-status-interactive))
+       :config (setq twittering-username "otfrom"
+                     twittering-url-show-status nil
+                     twittering-icon-mode 1
+                     twittering-use-icon-storage t
+                     twittering-use-master-password t
+                     twittering-connection-type-order '(wget curl urllib-http native urllib-https)
+                     twittering-initial-timeline-spec-string
+                     '("otfrom/people-i-know"
+                       ":replies"
+                       ":direct_messages")
+                     twittering-timer-interval (* 60 30))
+       (add-hook 'twittering-edit-mode-hook
+                 (lambda () (ispell-minor-mode) (flyspell-mode))))
+   #+END_SRC
+
+** irc/slack and erc stuff
+
+   erc can be used for irc and as a slack client. It needs a few
+   things to make it a bit nicer even though it is actually pretty
+   good out of the box.
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package erc-colorize
+       :ensure t
+       :defer t
+       :config (erc-colorize-mode 1))
+   #+END_SRC
+
+** music and sound
+
+   Yeah, I play music from inside emacs. What of it?
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package emms
+       :ensure t
+       :config
+       (progn
+         (emms-standard)
+         (emms-default-players)
+         (setq emms-playlist-buffer-name "Music-EMMS")
+         (setq emms-source-file-default-directory (concat (getenv "HOME") "/Music/"))
+         (emms-mode-line 0)))
+   #+END_SRC
+
+*** I miss big thunderstorms
+
+    Sometimes I need to concentrate and I don't want to be engaged by
+    music but just white noise won't do. I like a thunderstorm for
+    that.
+
+    #+BEGIN_SRC emacs-lisp
+      (defun make-it-rain ()
+        (interactive)
+        (emms-play-file (concat user-emacs-directory "resources/16480__martin-lightning__severe-thunderstorm.mp3")))
+    #+END_SRC
+
 * Other Modes
 
 ** make dired pretty
@@ -1319,19 +1424,6 @@
         :ensure t)
     #+END_SRC
 
-** irc/slack and erc stuff
-
-   erc can be used for irc and as a slack client. It needs a few
-   things to make it a bit nicer even though it is actually pretty
-   good out of the box.
-
-   #+BEGIN_SRC emacs-lisp
-     (use-package erc-colorize
-       :ensure t
-       :defer t
-       :config (erc-colorize-mode 1))
-   #+END_SRC
-
 ** pivotal tracker
 
    I've tried managing the whole team using org-mode. Even when there
@@ -1352,35 +1444,6 @@
      (require 'org-pivotal)
    #+END_SRC
 
-** twittering-mode
-
-   I have been accused by many ([[http://twitter.com/rrees][Robert Rees]] and [[http://twitter.com/cluttercup][Jane Dickson]] to name
-   but two) of being constantly on twitter. This is mostly fair. I'm
-   curious to see the revision history of this file and see if I
-   change this description before I declare .emacs bankruptcy again.
-
-   The best twitter client I've found is twittering-mode.
-
-   #+BEGIN_SRC emacs-lisp
-     (use-package twittering-mode
-       :ensure t
-       :defer t
-       :bind (([M-f6] . twittering-update-status-interactive))
-       :config (setq twittering-username "otfrom"
-                     twittering-url-show-status nil
-                     twittering-icon-mode 1
-                     twittering-use-icon-storage t
-                     twittering-use-master-password t
-                     twittering-connection-type-order '(wget curl urllib-http native urllib-https)
-                     twittering-initial-timeline-spec-string
-                     '("otfrom/people-i-know"
-                       ":replies"
-                       ":direct_messages")
-                     twittering-timer-interval (* 60 30))
-       (add-hook 'twittering-edit-mode-hook
-                 (lambda () (ispell-minor-mode) (flyspell-mode))))
-   #+END_SRC
-
 ** Emojis
 
    Just the unicode and github ones really. I like the ascii ones as
@@ -1391,38 +1454,6 @@
        :ensure t
        :defer t
        :init (add-hook 'after-init-hook #'global-emojify-mode))
-   #+END_SRC
-
-** elfeed
-
-#+BEGIN_SRC emacs-lisp
-  (use-package elfeed-org
-    :ensure t
-    :init (elfeed-org)
-    :config (setq rmh-elfeed-org-files (list "~/org/elfeed.org")))
-#+END_SRC
-
-** What is the weather?
-
-   This probably falls under "more stupid emacs tricks", but who
-   wouldn't want to to see the weather in emacs?
-
-   #+BEGIN_SRC emacs-lisp
-     (use-package wttrin
-       :ensure t
-       :commands (wttrin)
-       :init
-       (setq wttrin-default-cities '("London"
-                                     "Dundee")
-             wttrin-default-accept-language '("Accept-Language" . "en-GB")))
-   #+END_SRC
-
-   or we can open up a browser and look at darksky.net
-
-   #+BEGIN_SRC emacs-lisp
-     (defun dundee-darksky ()
-       (interactive)
-       (browse-url-chrome "https://darksky.net/forecast/56.46,-2.9933/uk212/en" t))
    #+END_SRC
 
 ** Alerting and Other Status Things
@@ -1455,34 +1486,6 @@
        :ensure t
        :bind (("C-=" . er/expand-region)))
    #+END_SRC
-
-** music and sound
-
-   Yeah, I play music from inside emacs. What of it?
-
-   #+BEGIN_SRC emacs-lisp
-     (use-package emms
-       :ensure t
-       :config
-       (progn
-         (emms-standard)
-         (emms-default-players)
-         (setq emms-playlist-buffer-name "Music-EMMS")
-         (setq emms-source-file-default-directory (concat (getenv "HOME") "/Music/"))
-         (emms-mode-line 0)))
-   #+END_SRC
-
-*** I miss big thunderstorms
-
-    Sometimes I need to concentrate and I don't want to be engaged by
-    music but just white noise won't do. I like a thunderstorm for
-    that.
-
-    #+BEGIN_SRC emacs-lisp
-      (defun make-it-rain ()
-        (interactive)
-        (emms-play-file (concat user-emacs-directory "resources/16480__martin-lightning__severe-thunderstorm.mp3")))
-    #+END_SRC
 
 * Finishing
 
