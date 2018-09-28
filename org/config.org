@@ -143,6 +143,14 @@
       (magit-org-todos-autoinsert))
   #+END_SRC
 
+  And why limit ourselves to just todos in a todo.org? We can find all
+  the todos, hacks and fixmes using [[https://github.com/alphapapa/magit-todos][magit-todo]].
+
+  #+BEGIN_SRC emacs-lisp
+    (use-package magit-todos
+      :ensure t)
+  #+END_SRC
+
   Once we do have version control and can do things with ediff, which
   is a great mode for looking at diffs between versions, buffer, files
   and directory trees, I want to fix how the windows work as the
