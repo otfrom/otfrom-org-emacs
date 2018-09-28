@@ -920,26 +920,34 @@
           ((org-super-agenda-groups
             '((:log t)  ; Automatically named "Log"
               (:name "Schedule"
-                     :time-grid t)
+                     :time-grid t
+                     :order 10)
               (:name "Started"
-                     :todo ("STARTED"))
-              (:name "Today"
-                     :scheduled today)
-              (:habit t)
-              (:name "Due today"
-                     :deadline today)
+                     :todo ("STARTED")
+                     :order 20)
               (:name "Overdue"
-                     :deadline past)
-              (:name "Due soon"
-                     :deadline future)
-              (:name "Unimportant"
-                     :todo ("SOMEDAY" "MAYBE" "CHECK" "TO-READ" "TO-WATCH")
-                     :order 100)
+                     :deadline past
+                     :order 30)
+              (:name "Due today"
+                     :deadline today
+                     :order 40)
               (:name "Waiting..."
                      :todo "WAITING"
-                     :order 98)
+                     :order 50)
+              (:name "Today"
+                     :scheduled today
+                     :order 60)
+              (:habit t
+                      :order 70)
+              (:name "Due soon"
+                     :deadline future
+                     :order 80)
               (:name "Scheduled earlier"
-                     :scheduled past))))
+                     :scheduled past
+                     :order 90)
+              (:name "Unimportant"
+                     :todo ("SOMEDAY" "MAYBE" "CHECK" "TO-READ" "TO-WATCH")
+                     :order 100))))
           (org-agenda nil "a")))
      #+END_SRC
 
@@ -1047,6 +1055,11 @@
               ("d" "Daily Review"
                entry (function org-journal-find-location)
                "* STARTED Daily Review [/]\n%U\n%a\n\n%?%[~/.emacs.d/org/daily-review.org]"
+               :clock-in t :clock-resume t
+               :empty-lines-before 1)
+              ("y" "Weekly Review"
+               entry (function org-journal-find-location)
+               "* STARTED Weekly Review [/]\n%U\n%a\n\n%?%[~/.emacs.d/org/weekly-review.org]"
                :clock-in t :clock-resume t
                :empty-lines-before 1)
               ("w" "To do from the web"
