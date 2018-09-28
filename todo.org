@@ -1,0 +1,9 @@
+* TODO Make org-mode better (with a combo of org-journal and PARA)
+
+* DONE Tidy up commits of latest changes.
+  CLOSED: [2018-09-17 Mon 19:02]
+  :LOGBOOK:
+  - CLOSING NOTE [2018-09-17 Mon 19:02]
+  :END:
+
+Things have become a bit messy here and we need to tidy them up.
