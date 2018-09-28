@@ -1171,6 +1171,19 @@
        :hook ((markdown-mode) . pandoc-mode))
    #+END_SRC
 
+* News, Weather and Light Entertainment
+
+** pocket reader
+
+   When browsing twitter if I don't bookmark something in org I like
+   to put it into pocket so I can read it later. Luckily I can know
+   read this in emacs.
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package pocket-reader
+       :ensure t)
+   #+END_SRC
+
 * Other Modes
 
 ** make dired pretty
