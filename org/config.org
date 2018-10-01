@@ -1242,7 +1242,7 @@
                      twittering-initial-timeline-spec-string
                      '("otfrom/people-i-know"
                        ":replies"
-                       ":direct_messages")
+                       ":direct_message_events")
                      twittering-timer-interval (* 60 30))
        (add-hook 'twittering-edit-mode-hook
                  (lambda () (ispell-minor-mode) (flyspell-mode))))
