@@ -13,6 +13,7 @@
                          ("melpa-stable" . "http://melpa-stable.milkbox.net/packages/")
                          ("melpa" . "http://melpa.milkbox.net/packages/")))
 
+;; FIXME: pinning here feels like a hack, but does mean things come from consistent places.
 ;; Pin all the things
 (setq package-pinned-packages
       '((aggressive-indent . "melpa-stable")
@@ -58,7 +59,6 @@
         (with-editor . "melpa-stable")
         (yasnippet . "melpa-stable")))
 
-;; This means we prefer things from ~/.emacs.d/elpa over the standard packages.
 (package-initialize)
 
 (unless (package-installed-p 'use-package)
@@ -76,6 +76,7 @@
   :pin org
   :ensure t)
 
+;; TODO This feels like it should go into config.org
 ;; I like using appt. I update my agenda mulitple times per day. I do
 ;; lots of scheduling.
 (defun update-agenda-and-appt ()
@@ -84,6 +85,7 @@
   (org-agenda-redo-all)
   (org-agenda-to-appt))
 
+;; TODO This feels like it should go into config.org
 (use-package org-agenda
   :bind (:map org-agenda-mode-map
               ("g" . update-agenda-and-appt)))
