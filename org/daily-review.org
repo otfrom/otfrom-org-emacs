@@ -21,7 +21,8 @@
 #+BEGIN_SRC emacs-lisp
   (progn
     (work-browser "https://twitter.com/i/notifications")
-    (elfeed))
+    (elfeed)
+    (pocket-reader))
 #+END_SRC
 - [ ] Capture any remaining open loops as tasks
 - [ ] Schedule + refile tasks in [[file:~/org/capture/todos.org][Org Mode Inbox]]
