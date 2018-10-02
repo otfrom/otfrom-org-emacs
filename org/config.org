@@ -1506,6 +1506,17 @@
        :ensure t
        :config (paradox-enable))
    #+END_SRC
+
+** ripgrep via deadgrep
+
+   [[https://github.com/Wilfred/deadgrep][deadgrep]] had the most stars when I installed it. I'm going to try
+   it for a while.
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package deadgrep
+       :ensure t)
+   #+END_SRC
+
 * Finishing
 
 ** Finis
