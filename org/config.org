@@ -856,6 +856,16 @@
          :ensure t)
      #+END_SRC
 
+**** split those clock entries
+
+     For when you need to edit the past b/c a clock has run on for too
+     long. More details on the [[https://github.com/justintaft/org-clock-split][github]].
+
+     #+BEGIN_SRC emacs-lisp
+       (use-package org-clock-split
+         :ensure t)
+     #+END_SRC
+
 *** org agenda
 
     These are the files that I currently need to keep an up to date
