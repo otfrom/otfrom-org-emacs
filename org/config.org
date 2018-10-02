@@ -1497,6 +1497,15 @@
        :bind (("C-=" . er/expand-region)))
    #+END_SRC
 
+** paradox
+
+   Get more information when choosing new modes.
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package paradox
+       :ensure t
+       :config (paradox-enable))
+   #+END_SRC
 * Finishing
 
 ** Finis
