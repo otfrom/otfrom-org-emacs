@@ -1179,6 +1179,8 @@
      needing emacs around. noflet is from my friend Nic Ferrier, so
      thanks @nicferrier!
 
+     The code for this came from [[https://cestlaz-nikola.github.io/posts/using-emacs-23-capture-1/][C'est la Z!]]
+
      #+BEGIN_SRC emacs-lisp
        (defadvice org-capture-finalize
            (after delete-capture-frame activate)
