@@ -1,4 +1,4 @@
-* TODO Make org-mode better (with a combo of org-journal and PARA)
+* STARTED Make org-mode better (with a combo of org-journal and PARA)
 
 * TODO org-capture from elfeed
 
