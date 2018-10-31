@@ -697,7 +697,7 @@
       (global-set-key (kbd "C-c c") 'org-capture)
       (global-set-key (kbd "<f12>") 'org-capture)
       (global-set-key (kbd "C-c a") 'org-agenda)
-      (global-set-key (kbd "C-<f12>") 'org-agenda) ;; change this to switch or new
+      (global-set-key (kbd "M-<f12>") 'org-agenda) ;; change this to switch or new
       (define-key org-agenda-mode-map "y" 'org-store-link)
     #+END_SRC
 
@@ -714,6 +714,171 @@
          :init
          (setq org-id-link-to-org-use-id t))
      #+END_SRC
+
+**** org agenda
+
+     These are the files that I currently need to keep an up to date
+     integrated agenda.
+
+     #+BEGIN_SRC emacs-lisp
+       (setq org-agenda-files
+             (append
+              (file-expand-wildcards "~/org/capture/*.org")
+              (file-expand-wildcards "~/org/work/*.org")
+              (file-expand-wildcards "~/org/life/*.org")
+              (mapcar 'cdr org-gcal-file-alist)))
+     #+END_SRC
+
+     I want the timeclock report to show me hours and not days.
+
+     #+BEGIN_SRC emacs-lisp
+       (setq org-time-clocksum-format
+             (quote (:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t)))
+     #+END_SRC
+
+***** org agenda clock editing
+
+      There are a lot of interesting things [[https://github.com/dfeich/org-clock-convenience][here]] about editing and
+      tracking time in org-agenda files.
+
+      #+BEGIN_SRC emacs-lisp
+        (use-package org-clock-convenience
+          :ensure t
+          :config
+          (defun dfeich/org-agenda-mode-fn ()
+            (define-key org-agenda-mode-map
+              (kbd "<S-up>") #'org-clock-convenience-timestamp-up)
+            (define-key org-agenda-mode-map
+              (kbd "<S-down>") #'org-clock-convenience-timestamp-down)
+            (define-key org-agenda-mode-map
+              (kbd "ø") #'org-clock-convenience-fill-gap)) ; AltGr-o
+          (add-hook 'org-agenda-mode-hook #'dfeich/org-agenda-mode-fn))
+      #+END_SRC
+
+***** Custom Agenda Views
+
+      The default agenda is a good start, but we can do a bit better.
+
+****** What am I doing in the Current Cake Countdown?
+       :PROPERTIES:
+       :ID:       08f62b57-c7b5-47c2-bd72-3244336b923b
+       :END:
+
+       The todo items are also filtered to only show things that have
+       the Owner property set to my name.
+
+       I'm using [[https://github.com/alphapapa/org-super-agenda][org-super-agenda]] now as it gives me a lot of
+       flexibility around sections. There are instructions on how to
+       configure it in the [[https://github.com/alphapapa/org-super-agenda/blob/master/README.org][readme]] and [[https://github.com/alphapapa/org-super-agenda/blob/master/examples.org][examples]].
+
+       #+BEGIN_SRC emacs-lisp
+         (add-to-list
+          'org-agenda-custom-commands
+          '("M" "Super Agenda" agenda
+            (org-super-agenda-mode)
+            ((org-super-agenda-groups
+              '((:log t)  ; Automatically named "Log"
+                (:name "Schedule"
+                       :time-grid t
+                       :order 10)
+                (:name "Waiting..."
+                       :todo "WAITING"
+                       :order 60)
+                (:name "Started"
+                       :todo ("STARTED")
+                       :order 20)
+                (:name "Projects"
+                       :todo ("PROJECT")
+                       :order 95)
+                (:name "Today"
+                       :scheduled today
+                       :order 50)
+                (:name "Overdue"
+                       :deadline past
+                       :order 30)
+                (:name "Due today"
+                       :deadline today
+                       :order 40)
+                (:habit t
+                        :order 70)
+                (:name "Due soon"
+                       :deadline future
+                       :order 80)
+                (:name "Scheduled earlier"
+                       :scheduled past
+                       :order 90)
+                (:name "Unimportant"
+                       :todo ("SOMEDAY" "MAYBE" "CHECK" "TO-READ" "TO-WATCH")
+                       :order 100))))
+            (org-agenda nil "a")))
+       #+END_SRC
+
+****** Holidays
+
+       From the help-gnu-emacs [[https://lists.gnu.org/archive/html/help-gnu-emacs/2014-08/msg00093.html][list]].
+
+       And more details from the [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Holiday-Customizing.html][GNU Emacs Manual]].
+
+       #+BEGIN_SRC emacs-lisp
+         (setq calendar-date-style 'european)
+       #+END_SRC
+
+       #+BEGIN_EXAMPLE
+         Hmmm, a very quick try:
+         Holidays from:
+         https://en.wikipedia.org/wiki/Public_holidays_in_the_United_Kingdom
+
+         Put this in your .emacs, restart, and give it a try:
+
+         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+         (setq european-calendar-style t             ; obsolete!
+               calendar-date-style 'european
+                                                 ;        calendar-latitude
+                                                 ;        calendar-longitude
+               calendar-week-start-day 1
+               mark-holidays-in-calendar t
+               ;; remove some holidays
+               all-christian-calendar-holidays nil         ;obsolete
+               calendar-christian-all-holidays-flag nil
+               general-holidays t
+               hebrew-holidays nil
+               islamic-holidays nil
+               oriental-holidays nil
+               bahai-holidays nil)
+
+         (setq holiday-general-holidays
+               '((holiday-fixed 1 1 "New Year's Day")
+                 (holiday-fixed 3 17 "St. Patrick's Day")
+                 (holiday-float 5 1 1 "May Day Bank Holiday")
+                 (holiday-fixed 7 12 "Battle of the Boyne")
+                 (holiday-float 8 1 -1 "May Day Bank Holiday")
+                 (holiday-fixed 12 26 "Boxing Day")))
+
+         (setq holiday-christian-holidays
+               '((holiday-fixed 12 25 "Christmas Day")
+                 (holiday-easter-etc  -2 "Good Friday")
+                 (holiday-easter-etc  +1 "Easter Monday")))
+
+         (setq calendar-holidays
+               (append general-holidays
+                       christian-holidays))
+
+         (setq org-agenda-include-diary t)
+         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+       #+END_EXAMPLE
+
+****** Pomodoro in agenda
+
+       Something to keep me focused and take breaks when I am focused
+       (so I don't die from sitting in one place for too long).
+
+       #+BEGIN_SRC emacs-lisp
+         (use-package org-pomodoro
+           :ensure t
+           :config
+           (add-hook 'org-agenda-mode-hook
+                     (lambda () (local-set-key (kbd "P") 'org-pomodoro))))
+       #+END_SRC
 
 *** org-mode add ons
 **** org-gcal
@@ -846,6 +1011,17 @@
           (plantuml . t)))
      #+END_SRC
 
+**** ox-gfm
+
+     I want to be able to export my results to broken things that
+     don't understand org-mode like slack. It helps if you can export
+     to github flavoured markdown.
+
+     #+BEGIN_SRC emacs-lisp
+       (use-package ox-gfm
+         :ensure t)
+     #+END_SRC
+
 **** Preview org-mode pages as html
 
      I'm hoping this will be handy for copying and pasting org-mode
@@ -865,7 +1041,8 @@
 
      #+BEGIN_SRC emacs-lisp
        (use-package org-cliplink
-         :ensure t)
+         :ensure t
+         :bind (([C-f12] . org-cliplink)))
      #+END_SRC
 
 **** org2blog
@@ -903,168 +1080,6 @@
      #+BEGIN_SRC emacs-lisp
        (use-package org-clock-split
          :ensure t)
-     #+END_SRC
-
-*** org agenda
-
-    These are the files that I currently need to keep an up to date
-    integrated agenda.
-
-    #+BEGIN_SRC emacs-lisp
-      (setq org-agenda-files
-            (append
-             (file-expand-wildcards "~/org/capture/*.org")
-             (file-expand-wildcards "~/org/work/*.org")
-             (file-expand-wildcards "~/org/life/*.org")
-             (mapcar 'cdr org-gcal-file-alist)))
-    #+END_SRC
-
-    I want the timeclock report to show me hours and not days.
-
-    #+BEGIN_SRC emacs-lisp
-      (setq org-time-clocksum-format
-            (quote (:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t)))
-    #+END_SRC
-
-*** org agenda clock editing
-
-    There are a lot of interesting things [[https://github.com/dfeich/org-clock-convenience][here]] about editing and
-    tracking time in org-agenda files.
-
-    #+BEGIN_SRC emacs-lisp
-      (use-package org-clock-convenience
-        :ensure t
-        :config
-        (defun dfeich/org-agenda-mode-fn ()
-          (define-key org-agenda-mode-map
-            (kbd "<S-up>") #'org-clock-convenience-timestamp-up)
-          (define-key org-agenda-mode-map
-            (kbd "<S-down>") #'org-clock-convenience-timestamp-down)
-          (define-key org-agenda-mode-map
-            (kbd "ø") #'org-clock-convenience-fill-gap)) ; AltGr-o
-        (add-hook 'org-agenda-mode-hook #'dfeich/org-agenda-mode-fn))
-    #+END_SRC
-
-*** Custom Agenda Views
-
-    The default agenda is a good start, but we can do a bit better.
-
-**** What am I doing in the Current Cake Countdown?
-     :PROPERTIES:
-     :ID:       08f62b57-c7b5-47c2-bd72-3244336b923b
-     :END:
-
-     The todo items are also filtered to only show things that have
-     the Owner property set to my name.
-
-     I'm using [[https://github.com/alphapapa/org-super-agenda][org-super-agenda]] now as it gives me a lot of
-     flexibility around sections. There are instructions on how to
-     configure it in the [[https://github.com/alphapapa/org-super-agenda/blob/master/README.org][readme]] and [[https://github.com/alphapapa/org-super-agenda/blob/master/examples.org][examples]].
-
-     #+BEGIN_SRC emacs-lisp
-       (add-to-list
-        'org-agenda-custom-commands
-        '("M" "Super Agenda" agenda
-          (org-super-agenda-mode)
-          ((org-super-agenda-groups
-            '((:log t)  ; Automatically named "Log"
-              (:name "Schedule"
-                     :time-grid t
-                     :order 10)
-              (:name "Started"
-                     :todo ("STARTED")
-                     :order 20)
-              (:name "Overdue"
-                     :deadline past
-                     :order 30)
-              (:name "Due today"
-                     :deadline today
-                     :order 40)
-              (:name "Waiting..."
-                     :todo "WAITING"
-                     :order 50)
-              (:name "Today"
-                     :scheduled today
-                     :order 60)
-              (:habit t
-                      :order 70)
-              (:name "Due soon"
-                     :deadline future
-                     :order 80)
-              (:name "Scheduled earlier"
-                     :scheduled past
-                     :order 90)
-              (:name "Unimportant"
-                     :todo ("SOMEDAY" "MAYBE" "CHECK" "TO-READ" "TO-WATCH")
-                     :order 100))))
-          (org-agenda nil "a")))
-     #+END_SRC
-
-**** Holidays
-
-     From the help-gnu-emacs [[https://lists.gnu.org/archive/html/help-gnu-emacs/2014-08/msg00093.html][list]].
-
-     And more details from the [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Holiday-Customizing.html][GNU Emacs Manual]].
-
-     #+BEGIN_SRC emacs-lisp
-       (setq calendar-date-style 'european)
-     #+END_SRC
-
-     #+BEGIN_EXAMPLE
-       Hmmm, a very quick try:
-       Holidays from:
-       https://en.wikipedia.org/wiki/Public_holidays_in_the_United_Kingdom
-
-       Put this in your .emacs, restart, and give it a try:
-
-       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-       (setq european-calendar-style t             ; obsolete!
-             calendar-date-style 'european
-                                               ;        calendar-latitude
-                                               ;        calendar-longitude
-             calendar-week-start-day 1
-             mark-holidays-in-calendar t
-             ;; remove some holidays
-             all-christian-calendar-holidays nil         ;obsolete
-             calendar-christian-all-holidays-flag nil
-             general-holidays t
-             hebrew-holidays nil
-             islamic-holidays nil
-             oriental-holidays nil
-             bahai-holidays nil)
-
-       (setq holiday-general-holidays
-             '((holiday-fixed 1 1 "New Year's Day")
-               (holiday-fixed 3 17 "St. Patrick's Day")
-               (holiday-float 5 1 1 "May Day Bank Holiday")
-               (holiday-fixed 7 12 "Battle of the Boyne")
-               (holiday-float 8 1 -1 "May Day Bank Holiday")
-               (holiday-fixed 12 26 "Boxing Day")))
-
-       (setq holiday-christian-holidays
-             '((holiday-fixed 12 25 "Christmas Day")
-               (holiday-easter-etc  -2 "Good Friday")
-               (holiday-easter-etc  +1 "Easter Monday")))
-
-       (setq calendar-holidays
-             (append general-holidays
-                     christian-holidays))
-
-       (setq org-agenda-include-diary t)
-       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-     #+END_EXAMPLE
-
-**** Pomodoro in agenda
-
-     Something to keep me focused and take breaks when I am focused
-     (so I don't die from sitting in one place for too long).
-
-     #+BEGIN_SRC emacs-lisp
-       (use-package org-pomodoro
-         :ensure t
-         :config
-         (add-hook 'org-agenda-mode-hook
-                   (lambda () (local-set-key (kbd "P") 'org-pomodoro))))
      #+END_SRC
 
 *** Capturing & Refiling
@@ -1135,7 +1150,7 @@
               ("l"
                "Capture a link"
                entry (function org-journal-find-location)
-               "* %(org-cliplink-capture) %^g\n%?"
+               "* %? %^g\n"
                :empty-lines-before 1)))
      #+END_SRC
 
@@ -1155,6 +1170,39 @@
        ;; (setq org-refile-use-outline-path t)
 
        ;; (setq org-link-search-must-match-exact-headline nil)
+     #+END_SRC
+
+**** Capture from anywhere
+
+     I have *completely cargo culted* this. It does seem to work and
+     now I have [f9] bound in ubuntu to give me a capture frame w/o
+     needing emacs around. noflet is from my friend Nic Ferrier, so
+     thanks @nicferrier!
+
+     #+BEGIN_SRC emacs-lisp
+       (defadvice org-capture-finalize
+           (after delete-capture-frame activate)
+         "Advise capture-finalize to close the frame"
+         (if (equal "capture" (frame-parameter nil 'name))
+             (delete-frame)))
+
+       (defadvice org-capture-destroy
+           (after delete-capture-frame activate)
+         "Advise capture-destroy to close the frame"
+         (if (equal "capture" (frame-parameter nil 'name))
+             (delete-frame)))
+
+       (use-package noflet
+         :ensure t)
+
+       (defun make-capture-frame ()
+         "Create a new frame and run org-capture."
+         (interactive)
+         (make-frame '((name . "capture")))
+         (select-frame-by-name "capture")
+         (delete-other-windows)
+         (noflet ((switch-to-buffer-other-window (buf) (switch-to-buffer buf)))
+                 (org-capture)))
      #+END_SRC
 
 ** Markdown
@@ -1557,6 +1605,15 @@
    #+END_SRC
 
 * Finishing
+
+** Start emacs-server
+
+   There are things we want to be able to do that require a running
+   emacs to be quick. Let us run that emacs.
+
+   #+BEGIN_SRC emacs-lisp
+     (server-start)
+   #+END_SRC
 
 ** Finis
 
