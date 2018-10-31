@@ -357,7 +357,7 @@
     #+BEGIN_SRC emacs-lisp
       (use-package flycheck
         :ensure t
-        :hook ((sh-mode) . flycheck-mode))
+        :hook ((sh-mode clojure-mode) . flycheck-mode))
     #+END_SRC
 
 *** Highlight the symbol you are on
@@ -429,7 +429,7 @@
       (use-package paredit
         :ensure t
         :diminish paredit-mode
-        :hook ((lisp-mode cider-mode emacs-lisp-mode cider-repl-mode) . paredit-mode))
+        :hook ((clojure-mode lisp-mode cider-mode emacs-lisp-mode cider-repl-mode) . paredit-mode))
     #+END_SRC
 
 *** rainbow delimiters
@@ -488,23 +488,33 @@
     often used bits of syntax like ns declrations correct.
 
     #+BEGIN_SRC emacs-lisp
-      ;; (use-package clj-refactor
-      ;;   :ensure t
-      ;;   :defer t
-      ;;   :config
-      ;;   (defun my-clj-refactor-hook ()
-      ;;     (message "Running cljr hook.")
-      ;;     (clj-refactor-mode 1)
-      ;;     (cljr-add-keybindings-with-prefix "C-c r"))
-      ;;   (add-hook 'clojure-mode-hook 'my-clj-refactor-hook))
+      (use-package clj-refactor
+        :ensure t
+        :defer t
+        :config
+        (defun my-clj-refactor-hook ()
+          (message "Running cljr hook.")
+          (clj-refactor-mode 1)
+          (yas-minor-mode 1)
+          (cljr-add-keybindings-with-prefix "C-c r"))
+        (add-hook 'clojure-mode-hook 'my-clj-refactor-hook))
     #+END_SRC
 
-**** joker and linting
+**** Linting
 
-     #+BEGIN_SRC emacs-lisp
-       (use-package flycheck-joker
-         :ensure t)
-     #+END_SRC
+***** joker
+
+      #+BEGIN_SRC emacs-lisp
+        (use-package flycheck-joker
+          :ensure t)
+      #+END_SRC
+
+***** kibit
+
+      #+BEGIN_SRC emacs-lisp
+        (use-package kibit-helper
+          :ensure t)
+      #+END_SRC
 
 ** Scala
 
