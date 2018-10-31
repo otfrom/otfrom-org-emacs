@@ -536,6 +536,35 @@
        :ensure t)
    #+END_SRC
 
+** Python
+
+*** elpy
+
+    First you need to install these:
+
+    #+BEGIN_SRC
+    pip install jedi flake8 autopep8 yapf
+    #+END_SRC
+
+    Then get the package
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package elpy
+        :ensure t
+        :config (elpy-enable))
+    #+END_SRC
+
+*** Black
+
+    Format that source code with a strong opinion.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package blacken
+        :ensure t
+        :init (setq blacken-executable "/home/bld/.local/bin/black")
+        :hook ((pyhon-mode) . blacken-mode))
+    #+END_SRC
+
 ** Ops Stuff
 *** Docker
 
