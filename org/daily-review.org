@@ -17,23 +17,25 @@
     (work-browser "https://mail.google.com")
     (personal-browser "https://mail.google.com"))
 #+END_SRC
-- [ ] Process streams (Slack, [[https://twitter.com/][Twitter]]) as inboxes - record tasks, read it later, file notes
+- [ ] Process streams (Slack, [[https://twitter.com/][Twitter]], linkedin ) as inboxes - record tasks, read it later, file notes
 #+BEGIN_SRC emacs-lisp
   (progn
     (work-browser "https://twitter.com/i/notifications")
-    (elfeed)
-    (pocket-reader))
+#+END_SRC
+- [ ] Review Exercise Progress
+#+BEGIN_SRC emacs-lisp
 #+END_SRC
 - [ ] Capture any remaining open loops as tasks
 - [ ] Schedule + refile tasks in [[file:~/org/capture/todos.org][Org Mode Inbox]]
-- [ ] Schedule any tasks from pivotal
-#+BEGIN_SRC emacs-lisp
-  (pivotal)
-#+END_SRC
-- [ ] Schedule today's tasks (immersive -> process, deep -> shallow):
+
+*Prepare for stand up*
+
 #+BEGIN_SRC emacs-lisp
   (progn
+    ;;(pivotal) ;; doesn't work atm
+    (org-todo "D")
+    (org-capture-finalize)
     (org-agenda nil "M")
-    (org-agenda-day-view))
+    (org-agenda-day-view)
+    (work-browser "https://meet.google.com"))
 #+END_SRC
-- [ ] Clock out.
