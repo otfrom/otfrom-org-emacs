@@ -1,4 +1,15 @@
+* Exceptions
+
+  Because I like really big exception traces
+
+  #+BEGIN_SRC emacs-lisp
+    ;; (setq undo-outer-limit 32000000)
+  #+END_SRC
+
 * Helpers
+  :PROPERTIES:
+  :ID:       4ff166a0-1264-4997-b9e4-798fcca644c5
+  :END:
 
   There are a number of helper functions that we'll need through the
   rest of this. We'll just define them up here.
@@ -139,6 +150,7 @@
   #+BEGIN_SRC emacs-lisp
     (use-package magit-org-todos
       :ensure t
+      :after (:all magit org)
       :config
       (magit-org-todos-autoinsert))
   #+END_SRC
@@ -148,6 +160,7 @@
 
   #+BEGIN_SRC emacs-lisp
     (use-package magit-todos
+      :after magit
       :ensure t)
   #+END_SRC
 
@@ -163,25 +176,34 @@
       (setq ediff-window-setup-function 'ediff-setup-windows-plain))
   #+END_SRC
 
-** link to github
+** Work with forges like github
 
    #+BEGIN_SRC emacs-lisp
-     (use-package git-link
-       :ensure t)
+     ;; (use-package forge
+     ;;   :ensure t
+     ;;   :after magit)
    #+END_SRC
 
 ** Step through those versions of a file with the time machine
 
    #+BEGIN_SRC emacs-lisp
-     (use-package git-timemachine
+     ;; (use-package git-timemachine
+     ;;   :ensure t)
+   #+END_SRC
+
+** Review pull requests
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package github-review
+       :after magit
        :ensure t)
    #+END_SRC
 
 ** See last commit for this line in a popup
 
    #+BEGIN_SRC emacs-lisp
-     (use-package git-messenger
-       :ensure t)
+     ;; (use-package git-messenger
+     ;;   :ensure t)
    #+END_SRC
 
 ** Delete that trailing whitespace
@@ -203,8 +225,8 @@
    version control. Emacs of course makes this possible.
 
    #+BEGIN_SRC emacs-lisp
-     (use-package git-auto-commit-mode
-       :ensure t)
+     ;; (use-package git-auto-commit-mode
+     ;;   :ensure t)
   #+END_SRC
 
 * Make it pretty
@@ -221,6 +243,11 @@
        :load-path "themes"
        :config
        (load-theme 'sanityinc-tomorrow-bright t))
+   #+END_SRC
+
+   #+BEGIN_SRC emacs-lisp
+     (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
+     ;; (load-theme 'cyberpunk-2019 t)
    #+END_SRC
 
 ** Bars, columns and lines
@@ -265,16 +292,19 @@
 
 ** Beacon
 
-   Make with the wooshy cursor to see where it is
+   Make with the wooshy cursor to see where it is, but it is really
+   CPU intensive apparently.
 
    #+BEGIN_SRC emacs-lisp
      (blink-cursor-mode -1)
 
-     (use-package beacon
-       :diminish
-       :ensure t
-       :config
-       (beacon-mode 1))
+     ;; (beacon-mode 0)
+
+     ;; (use-package beacon
+     ;;   :diminish
+     ;;   :ensure t
+     ;;   :config
+     ;;   (beacon-mode 1))
    #+END_SRC
 
 ** Startup Screen
@@ -307,13 +337,6 @@
         :diminish company-mode
         :config
         (global-company-mode))
-    #+END_SRC
-
-*** Faster searching with ag
-
-    #+BEGIN_SRC emacs-lisp
-      (use-package ag
-        :ensure t)
     #+END_SRC
 
 *** projectile
@@ -357,7 +380,21 @@
     #+BEGIN_SRC emacs-lisp
       (use-package flycheck
         :ensure t
-        :hook ((sh-mode clojure-mode) . flycheck-mode))
+        :hook ((sh-mode clojure-mode) . flycheck-mode)
+        :config
+        (set-face-attribute 'flycheck-error nil :underline '(:color "#FF4081"))
+        (set-face-attribute 'flycheck-warning nil :underline '(:color "#FF9C00"))
+        (set-face-attribute 'flycheck-info nil :underline '(:color "#9C00FF")))
+    #+END_SRC
+
+    And we want popup tool tips rather than even yet more things in
+    the minibuffer.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package flycheck-pos-tip
+        :ensure t
+        :after (flycheck)
+        :config (flycheck-pos-tip-mode))
     #+END_SRC
 
 *** Highlight the symbol you are on
@@ -367,13 +404,22 @@
         :ensure t
         :diminish highlight-symbol-mode
         :hook (prog-mode . highlight-symbol-mode)
-        :config
+        :init
+        (setq highlight-symbol-occurrence-message '(explicit navigation))
         (setq highlight-symbol-on-navigation-p t))
     #+END_SRC
 
     #+BEGIN_SRC emacs-lisp
-      (use-package highlight-symbol-nav-mode
-        :hook (prog-mode . highlight-symbol-nav-mode))
+       (use-package highlight-symbol-nav-mode
+         :hook (prog-mode . highlight-symbol-nav-mode))
+    #+END_SRC
+
+*** Highlight indentation
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package highlight-indent-guides
+        :ensure t
+        :hook ((prog-mode) . highlight-indent-guides-mode))
     #+END_SRC
 
 *** ivy-xref
@@ -418,7 +464,7 @@
     #+BEGIN_SRC emacs-lisp
       (use-package eldoc
         :diminish eldoc-mode
-        :hook ((emacs-lisp-mode lisp-mode clojure-mode) . eldoc-mode))
+        :config (global-eldoc-mode 1))
     #+END_SRC
 
 *** paredit
@@ -454,6 +500,9 @@
     #+END_SRC
 
 *** clojure and CIDER
+    :PROPERTIES:
+    :ID:       b5fa2816-6ee5-423e-9462-f52d9bbde4b4
+    :END:
 
     Clojure is certainly my favorite lisp on the JVM and is the one I
     use most professionally, or at least the one I create code in that
@@ -463,8 +512,9 @@
       (use-package clojure-mode
         :ensure t
         :defer t
-        :mode (("\\.clj\\'" . clojure-mode)
-               ("\\.edn\\'" . clojure-mode)))
+        :mode (("\\.clj\\'" . clojure-mode))
+        :config
+        (require 'flycheck-clj-kondo))
     #+END_SRC
 
     CIDER is the mode that lets us connect to a REPL and evaluate code
@@ -475,13 +525,16 @@
         :ensure t
         :defer t
         :init
-        (setq cider-lein-parameters "repl :headless :host localhost"
-              cider-repl-history-file (concat user-emacs-directory "cider-history")
-              cider-repl-history-size 1000
-              cider-font-lock-dynamically '(macro core function var)
-              cider-overlays-use-font-lock t
-              cider-pprint-fn 'fipp
-              cider-cljs-lein-repl "(do (use 'figwheel-sidecar.repl-api) (start-figwheel!) (cljs-repl))"))
+        (setq ;; cider-lein-parameters "repl :headless :host localhost"
+         cider-repl-history-file (concat user-emacs-directory "cider-history")
+         cider-repl-history-size 1000
+         cider-font-lock-dynamically '(macro core function var)
+         ;; cider-overlays-use-font-lock t
+         cider-use-overlays t
+         ;; cider-print-fn 'fipp
+          cider-print-quota 640
+         ;; cider-print-options '(("print-length" 1024) ("width" 1024))
+         cider-cljs-lein-repl "(do (use 'figwheel-sidecar.repl-api) (start-figwheel!) (cljs-repl))"))
     #+END_SRC
 
     clj-refactor lets us move a lot of things around and get less
@@ -490,14 +543,14 @@
     #+BEGIN_SRC emacs-lisp
       (use-package clj-refactor
         :ensure t
-        :defer t
-        :config
+        :after (:all cider)
+        :init
         (defun my-clj-refactor-hook ()
           (message "Running cljr hook.")
           (clj-refactor-mode 1)
           (yas-minor-mode 1)
           (cljr-add-keybindings-with-prefix "C-c r"))
-        (add-hook 'clojure-mode-hook 'my-clj-refactor-hook))
+        (add-hook 'clojure-mode-hook #'my-clj-refactor-hook))
     #+END_SRC
 
 **** Linting
@@ -505,18 +558,17 @@
 ***** joker
 
       #+BEGIN_SRC emacs-lisp
-        (use-package flycheck-joker
-          :ensure t)
+        ;; (use-package flycheck-joker
+        ;;   :ensure t)
       #+END_SRC
 
-***** kibit
+***** clj-kondo
 
       #+BEGIN_SRC emacs-lisp
-        (use-package kibit-helper
+        (use-package flycheck-clj-kondo
           :ensure t)
       #+END_SRC
 
-** Scala
 
    Yeah, I'll have a java mode here too at some point.
 
@@ -554,35 +606,11 @@
         :config (elpy-enable))
     #+END_SRC
 
-*** Black
+** Shell
 
-    Format that source code with a strong opinion.
-
-    #+BEGIN_SRC emacs-lisp
-      (use-package blacken
-        :ensure t
-        :init (setq blacken-executable "/home/bld/.local/bin/black")
-        :hook ((pyhon-mode) . blacken-mode))
-    #+END_SRC
-
-** Ops Stuff
-*** Docker
-
-    DOCKER ALL THE THINGS!!!!
-
-    #+BEGIN_SRC emacs-lisp
-      (use-package dockerfile-mode
-        :ensure t)
-    #+END_SRC
-
-*** Terraform
-
-    Highlight the syntax of those terraform files.
-
-    #+BEGIN_SRC emacs-lisp
-      (use-package terraform-mode
-        :ensure t)
-    #+END_SRC
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'sh-mode-hook 'flycheck-mode)
+#+END_SRC
 
 ** YAML
 
@@ -600,6 +628,7 @@
      (use-package plantuml-mode
        :ensure t
        :init
+       (setq plantuml-default-exec-mode 'jar)
        (setq plantuml-jar-path "/usr/share/plantuml/plantuml.jar")
        (setq org-plantuml-jar-path plantuml-jar-path))
 
@@ -616,13 +645,6 @@
        :ensure t)
    #+END_SRC
 
-** jenkins
-
-#+BEGIN_SRC emacs-lisp
-  (use-package jenkins
-    :ensure t)
-#+END_SRC
-
 ** sql
 
    Formatting SQL is a pain
@@ -632,7 +654,21 @@
        :ensure t)
    #+END_SRC
 
+** csv handling
+
+   Does this belong in programming? Does it belong in text? I'm not
+   sure. Perhaps I need a data section. Does the c stand for comma or
+   character?
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package csv-mode
+       :ensure t)
+   #+END_SRC
+
 * Text Modes
+  :PROPERTIES:
+  :ID:       edcdf4f8-f314-4946-bfa6-4c0a999b22ba
+  :END:
 
 ** Text Mode Basics
 
@@ -672,7 +708,7 @@
                 (setq org-default-notes-file "~/org/capture/todos.org")
                 (setq org-clock-persist 'history)
                 (setq org-link-search-must-match-exact-headline nil) ;; fuzzy match headlines
-                (setq org-agenda-window-setup 'current-window) ; agenda in current window
+                (setq org-agenda-window-setup 'other-window) ; agenda in current window
                 (org-clock-persistence-insinuate) ; keep the clock history
                 (require 'org-habit) ; track habits
                 (appt-activate 1))) ; shout when we have appts
@@ -711,6 +747,7 @@
 
      #+BEGIN_SRC emacs-lisp
        (use-package org-id
+         :after (:all org)
          :init
          (setq org-id-link-to-org-use-id t))
      #+END_SRC
@@ -726,7 +763,7 @@
               (file-expand-wildcards "~/org/capture/*.org")
               (file-expand-wildcards "~/org/work/*.org")
               (file-expand-wildcards "~/org/life/*.org")
-              (mapcar 'cdr org-gcal-file-alist)))
+              (mapcar 'cdr org-gcal-fetch-file-alist)))
      #+END_SRC
 
      I want the timeclock report to show me hours and not days.
@@ -744,6 +781,7 @@
       #+BEGIN_SRC emacs-lisp
         (use-package org-clock-convenience
           :ensure t
+          :after (:all org)
           :config
           (defun dfeich/org-agenda-mode-fn ()
             (define-key org-agenda-mode-map
@@ -763,9 +801,6 @@
        :PROPERTIES:
        :ID:       08f62b57-c7b5-47c2-bd72-3244336b923b
        :END:
-
-       The todo items are also filtered to only show things that have
-       the Owner property set to my name.
 
        I'm using [[https://github.com/alphapapa/org-super-agenda][org-super-agenda]] now as it gives me a lot of
        flexibility around sections. There are instructions on how to
@@ -875,6 +910,7 @@
        #+BEGIN_SRC emacs-lisp
          (use-package org-pomodoro
            :ensure t
+           :after (:all org)
            :config
            (add-hook 'org-agenda-mode-hook
                      (lambda () (local-set-key (kbd "P") 'org-pomodoro))))
@@ -890,6 +926,7 @@
 
      #+BEGIN_SRC emacs-lisp
        (use-package org-gcal
+         :after (:all org)
          :ensure t)
      #+END_SRC
 
@@ -905,6 +942,9 @@
      #+END_SRC
 
 **** org-journal
+     :PROPERTIES:
+     :ID:       57497b60-93f4-4785-a084-40f401567655
+     :END:
 
      When I'm not trying to actually follow a procedure around using
      org-mode for day to day stuff, I basically follow the pattern
@@ -921,13 +961,22 @@
      #+BEGIN_SRC emacs-lisp
        (use-package org-journal
          :ensure t
+         :defer t
+         :after (:all org)
          :bind (("C-c j" . org-journal-new-entry))
+         :custom
+         (org-journal-dir "~/org/journal/")
+         (org-journal-enable-agenda-integration t)
+         (org-journal-carryover-items "TODO=\"WAITING\"|TODO=\"STARTED\"|TODO=\"TODO\"|TODO=\"NEXT\"|TODO=\"PROJECT\"")
          :init
-         (setq org-journal-dir "~/org/journal/"
-               org-journal-enable-agenda-integration t
-               org-journal-carryover-items "TODO=\"WAITING\"|TODO=\"STARTED\"|TODO=\"TODO\"|TODO=\"NEXT\"")
-         (add-to-list 'auto-mode-alist '("org/journal" . org-mode)))
+         (add-hook 'org-agenda-mode-hook #'org-journal-update-org-agenda-files)
+         (setq org-journal-file-type 'yearly)
+         (add-to-list 'auto-mode-alist '("org/journal/" . org-mode)))
      #+END_SRC
+
+**** Work and Personal Browsers
+
+     These should be moved some place better.
 
      #+BEGIN_SRC emacs-lisp
        (defun work-browser (url &optional _new-window)
@@ -955,7 +1004,19 @@
 
      #+BEGIN_SRC emacs-lisp
        (use-package org-super-agenda
+         :after (:all org)
          :ensure t)
+     #+END_SRC
+
+**** Show my agenda when I'm idle
+
+     #+BEGIN_SRC emacs-lisp
+       ;; (use-package idle-org-agenda
+       ;;   :after (:all org-agenda)
+       ;;   :ensure t
+       ;;   :init (setq idle-org-agenda-key "M")
+       ;;   :config
+       ;;   (idle-org-agenda-mode))
      #+END_SRC
 
 **** org-web-tools
@@ -966,6 +1027,7 @@
 
      #+BEGIN_SRC emacs-lisp
        (use-package org-web-tools
+         :after (:all org)
          :ensure t)
      #+END_SRC
 
@@ -975,6 +1037,7 @@
 
      #+BEGIN_SRC emacs-lisp
        (use-package org-clock-today
+         :after (:all org)
          :ensure t)
      #+END_SRC
 
@@ -985,22 +1048,27 @@
      #+BEGIN_SRC emacs-lisp
        (use-package interleave
          :ensure t
+         :after (:all org)
          :config (setq interleave-org-notes-dir-list '("~/org/interleave" ".")))
      #+END_SRC
 
 **** org-babel
+     :PROPERTIES:
+     :ID:       04a3986f-750d-4adf-bcf4-1a1fd02fb2ce
+     :END:
 
      I want to be able to do shell and have graphviz and plantuml
      visualisations in my org-mode buffers (this is where I do a lot of
      my thinking).
 
      For some of the longer running things though I want them to be
-     asynchronous so they don't tie up my emacs while they are running
+     async:asyhronous so they don't tie up my emacs while they are running
      in the background.
 
      #+BEGIN_SRC emacs-lisp
        (use-package ob-async
-         :ensure t)
+         :ensure t
+         :after (:all org))
      #+END_SRC
 
      #+BEGIN_SRC emacs-lisp
@@ -1019,7 +1087,8 @@
 
      #+BEGIN_SRC emacs-lisp
        (use-package ox-gfm
-         :ensure t)
+         :ensure t
+         :after (:all org))
      #+END_SRC
 
 **** Preview org-mode pages as html
@@ -1042,24 +1111,28 @@
      #+BEGIN_SRC emacs-lisp
        (use-package org-cliplink
          :ensure t
+         :after (:all org)
          :bind (([C-f12] . org-cliplink)))
      #+END_SRC
 
 **** org2blog
 
+     This appears to be broken atm.
+
      #+BEGIN_SRC emacs-lisp
-       (use-package org2blog
-         :ensure t
-         :config (setq org2blog/wp-use-sourcecode-shortcode nil
-                       org2blog/wp-blog-alist
-                       (->> (netrc-parse "~/.netrc")
-                            (-filter #'(lambda (m) (string-match-p "wordpress.com" (cdr (assoc "machine" m)))))
-                            (mapcar
-                             #'(lambda (m)
-                                 (list (cdr (assoc "machine" m))
-                                       :url (concat "https://" (cdr (assoc "machine" m)) "/xmlrpc.php")
-                                       :username (cdr (assoc "login" m))
-                                       :password (cdr (assoc "password" m))))))))
+       ;; (use-package org2blog
+       ;;   :ensure t
+       ;;   :after (:all org)
+       ;;   :config (setq org2blog/wp-use-sourcecode-shortcode nil
+       ;;                 org2blog/wp-blog-alist
+       ;;                 (->> (netrc-parse "~/.netrc")
+       ;;                      (-filter #'(lambda (m) (string-match-p "wordpress.com" (cdr (assoc "machine" m)))))
+       ;;                      (mapcar
+       ;;                       #'(lambda (m)
+       ;;                           (list (cdr (assoc "machine" m))
+       ;;                                 :url (concat "https://" (cdr (assoc "machine" m)) "/xmlrpc.php")
+       ;;                                 :username (cdr (assoc "login" m))
+       ;;                                 :password (cdr (assoc "password" m))))))))
      #+END_SRC
 
 **** mailbox like rescheduling.
@@ -1069,7 +1142,8 @@
 
      #+BEGIN_SRC emacs-lisp
        (use-package orgbox
-         :ensure t)
+         :ensure t
+         :after (:all org))
      #+END_SRC
 
 **** split those clock entries
@@ -1079,7 +1153,8 @@
 
      #+BEGIN_SRC emacs-lisp
        (use-package org-clock-split
-         :ensure t)
+         :ensure t
+         :after (:all org))
      #+END_SRC
 
 *** Capturing & Refiling
@@ -1112,6 +1187,10 @@
                entry (function org-journal-find-location)
                "* TODO %?\n%U\n%a\n"
                :empty-lines-before 1)
+              ("n" "Note"
+               entry (function org-journal-find-location)
+               "* %?\n%U\n%a\n"
+               :empty-lines-before 1)
               ("p" "To do from Pivotal"
                entry (function org-journal-find-location)
                "* TODO %:description :pivotal:\n%U\n%a\n%?"
@@ -1133,11 +1212,6 @@
               ("r" "Capture Web site with eww-readable"
                entry (function org-journal-find-location)
                "%(org-web-tools--url-as-readable-org)")
-              ("n" "Doing RIGHT NOW"
-               entry (function org-journal-find-location)
-               "* STARTED %?\n%U\n%a\n"
-               :clock-in t :clock-resume t
-               :empty-lines-before 1)
               ("k" "Kaylee Checks"
                entry (function org-journal-find-location)
                "* STARTED Kaylee Checks\n%U\n%a\n%?%[~/wip/kaylee-tools/org/kaylee-template.org]"
@@ -1217,6 +1291,22 @@
        :mode (".md$" . gfm-mode))
    #+END_SRC
 
+** ASCII Doc
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package adoc-mode
+       :ensure t
+       :mode (".adoc$" . adoc-mode))
+   #+END_SRC
+
+** Improve your style
+
+#+BEGIN_SRC emacs-lisp
+  (use-package smog
+    :ensure t
+    :config (setq smog-command "style -L en"))
+
+#+END_SRC
 ** html, css, sass, scss and others
 
 *** rainbow-mode
@@ -1295,29 +1385,6 @@
      :config (setq rmh-elfeed-org-files (list "~/org/elfeed.org")))
    #+END_SRC
 
-** What is the weather?
-
-   This probably falls under "more stupid emacs tricks", but who
-   wouldn't want to to see the weather in emacs?
-
-   #+BEGIN_SRC emacs-lisp
-     (use-package wttrin
-       :ensure t
-       :commands (wttrin)
-       :init
-       (setq wttrin-default-cities '("London"
-                                     "Dundee")
-             wttrin-default-accept-language '("Accept-Language" . "en-GB")))
-   #+END_SRC
-
-   or we can open up a browser and look at darksky.net
-
-   #+BEGIN_SRC emacs-lisp
-     (defun dundee-darksky ()
-       (interactive)
-       (browse-url-chrome "https://darksky.net/forecast/56.46,-2.9933/uk212/en" t))
-   #+END_SRC
-
 ** twittering-mode
 
    I have been accused by many ([[http://twitter.com/rrees][Robert Rees]] and [[http://twitter.com/cluttercup][Jane Dickson]] to name
@@ -1331,7 +1398,9 @@
      (use-package twittering-mode
        :ensure t
        :defer t
-       :bind (([M-f6] . twittering-update-status-interactive))
+       :bind (([M-f6] . twittering-update-status-interactive)
+              :map twittering-mode-map
+              ("l" . pocket-reader-add-link))
        :config (setq twittering-username "otfrom"
                      twittering-url-show-status nil
                      twittering-icon-mode 1
@@ -1389,28 +1458,6 @@
     #+END_SRC
 
 * Other Modes
-
-** make dired pretty
-
-   Who doesn't want all the icons?
-
-   #+BEGIN_SRC emacs-lisp
-     (use-package all-the-icons
-       :ensure t)
-   #+END_SRC
-
-   #+BEGIN_SRC emacs-lisp
-     (use-package all-the-icons-dired
-       :ensure t
-       :hook ((dired-mode) . all-the-icons-dired-mode))
-   #+END_SRC
-
-   #+BEGIN_SRC emacs-lisp
-     (use-package all-the-icons-ivy
-       :ensure t
-       :config
-       (all-the-icons-ivy-setup))
-   #+END_SRC
 
 ** ivy, swiper and others
 
@@ -1471,7 +1518,7 @@
      (use-package ace-window
        :ensure t
        :init (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
-       :bind ("M-o". ace-window))
+       :bind ("C-x o". ace-window))
    #+END_SRC
 
 ** workspaces
@@ -1487,10 +1534,8 @@
                    eyebrowse-new-workspace t)
        :config (eyebrowse-mode t))
    #+END_SRC
+
 ** yasnippet
-   :PROPERTIES:
-   :ORDERED:  t
-   :END:
 
    Yet another snippet package, but this one is pretty good so we'll
    use it.
@@ -1523,38 +1568,6 @@
         :ensure t)
     #+END_SRC
 
-** pivotal tracker
-
-   I've tried managing the whole team using org-mode. Even when there
-   were only 4 of us and 3 of us were regular emacs users it didn't
-   work. It was a lovely idea and I'll give something similar another
-   crack.
-
-   For now, we've gone full hipster with [[http://pivotaltracker.com][Pivotal Tracker]].
-
-   #+BEGIN_SRC emacs-lisp
-     (use-package pivotal-tracker
-       :ensure t)
-   #+END_SRC
-
-   And I want it to play nicely with org-mode links
-
-   #+BEGIN_SRC emacs-lisp
-     (require 'org-pivotal)
-   #+END_SRC
-
-** Emojis
-
-   Just the unicode and github ones really. I like the ascii ones as
-   they are :-) .
-
-   #+BEGIN_SRC emacs-lisp
-     (use-package emojify
-       :ensure t
-       :defer t
-       :init (add-hook 'after-init-hook #'global-emojify-mode))
-   #+END_SRC
-
 ** Alerting and Other Status Things
 
 *** alert
@@ -1571,7 +1584,8 @@
     #+BEGIN_SRC emacs-lisp
       (use-package sauron
         :ensure t
-        :config (setq sauron-separate-frame nil
+        :config (setq sauron-separate-frame t
+                      sauron-modules '(sauron-erc sauron-org sauron-dbus sauron-compilation sauron-notifications sauron-twittering  sauron-elfeed) ;; sauron-mu4e sauron-jabber sauron-identica
                       sauron-prio-twittering-new-tweets 2))
     #+END_SRC
 
@@ -1591,9 +1605,9 @@
    Get more information when choosing new modes.
 
    #+BEGIN_SRC emacs-lisp
-     (use-package paradox
-       :ensure t
-       :config (paradox-enable))
+     ;; (use-package paradox
+     ;;   :ensure t
+     ;;   :config (paradox-enable))
    #+END_SRC
 
 ** ripgrep via deadgrep
@@ -1604,6 +1618,30 @@
    #+BEGIN_SRC emacs-lisp
      (use-package deadgrep
        :ensure t)
+   #+END_SRC
+
+** tmux/tmate improvements
+
+   Use this to make emacs work better. More detail [[https://github.com/tmate-io/tmate/blob/3f6c6d44472a5ccab0403ebf89fc59e7df58b6b2/FAQ#L242][here]].
+
+   #+BEGIN_SRC emacs-lisp
+     (defadvice terminal-init-screen
+         ;; The advice is named `tmux', and is run before `terminal-init-screen' runs.
+         (before tmux activate)
+       ;; Docstring.  This describes the advice and is made available inside emacs;
+       ;; for example when doing C-h f terminal-init-screen RET
+       "Apply xterm keymap, allowing use of keys passed through tmux."
+       ;; This is the elisp code that is run before `terminal-init-screen'.
+       (if (getenv "TMUX")
+           (let ((map (copy-keymap xterm-function-map)))
+             (set-keymap-parent map (keymap-parent input-decode-map))
+             (set-keymap-parent input-decode-map map))))
+   #+END_SRC
+
+** Save state between sessions
+
+   #+BEGIN_SRC emacs-lisp
+     (desktop-save-mode 1)
    #+END_SRC
 
 * Finishing
@@ -1635,6 +1673,9 @@
    #+END_SRC
 
 ** Extra Bits
+   :PROPERTIES:
+   :ID:       312592ee-08be-4e23-b10a-024a4b5d938a
+   :END:
 
    #+BEGIN_EXAMPLE
 
