@@ -29,6 +29,13 @@
 
 (straight-use-package 'use-package)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Pretty Colours
+(use-package color-theme-sanityinc-tomorrow
+  :straight t
+  :load-path "themes"
+  :config
+  (load-theme 'sanityinc-tomorrow-bright t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; magit
