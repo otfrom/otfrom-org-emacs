@@ -30,3 +30,6 @@ emojis
 /local/custom.el
 *.save
 /network-security.data
+/straight/build/*
+/straight/build-cache.el
+/straight/repos
